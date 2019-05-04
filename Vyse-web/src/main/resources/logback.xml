@@ -46,6 +46,8 @@
         </encoder>
     </appender>
 
+    <logger name="fun.Vyse.cloud" level="debug"/>
+
     <root level="info">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="SYSTEM_ERROR_FILE" />
