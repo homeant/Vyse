@@ -1,0 +1,8 @@
+Vyse:
+  model:
+    mapping-locations: 'classpath*:mapper_*.xml'
+
+
+logging:
+  level:
+    fun: debug

@@ -80,7 +80,7 @@ public class OrikaAutoConfiguration {
         orikaMapperFactoryConfigurers
                 .orElseGet(Collections::emptyList)
                 .forEach(configurer -> configurer.configure(orikaMapperFactory));
-        log.debug("Created a MapperFactory: [{}]", orikaMapperFactory);
+        log.debug("Created a MapperMap: [{}]", orikaMapperFactory);
         return orikaMapperFactory;
     }
 
