@@ -132,6 +132,7 @@ public class ModelTransformAutoConfiguration implements ApplicationContextAware 
              */
             @Override
             public void configure(DefaultMapperFactory.MapperFactoryBuilder<?, ?> mapperFactoryBuilder) {
+                log.debug("config：{}",mapperFactoryBuilder);
                 DateConverter dateConverter = new DateConverter("yyyy-MM-dd");
                 mapperFactoryBuilder.build().getConverterFactory().registerConverter("dataToStr",dateConverter);
             }
@@ -156,7 +157,7 @@ public class ModelTransformAutoConfiguration implements ApplicationContextAware 
                             if(StringUtils.isEmpty(field.getDateFormat())){
                                 builder.field(field.getA(),field.getB());
                             }else{
-                                builder.fieldMap(field.getA(),field.getB()).converter("dataToStr");
+                                builder.fieldMap(field.getA(),field.getB()).converter("dataToStr").add();
                             }
                         });
                         builder.byDefault().register();

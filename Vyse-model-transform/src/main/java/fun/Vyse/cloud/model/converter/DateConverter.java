@@ -30,6 +30,7 @@ public class DateConverter extends BidirectionalConverter<java.util.Date,String>
 
     @Override
     public String convertTo(Date date, Type<String> type, MappingContext mappingContext) {
+        log.debug("date:{}",DateFormatUtils.format(date,format));
         return DateFormatUtils.format(date,format);
     }
 }

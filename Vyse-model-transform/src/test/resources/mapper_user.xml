@@ -7,10 +7,10 @@
         <class-a>fun.Vyse.cloud.test.domain.User</class-a>
         <class-b>fun.Vyse.cloud.test.domain.UserDto</class-b>
         <fields>
-            <!--<field>
+            <field>
                 <a>name</a>
                 <b>nickName</b>
-            </field>-->
+            </field>
             <field>
                 <a date-format="yyyy-MM-dd">date</a>
                 <b>date</b>
