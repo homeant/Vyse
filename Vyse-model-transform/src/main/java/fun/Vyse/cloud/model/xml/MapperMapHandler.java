@@ -1,6 +1,5 @@
 package fun.Vyse.cloud.model.xml;
 
-import fun.Vyse.cloud.model.domain.MapperMap;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.SAXException;

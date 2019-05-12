@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Mapper {
+public class Mapping {
     private String classA;
 
     private String classB;

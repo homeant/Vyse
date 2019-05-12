@@ -1,6 +1,6 @@
 Vyse:
   model:
-    mapping-locations: 'classpath*:mapper_*.xml'
+    mapping-locations: 'classpath*:mapping_*.xml'
 
 
 logging:

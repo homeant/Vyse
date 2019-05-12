@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings>
+    <configuration>
+        <custom-converters>
+            <converter type="ru.lic.bank.core.ws.mapper.FullNameToString">
+                <class-a>ru.lic.bank.core.domain.FullName</class-a>
+                <class-b>java.lang.String</class-b>
+            </converter>
+        </custom-converters>
+    </configuration>
+
+    <mapping>
+        <class-a>fun.Vyse.cloud.test.domain.User</class-a>
+        <class-b>java.util.Map</class-b>
+        <field>
+            <a>name</a>
+            <b>nickname</b>
+        </field>
+        <field>
+            <a>date</a>
+            <b>data</b>
+        </field>
+    </mapping>
+
+</mappings>

@@ -2,7 +2,10 @@ package fun.Vyse.cloud.model.domain;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Configuration {
-    private String dateFormat;
+    
+    private List<Converter> customConverters;
 }

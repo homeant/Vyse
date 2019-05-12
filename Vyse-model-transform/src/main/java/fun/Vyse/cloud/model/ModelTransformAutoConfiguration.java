@@ -7,15 +7,13 @@ import fun.Vyse.cloud.core.orika.OrikaMapperFactoryConfigurer;
 import fun.Vyse.cloud.model.converter.DateConverter;
 import fun.Vyse.cloud.model.domain.Configuration;
 import fun.Vyse.cloud.model.domain.Field;
-import fun.Vyse.cloud.model.domain.Mapper;
-import fun.Vyse.cloud.model.domain.MapperMap;
+import fun.Vyse.cloud.model.domain.Mapping;
 import fun.Vyse.cloud.model.util.ClassUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import ma.glasnost.orika.metadata.ClassMapBuilder;
-import ma.glasnost.orika.metadata.FieldMapBuilder;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -42,85 +40,84 @@ import java.util.List;
 public class ModelTransformAutoConfiguration implements ApplicationContextAware {
     private ApplicationContext applicationContext;
     private ModelTransformProperties transformProperties;
-    private MapperMap mapperMap;
 
     public ModelTransformAutoConfiguration(ModelTransformProperties properties){
         this.transformProperties = properties;
-        Resource[] resources = transformProperties.resolveMappingLocations();
-        mapperMap = new MapperMap();
-        mapperMap.setMappers(Lists.newArrayList());
-        for (int i = 0; i < resources.length; i++) {
-            Resource resource = resources[i];
-            MapperMap mapper = buiderMapper(resource);
-            if(mapper.getConfiguration()!=null){
-                mapperMap.setConfiguration(mapper.getConfiguration());
-            }
-            mapperMap.getMappers().addAll(mapper.getMappers());
-        }
-        log.debug("mapperMap:{}",mapperMap);
+//        Resource[] resources = transformProperties.resolveMappingLocations();
+//        mapperMap = new MapperMap();
+//        mapperMap.setMappers(Lists.newArrayList());
+//        for (int i = 0; i < resources.length; i++) {
+//            Resource resource = resources[i];
+//            MapperMap mapper = buiderMapper(resource);
+//            if(mapper.getConfiguration()!=null){
+//                mapperMap.setConfiguration(mapper.getConfiguration());
+//            }
+//            mapperMap.getMappers().addAll(mapper.getMappers());
+//        }
+//        log.debug("mapperMap:{}",mapperMap);
     }
 
-    private MapperMap buiderMapper(Resource resource){
-        MapperMap mapperMap = new MapperMap();
-        try {
-            if(resource.isFile()){
-                SAXReader reader = new SAXReader();
-                Document document = reader.read(resource.getFile());
-                Element rootEl = document.getRootElement(); // 获取根节点
-                Element configurationEl = rootEl.element("configuration");
-                if(configurationEl!=null){
-                    Element format = configurationEl.element("date-format");
-                    if(format !=null){
-                        Configuration configuration = new Configuration();
-                        configuration.setDateFormat(format.getStringValue());
-                        mapperMap.setConfiguration(configuration);
-                    }
-                }
-                Iterator<Element> mappersEl = rootEl.elementIterator("mapper");
-                List<Mapper> mappers = Lists.newArrayList();
-                while (mappersEl.hasNext()) {
-                    Element mapperEl = mappersEl.next();
-                    Element classAEl = mapperEl.element("class-a");
-                    Element classBEl = mapperEl.element("class-b");
-                    Mapper mapper = new Mapper();
-                    mapper.setClassA(classAEl.getStringValue());
-                    mapper.setClassB(classBEl.getStringValue());
-                    List<Field> fields = Lists.newArrayList();
-                    Element fieldsEl = mapperEl.element("fields");
-                    Iterator<Element> fieldEls = fieldsEl.elementIterator("field");
-                    while (fieldEls.hasNext()){
-                        Field field = new Field();
-                        Element fieldEl = fieldEls.next();
-                        Element aEl = fieldEl.element("a");
-                        Element bEl = fieldEl.element("b");
-                        field.setA(aEl.getStringValue());
-                        field.setB(bEl.getStringValue());
-                        Attribute aformatAttr = aEl.attribute("date-format");
-                        Attribute bformatAttr = bEl.attribute("date-format");
-                        if(aformatAttr!=null){
-                            String format = aformatAttr.getValue();
-                            if(!StringUtils.isEmpty(format)){
-                                field.setDateFormat(format);
-                            }
-                        }else if(bformatAttr!=null){
-                            String format = bformatAttr.getValue();
-                            if(!StringUtils.isEmpty(format)){
-                                field.setDateFormat(format);
-                            }
-                        }
-                        fields.add(field);
-                    }
-                    mapper.setFields(fields);
-                    mappers.add(mapper);
-                }
-                mapperMap.setMappers(mappers);
-            }
-        }catch (Exception e){
-            log.error("{}",e);
-            throw new RuntimeException(e);
-        }
-        return mapperMap;
-    }
+//    private MapperMap buiderMapper(Resource resource){
+//        MapperMap mapperMap = new MapperMap();
+//        try {
+//            if(resource.isFile()){
+//                SAXReader reader = new SAXReader();
+//                Document document = reader.read(resource.getFile());
+//                Element rootEl = document.getRootElement(); // 获取根节点
+//                Element configurationEl = rootEl.element("configuration");
+//                if(configurationEl!=null){
+//                    Element format = configurationEl.element("date-format");
+//                    if(format !=null){
+//                        Configuration configuration = new Configuration();
+//                        configuration.setDateFormat(format.getStringValue());
+//                        mapperMap.setConfiguration(configuration);
+//                    }
+//                }
+//                Iterator<Element> mappersEl = rootEl.elementIterator("mapper");
+//                List<Mapping> mappers = Lists.newArrayList();
+//                while (mappersEl.hasNext()) {
+//                    Element mapperEl = mappersEl.next();
+//                    Element classAEl = mapperEl.element("class-a");
+//                    Element classBEl = mapperEl.element("class-b");
+//                    Mapping mapper = new Mapping();
+//                    mapper.setClassA(classAEl.getStringValue());
+//                    mapper.setClassB(classBEl.getStringValue());
+//                    List<Field> fields = Lists.newArrayList();
+//                    Element fieldsEl = mapperEl.element("fields");
+//                    Iterator<Element> fieldEls = fieldsEl.elementIterator("field");
+//                    while (fieldEls.hasNext()){
+//                        Field field = new Field();
+//                        Element fieldEl = fieldEls.next();
+//                        Element aEl = fieldEl.element("a");
+//                        Element bEl = fieldEl.element("b");
+//                        field.setA(aEl.getStringValue());
+//                        field.setB(bEl.getStringValue());
+//                        Attribute aformatAttr = aEl.attribute("date-format");
+//                        Attribute bformatAttr = bEl.attribute("date-format");
+//                        if(aformatAttr!=null){
+//                            String format = aformatAttr.getValue();
+//                            if(!StringUtils.isEmpty(format)){
+//                                field.setDateFormat(format);
+//                            }
+//                        }else if(bformatAttr!=null){
+//                            String format = bformatAttr.getValue();
+//                            if(!StringUtils.isEmpty(format)){
+//                                field.setDateFormat(format);
+//                            }
+//                        }
+//                        fields.add(field);
+//                    }
+//                    mapper.setFields(fields);
+//                    mappers.add(mapper);
+//                }
+//                mapperMap.setMappers(mappers);
+//            }
+//        }catch (Exception e){
+//            log.error("{}",e);
+//            throw new RuntimeException(e);
+//        }
+//        return mapperMap;
+//    }
 
     @Bean
     public OrikaMapperFactoryBuilderConfigurer orikaMapperFactoryBuilderConfigurer(){
@@ -150,21 +147,21 @@ public class ModelTransformAutoConfiguration implements ApplicationContextAware 
              */
             @Override
             public void configure(MapperFactory factory) {
-                mapperMap.getMappers().forEach(mapper -> {
-                    try {
-                        ClassMapBuilder builder = factory.classMap(ClassUtils.getClass(mapper.getClassA()), ClassUtils.getClass(mapper.getClassB()));
-                        mapper.getFields().forEach(field -> {
-                            if(StringUtils.isEmpty(field.getDateFormat())){
-                                builder.field(field.getA(),field.getB());
-                            }else{
-                                builder.fieldMap(field.getA(),field.getB()).converter("dataToStr").add();
-                            }
-                        });
-                        builder.byDefault().register();
-                    }catch (Exception e){
-                        throw new RuntimeException(e);
-                    }
-                });
+//                mapperMap.getMappers().forEach(mapper -> {
+//                    try {
+//                        ClassMapBuilder builder = factory.classMap(ClassUtils.getClass(mapper.getClassA()), ClassUtils.getClass(mapper.getClassB()));
+//                        mapper.getFields().forEach(field -> {
+//                            if(StringUtils.isEmpty(field.getDateFormat())){
+//                                builder.field(field.getA(),field.getB());
+//                            }else{
+//                                builder.fieldMap(field.getA(),field.getB()).converter("dataToStr").add();
+//                            }
+//                        });
+//                        builder.byDefault().register();
+//                    }catch (Exception e){
+//                        throw new RuntimeException(e);
+//                    }
+//                });
             }
         };
         log.debug("factoryConfigurer:{}",factoryConfigurer);
