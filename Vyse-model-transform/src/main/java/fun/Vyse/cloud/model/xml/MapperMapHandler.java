@@ -8,8 +8,6 @@ import org.xml.sax.helpers.DefaultHandler;
 @Data
 @Slf4j
 public class MapperMapHandler extends DefaultHandler {
-    private MapperMap mapperMap = new MapperMap();
-
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         super.characters(ch, start, length);

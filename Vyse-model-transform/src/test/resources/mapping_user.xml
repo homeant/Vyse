@@ -2,8 +2,8 @@
 <mappings>
     <configuration>
         <custom-converters>
-            <converter type="ru.lic.bank.core.ws.mapper.FullNameToString">
-                <class-a>ru.lic.bank.core.domain.FullName</class-a>
+            <converter type="fun.Vyse.cloud.model.converter.DateConverter">
+                <class-a>java.util.Date</class-a>
                 <class-b>java.lang.String</class-b>
             </converter>
         </custom-converters>
