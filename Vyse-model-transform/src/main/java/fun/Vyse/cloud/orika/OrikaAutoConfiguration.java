@@ -1,9 +1,13 @@
-package fun.Vyse.cloud.core.orika;
+package fun.Vyse.cloud.orika;
 
+import fun.Vyse.cloud.orika.converter.LocalDateConverter;
+import fun.Vyse.cloud.orika.converter.LocalDateTimeConverter;
+import fun.Vyse.cloud.orika.converter.LocalTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.converter.ConverterFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EnableConfigurationProperties(OrikaProperties.class)
 public class OrikaAutoConfiguration {
+
     /**
      * The configuration properties for Orika.
      */
@@ -63,38 +68,39 @@ public class OrikaAutoConfiguration {
         orikaMapperFactoryBuilderConfigurers
                 .orElseGet(Collections::emptyList)
                 .forEach(configurer -> configurer.configure(orikaMapperFactoryBuilder));
-        log.debug("Created a MapperFactoryBuilder: [{}]", orikaMapperFactoryBuilder);
         return orikaMapperFactoryBuilder;
     }
 
     /**
      * Creates a {@link MapperFactory}.
      *
-     * @param orikaMapperFactoryBuilder the {@link DefaultMapperFactory.MapperFactoryBuilder}.
+     * @param mapperFactoryBuilder the {@link DefaultMapperFactory.MapperFactoryBuilder}.
      * @return a {@link MapperFactory}.
      */
     @ConditionalOnMissingBean
     @Bean
-    public MapperFactory orikaMapperFactory(DefaultMapperFactory.MapperFactoryBuilder<?, ?> orikaMapperFactoryBuilder) {
-        MapperFactory orikaMapperFactory = orikaMapperFactoryBuilder.build();
+    public MapperFactory orikaMapperFactory(DefaultMapperFactory.MapperFactoryBuilder<?, ?> mapperFactoryBuilder) {
+        MapperFactory orikaMapperFactory = mapperFactoryBuilder.build();
         orikaMapperFactoryConfigurers
                 .orElseGet(Collections::emptyList)
                 .forEach(configurer -> configurer.configure(orikaMapperFactory));
-        log.debug("Created a MapperMap: [{}]", orikaMapperFactory);
+        ConverterFactory factory = orikaMapperFactory.getConverterFactory();
+        factory.registerConverter(new LocalDateTimeConverter());
+        factory.registerConverter(new LocalDateConverter());
+        factory.registerConverter(new LocalTimeConverter());
         return orikaMapperFactory;
     }
 
     /**
      * Creates a {@link MapperFacade}.
      *
-     * @param orikaMapperFactory the {@link MapperFactory}.
+     * @param mapperFactory the {@link MapperFactory}.
      * @return a {@link MapperFacade}.
      */
     @ConditionalOnMissingBean
     @Bean
-    public MapperFacade orikaMapperFacade(MapperFactory orikaMapperFactory) {
-        MapperFacade orikaMapperFacade = orikaMapperFactory.getMapperFacade();
-        log.debug("Created a MapperFacade: [{}]", orikaMapperFacade);
+    public MapperFacade orikaMapperFacade(MapperFactory mapperFactory) {
+        MapperFacade orikaMapperFacade = mapperFactory.getMapperFacade();
         return orikaMapperFacade;
     }
 

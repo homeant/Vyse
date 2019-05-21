@@ -2,10 +2,7 @@
 <mappings>
     <configuration>
         <custom-converters>
-            <converter type="fun.Vyse.cloud.model.converter.DateConverter">
-                <class-a>java.util.Date</class-a>
-                <class-b>java.lang.String</class-b>
-            </converter>
+
         </custom-converters>
     </configuration>
 
@@ -19,6 +16,10 @@
         <field>
             <a>date</a>
             <b>data</b>
+        </field>
+        <field>
+            <a>addresses{}</a>
+            <b>adds{}</b>
         </field>
     </mapping>
 

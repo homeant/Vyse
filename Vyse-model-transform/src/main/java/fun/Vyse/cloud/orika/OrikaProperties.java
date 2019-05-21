@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.core.orika;
+package fun.Vyse.cloud.orika;
 
 
 import lombok.Data;

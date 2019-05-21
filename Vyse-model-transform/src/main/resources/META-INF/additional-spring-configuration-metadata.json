@@ -1,6 +1,10 @@
 {
   "properties": [
     {
+      "name": "orika",
+      "sourceType": "fun.Vyse.cloud.orika.OrikaProperties"
+    },
+    {
       "name": "Vyse.model",
       "sourceType": "fun.Vyse.cloud.model.ModelTransformProperties"
     }

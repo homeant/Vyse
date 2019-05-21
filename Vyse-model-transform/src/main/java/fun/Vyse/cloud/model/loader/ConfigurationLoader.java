@@ -1,6 +1,7 @@
 package fun.Vyse.cloud.model.loader;
 
 
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import fun.Vyse.cloud.model.domain.Configuration;
@@ -18,9 +19,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.core.io.Resource;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 读取xml
@@ -29,19 +29,19 @@ import java.util.Map;
 @Data
 public class ConfigurationLoader {
 
-    private final Map<String,Mapping> MAPPING_MAP = Maps.newConcurrentMap();
-    private final Map<String,Converter> CONVERTER_MAP = Maps.newConcurrentMap();
-    private final String MAPPINGS_TAG = "mappings";
-    private final String MAPPING_TAG = "mapping";
-    private final String CONFIGURATION_TAG = "configuration";
-    private final String CUSTOM_CONVERTERS_TAG = "custom-converters";
-    private final String TYPE_ATTR = "type";
-    private final String CONVERTER_TAG = "converter";
-    private final String CLASS_A_TAG = "class-a";
-    private final String CLASS_B_TAG = "class-b";
-    private final String FIELD_TAG = "field";
-    private final String A_TAG = "a";
-    private final String B_TAG = "b";
+    private static final Map<String,Mapping> MAPPING_MAP = Maps.newConcurrentMap();
+    private static final Map<String,Converter> CONVERTER_MAP = Maps.newConcurrentMap();
+    private static final String MAPPINGS_TAG = "mappings";
+    private static final String MAPPING_TAG = "mapping";
+    private static final String CONFIGURATION_TAG = "configuration";
+    private static final String CUSTOM_CONVERTERS_TAG = "custom-converters";
+    private static final String TYPE_ATTR = "type";
+    private static final String CONVERTER_TAG = "converter";
+    private static final String CLASS_A_TAG = "class-a";
+    private static final String CLASS_B_TAG = "class-b";
+    private static final String FIELD_TAG = "field";
+    private static final String A_TAG = "a";
+    private static final String B_TAG = "b";
 
 
 
@@ -70,7 +70,7 @@ public class ConfigurationLoader {
                                     converters.add(converter);
                                     Class A = ClassUtils.getClass(converter.getClassA());
                                     Class B = ClassUtils.getClass(converter.getClassB());
-                                    CONVERTER_MAP.put(A.getSimpleName()+"_"+B.getSimpleName(),converter);
+                                    CONVERTER_MAP.put(A.getTypeName()+"_"+B.getTypeName(),converter);
                                 }
                                 configuration.setCustomConverters(converters);
                                 log.debug("converter:{}",CONVERTER_MAP);
@@ -92,7 +92,7 @@ public class ConfigurationLoader {
                                 mapping.setFields(fields);
                                 Class A = ClassUtils.getClass(mapping.getClassA());
                                 Class B = ClassUtils.getClass(mapping.getClassB());
-                                MAPPING_MAP.put(A.getSimpleName()+"_"+B.getSimpleName(),mapping);
+                                MAPPING_MAP.put(A.getTypeName()+"_"+B.getTypeName(),mapping);
                             }
                         }
                     }
@@ -128,4 +128,18 @@ public class ConfigurationLoader {
     private String getAttributeValue(Attribute el){
         return el.getStringValue();
     }
+
+    public Mapping getMapping(String key){return MAPPING_MAP.get(key);}
+
+    public Converter getConverter(String key){return CONVERTER_MAP.get(key);}
+
+    public List<Mapping> getMappings(){
+        List<String> keys = MAPPING_MAP.keySet().stream().collect(Collectors.toList());
+        List<Mapping> mappings = Lists.newArrayList();
+        for (int i = 0; i < keys.size(); i++) {
+            mappings.add(MAPPING_MAP.get(keys.get(i)));
+        }
+        return mappings;
+    }
+
 }

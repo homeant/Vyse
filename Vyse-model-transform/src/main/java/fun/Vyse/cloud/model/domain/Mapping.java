@@ -10,5 +10,9 @@ public class Mapping {
 
     private String classB;
 
+    private Boolean mapNull;
+
+    private String customConverter;
+
     private List<Field> fields;
 }
