@@ -5,6 +5,10 @@
       "sourceType": "fun.Vyse.cloud.orika.OrikaProperties"
     },
     {
+      "name": "dozer",
+      "sourceType": "fun.Vyse.cloud.dozer.DozerProperties"
+    },
+    {
       "name": "Vyse.model",
       "sourceType": "fun.Vyse.cloud.model.ModelTransformProperties"
     }

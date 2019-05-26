@@ -12,7 +12,6 @@ import fun.Vyse.cloud.model.util.ClassUtils;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFactory;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;

@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 @Data
 @Slf4j
 @AutoConfigureBefore(OrikaAutoConfiguration.class)
-@ConditionalOnProperty(name = "vyse.model.enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = "vyse.model.enabled", havingValue  = "true")
 @EnableConfigurationProperties(ModelTransformProperties.class)
 public class ModelTransformAutoConfiguration implements ApplicationContextAware {
     private ApplicationContext applicationContext;
