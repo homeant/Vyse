@@ -4,8 +4,8 @@
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
     <mapping date-format="yyyy-MM-dd">
-        <class-a>fun.Vyse.cloud.test.domain.User</class-a>
-        <class-b>fun.Vyse.cloud.test.domain.UserDto</class-b>
+        <class-a>fun.vyse.cloud.test.domain.User</class-a>
+        <class-b>fun.vyse.cloud.test.domain.UserDto</class-b>
         <field>
             <a>name</a>
             <b>nickname</b>
@@ -20,8 +20,8 @@
         </field>
     </mapping>
     <mapping>
-        <class-a>fun.Vyse.cloud.test.domain.Address</class-a>
-        <class-b>fun.Vyse.cloud.test.domain.Site</class-b>
+        <class-a>fun.vyse.cloud.test.domain.Address</class-a>
+        <class-b>fun.vyse.cloud.test.domain.Site</class-b>
         <field>
             <a>address</a>
             <b>name</b>

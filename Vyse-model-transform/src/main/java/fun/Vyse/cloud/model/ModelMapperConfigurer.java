@@ -1,8 +1,8 @@
-package fun.Vyse.cloud.model;
+package fun.vyse.cloud.model;
 
-import fun.Vyse.cloud.model.domain.Mapping;
-import fun.Vyse.cloud.model.loader.ConfigurationLoader;
-import fun.Vyse.cloud.orika.OrikaMapperFactoryBuilderConfigurer;
+import fun.vyse.cloud.model.domain.Mapping;
+import fun.vyse.cloud.model.loader.ConfigurationLoader;
+import fun.vyse.cloud.orika.OrikaMapperFactoryBuilderConfigurer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.converter.ConverterFactory;

@@ -1,7 +1,7 @@
-package fun.Vyse.cloud.test.converter;
+package fun.vyse.cloud.test.converter;
 
-import fun.Vyse.cloud.test.domain.User;
-import fun.Vyse.cloud.test.domain.UserDto;
+import fun.vyse.cloud.test.domain.User;
+import fun.vyse.cloud.test.domain.UserDto;
 import ma.glasnost.orika.CustomConverter;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.metadata.Type;

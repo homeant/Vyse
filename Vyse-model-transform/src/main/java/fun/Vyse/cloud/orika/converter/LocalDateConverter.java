@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.orika.converter;
+package fun.vyse.cloud.orika.converter;
 
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.converter.BidirectionalConverter;

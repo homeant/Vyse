@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.model;
+package fun.vyse.cloud.model;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Data
-@ConfigurationProperties("vyse.model")
+@ConfigurationProperties("vyse.entity")
 public class ModelTransformProperties {
 
     private static final ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();

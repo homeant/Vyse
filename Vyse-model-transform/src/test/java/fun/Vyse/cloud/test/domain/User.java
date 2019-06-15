@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.test.domain;
+package fun.vyse.cloud.test.domain;
 
 
 import lombok.Data;

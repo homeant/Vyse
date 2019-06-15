@@ -1,14 +1,13 @@
-package fun.Vyse.cloud.model.loader;
+package fun.vyse.cloud.model.loader;
 
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import fun.Vyse.cloud.model.domain.Configuration;
-import fun.Vyse.cloud.model.domain.Converter;
-import fun.Vyse.cloud.model.domain.Field;
-import fun.Vyse.cloud.model.domain.Mapping;
-import fun.Vyse.cloud.model.util.ClassUtils;
+import fun.vyse.cloud.model.domain.Configuration;
+import fun.vyse.cloud.model.domain.Converter;
+import fun.vyse.cloud.model.domain.Field;
+import fun.vyse.cloud.model.domain.Mapping;
+import fun.vyse.cloud.model.util.ClassUtils;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;

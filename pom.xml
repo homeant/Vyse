@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fun.Vyse.cloud</groupId>
-    <artifactId>Vyse-parent</artifactId>
+    <groupId>fun.vyse.cloud</groupId>
+    <artifactId>vyse-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <description>Vyse development framework</description>
@@ -28,10 +28,10 @@
         </license>
     </licenses>
     <modules>
-        <module>Vyse-core</module>
-        <module>Vyse-web</module>
-        <module>Vyse-design</module>
-        <module>Vyse-model-transform</module>
+        <module>vyse-core</module>
+        <module>vyse-web</module>
+        <module>vyse-design</module>
+        <module>vyse-model-transform</module>
     </modules>
 
     <properties>
@@ -255,20 +255,6 @@
                         <skipTests>true</skipTests>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${maven-gpg-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -293,8 +279,27 @@
                 </snapshotRepository>
             </distributionManagement>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-gpg-plugin</artifactId>
+                            <version>${maven-gpg-plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>sign-artifacts</id>
+                                    <phase>verify</phase>
+                                    <goals>
+                                        <goal>sign</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                     </plugin>
                 </plugins>

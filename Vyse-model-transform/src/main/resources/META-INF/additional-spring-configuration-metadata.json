@@ -2,15 +2,15 @@
   "properties": [
     {
       "name": "orika",
-      "sourceType": "fun.Vyse.cloud.orika.OrikaProperties"
+      "sourceType": "fun.vyse.cloud.orika.OrikaProperties"
     },
     {
       "name": "dozer",
-      "sourceType": "fun.Vyse.cloud.dozer.DozerProperties"
+      "sourceType": "fun.vyse.cloud.dozer.DozerProperties"
     },
     {
       "name": "Vyse.model",
-      "sourceType": "fun.Vyse.cloud.model.ModelTransformProperties"
+      "sourceType": "fun.vyse.cloud.model.ModelTransformProperties"
     }
   ]
 }

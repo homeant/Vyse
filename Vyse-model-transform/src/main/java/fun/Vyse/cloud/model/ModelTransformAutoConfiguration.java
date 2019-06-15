@@ -1,8 +1,8 @@
-package fun.Vyse.cloud.model;
+package fun.vyse.cloud.model;
 
 
-import fun.Vyse.cloud.model.loader.ConfigurationLoader;
-import fun.Vyse.cloud.orika.OrikaAutoConfiguration;
+import fun.vyse.cloud.model.loader.ConfigurationLoader;
+import fun.vyse.cloud.orika.OrikaAutoConfiguration;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 @Data
 @Slf4j
 @AutoConfigureBefore(OrikaAutoConfiguration.class)
-@ConditionalOnProperty(name = "vyse.model.enabled", havingValue  = "true")
+@ConditionalOnProperty(name = "vyse.entity.enabled", havingValue  = "true")
 @EnableConfigurationProperties(ModelTransformProperties.class)
 public class ModelTransformAutoConfiguration implements ApplicationContextAware {
     private ApplicationContext applicationContext;

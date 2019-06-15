@@ -1,12 +1,11 @@
-package fun.Vyse.cloud.test;
+package fun.vyse.cloud.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
-import fun.Vyse.cloud.test.domain.Address;
-import fun.Vyse.cloud.test.domain.Site;
-import fun.Vyse.cloud.test.domain.User;
-import fun.Vyse.cloud.test.domain.UserDto;
+import fun.vyse.cloud.test.domain.Address;
+import fun.vyse.cloud.test.domain.User;
+import fun.vyse.cloud.test.domain.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;

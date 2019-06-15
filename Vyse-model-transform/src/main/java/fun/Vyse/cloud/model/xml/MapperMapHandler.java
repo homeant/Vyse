@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.model.xml;
+package fun.vyse.cloud.model.xml;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

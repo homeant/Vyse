@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.dozer;
+package fun.vyse.cloud.dozer;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.test;
+package fun.vyse.cloud.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

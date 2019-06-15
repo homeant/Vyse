@@ -7,7 +7,7 @@
 <!--    </configuration>-->
 
 <!--    <mapping>-->
-<!--        <class-a>fun.Vyse.cloud.test.domain.User</class-a>-->
+<!--        <class-a>User</class-a>-->
 <!--        <class-b>java.util.Map</class-b>-->
 <!--        <field>-->
 <!--            <a>name</a>-->
@@ -24,7 +24,7 @@
 <!--    </mapping>-->
 
 <!--    <mapping>-->
-<!--        <class-a>fun.Vyse.cloud.test.domain.Address</class-a>-->
+<!--        <class-a>Address</class-a>-->
 <!--        <class-b>java.util.Map</class-b>-->
 <!--        <field>-->
 <!--            <a>address</a>-->

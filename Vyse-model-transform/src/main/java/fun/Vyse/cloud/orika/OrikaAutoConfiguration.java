@@ -1,8 +1,8 @@
-package fun.Vyse.cloud.orika;
+package fun.vyse.cloud.orika;
 
-import fun.Vyse.cloud.orika.converter.LocalDateConverter;
-import fun.Vyse.cloud.orika.converter.LocalDateTimeConverter;
-import fun.Vyse.cloud.orika.converter.LocalTimeConverter;
+import fun.vyse.cloud.orika.converter.LocalDateConverter;
+import fun.vyse.cloud.orika.converter.LocalDateTimeConverter;
+import fun.vyse.cloud.orika.converter.LocalTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
