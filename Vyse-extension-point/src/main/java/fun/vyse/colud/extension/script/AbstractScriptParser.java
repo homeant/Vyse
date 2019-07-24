@@ -28,10 +28,8 @@ public abstract class AbstractScriptParser {
      * @param elStr
      * @param target    AOP 拦截到的实例
      * @param arguments 参数
-     * @param valueType 值类型
-     * @param <T>       泛型
      * @return T Value 返回值
      * @throws Exception 异常
      */
-    public abstract  <T> T getElValue(String elStr, Object target, Object[] arguments, Class<T> valueType) throws Exception;
+    public abstract boolean getElValue(String elStr, Object target, Object[] arguments) throws Exception;
 }

@@ -96,9 +96,9 @@ public class ExtensionInterceptor implements ApplicationContextAware {
                 Object bean = entry.getValue();
                 Method me = bean.getClass().getDeclaredMethod(methodName, array);
                 Extension extension = me.getAnnotation(Extension.class);
-                Boolean elValue = true;
+                boolean elValue = true;
                 if(extension!=null){
-                    elValue = springELParser.getElValue(extension.condition(), point.getTarget(), point.getArgs(), Boolean.class);
+                    elValue = springELParser.getElValue(extension.condition(), point.getTarget(), point.getArgs());
                 }
                 if(elValue){
                     Object invoke = me.invoke(bean, point.getArgs());
