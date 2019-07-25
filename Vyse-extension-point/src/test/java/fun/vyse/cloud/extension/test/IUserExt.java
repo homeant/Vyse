@@ -10,4 +10,5 @@ import fun.vyse.cloud.extension.test.entity.User;
  */
 public interface IUserExt {
     User getUser(User user);
+
 }
