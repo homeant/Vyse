@@ -12,6 +12,7 @@
         <aop:aspect ref="aopInterceptor">
             <aop:before pointcut-ref="pointcut" method="beforMethod"/>
             <aop:after-returning pointcut-ref="pointcut" method="afterReturnMethod" returning="result"/>
+            <aop:after method="afterMethod" pointcut-ref="pointcut"/>
             <aop:around method="aroundMethod" pointcut-ref="pointcut"/>
         </aop:aspect>
     </aop:config>
