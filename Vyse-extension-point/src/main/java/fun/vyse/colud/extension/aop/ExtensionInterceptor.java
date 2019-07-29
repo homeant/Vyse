@@ -68,9 +68,9 @@ public class ExtensionInterceptor implements ApplicationContextAware {
 	        for (int i = 0; i < list.size(); i++) {
 	            array[i] = Class.forName(list.get(i));
 	        }
-	        LinkedHashMap dataLinkMap=(LinkedHashMap) sortHashMap(beansOfType);
+	        LinkedHashMap <String,Object> dataLinkMap=(LinkedHashMap<String,Object>) sortHashMap(beansOfType,methodName);
 	        System.out.println(dataLinkMap);
-	        for (Map.Entry<String, Object> entry : beansOfType.entrySet()) {
+	        for (Map.Entry<String, Object> entry : dataLinkMap.entrySet()) {
 	            Object bean = entry.getValue();
 
 	            Method me = bean.getClass().getDeclaredMethod(methodName,Object[].class);
@@ -92,11 +92,11 @@ public class ExtensionInterceptor implements ApplicationContextAware {
 		}
     }
     /**
-     * 对拓展的方法排序
+     * 对拓展的实现方法排序
      *
      * @param map 
      */
-    public static HashMap<String,Object> sortHashMap(Map<String, Object> map) {
+    public static HashMap<String,Object> sortHashMap(Map<String, Object> map,String MethodName) {
         // 首先拿到 map 的键值对集合
         Set<Map.Entry<String, Object>> entrySet = map.entrySet();
         // 将 set 集合转为 List 集合，为什么，为了使用工具类的排序方法
@@ -107,10 +107,9 @@ public class ExtensionInterceptor implements ApplicationContextAware {
             public int compare(Map.Entry<String, Object> o1, Map.Entry<String, Object> o2) {
                 //按照要求根据 User 的 age 的升序进行排,如果是倒序就是o2-o1
             	try {
-	            Method me1 = o1.getValue().getClass().getDeclaredMethod("afterMethod",Object[].class);
+	            Method me1 = o1.getValue().getClass().getDeclaredMethod(MethodName,Object[].class);
 	            Extension extension1 = me1.getAnnotation(Extension.class);
-            	
-	            Method me2 = o2.getValue().getClass().getDeclaredMethod("afterMethod",Object[].class);
+	            Method me2 = o2.getValue().getClass().getDeclaredMethod(MethodName,Object[].class);
 	            Extension extension2 = me2.getAnnotation(Extension.class);
                 return  extension1.order()-extension2.order();
             	} catch (NoSuchMethodException e) {
