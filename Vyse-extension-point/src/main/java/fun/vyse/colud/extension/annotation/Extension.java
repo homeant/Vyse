@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  *
  * @author huangtianhui
  */
-@Target({ElementType.METHOD,ElementType.ANNOTATION_TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Extension {
