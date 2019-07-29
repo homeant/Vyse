@@ -13,9 +13,15 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -47,10 +53,84 @@ public class ExtensionInterceptor implements ApplicationContextAware {
      *
      * @param joinPoint
      */
-    public void afterMethod(JoinPoint joinPoint) {
-        String methodName = joinPoint.getSignature().getName();
-    }
+    @SuppressWarnings("unchecked")
+	public void afterMethod(JoinPoint joinPoint) {
+    	//后置方法名称
+    	String methodName = "afterMethod";
+    	MethodSignature sign = (MethodSignature) joinPoint.getSignature();
+        Method method = sign.getMethod();
+        ExtensionService extensionService = method.getAnnotation(ExtensionService.class);
+        try {
+	        Class clazz = extensionService.className();
+	        Map<String,Object> beansOfType = applicationContext.getBeansOfType(clazz);
+	        Class[] array = new Class[joinPoint.getArgs().length];
+	        List<String> list = Arrays.asList(joinPoint.getArgs()).stream().map(r -> r.getClass().getName()).collect(Collectors.toList());
+	        for (int i = 0; i < list.size(); i++) {
+	            array[i] = Class.forName(list.get(i));
+	        }
+	        LinkedHashMap dataLinkMap=(LinkedHashMap) sortHashMap(beansOfType);
+	        System.out.println(dataLinkMap);
+	        for (Map.Entry<String, Object> entry : beansOfType.entrySet()) {
+	            Object bean = entry.getValue();
 
+	            Method me = bean.getClass().getDeclaredMethod(methodName,Object[].class);
+	            Extension extension = me.getAnnotation(Extension.class);
+	            boolean elValue = true;
+	            if(extension!=null){
+	                elValue = springELParser.getElValue(extension.condition(), joinPoint.getTarget(), joinPoint.getArgs());
+	            }
+	            if(elValue){
+	                Object invoke = me.invoke(bean, new Object[]{joinPoint.getArgs()});
+	                log.debug("result:{}",invoke);
+	                if(invoke!=null){
+	                    //return invoke;
+	                }
+	            }
+	         }
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    /**
+     * 对拓展的方法排序
+     *
+     * @param map 
+     */
+    public static HashMap<String,Object> sortHashMap(Map<String, Object> map) {
+        // 首先拿到 map 的键值对集合
+        Set<Map.Entry<String, Object>> entrySet = map.entrySet();
+        // 将 set 集合转为 List 集合，为什么，为了使用工具类的排序方法
+        List<Map.Entry<String, Object>> list = new ArrayList<Map.Entry<String, Object>>(entrySet);
+        // 使用 Collections 集合工具类对 list 进行排序，排序规则使用匿名内部类来实现
+        Collections.sort(list, new Comparator<Map.Entry<String, Object>>() {
+            @Override
+            public int compare(Map.Entry<String, Object> o1, Map.Entry<String, Object> o2) {
+                //按照要求根据 User 的 age 的升序进行排,如果是倒序就是o2-o1
+            	try {
+	            Method me1 = o1.getValue().getClass().getDeclaredMethod("afterMethod",Object[].class);
+	            Extension extension1 = me1.getAnnotation(Extension.class);
+            	
+	            Method me2 = o2.getValue().getClass().getDeclaredMethod("afterMethod",Object[].class);
+	            Extension extension2 = me2.getAnnotation(Extension.class);
+                return  extension1.order()-extension2.order();
+            	} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+					return -1;
+				} catch (SecurityException e) {
+					e.printStackTrace();
+					return -1;
+				}
+            }
+        });
+        //创建一个新的有序的 HashMap 子类的集合
+        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<String, Object>();
+        //将 List 中的数据存储在 LinkedHashMap 中
+        for (Map.Entry<String, Object> entry : list) {
+            linkedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        //返回结果
+        return linkedHashMap;
+    }
     /**
      * 返回通知（在方法正常结束执行的代码）
      * 返回通知可以访问到方法的返回值！
@@ -82,7 +162,7 @@ public class ExtensionInterceptor implements ApplicationContextAware {
     public Object aroundMethod(ProceedingJoinPoint point) {
         ExtensionService annotation = getMethodAnnotation(point, ExtensionService.class);
         Object result = null;
-        String methodName = point.getSignature().getName();
+        String methodName ="beforeMethod";
         try {
             Class clazz = annotation.className();
             Map<String,Object> beansOfType = applicationContext.getBeansOfType(clazz);
@@ -91,7 +171,6 @@ public class ExtensionInterceptor implements ApplicationContextAware {
             for (int i = 0; i < list.size(); i++) {
                 array[i] = Class.forName(list.get(i));
             }
-
             for (Map.Entry<String, Object> entry : beansOfType.entrySet()){
                 Object bean = entry.getValue();
                 Method me = bean.getClass().getDeclaredMethod(methodName, array);
