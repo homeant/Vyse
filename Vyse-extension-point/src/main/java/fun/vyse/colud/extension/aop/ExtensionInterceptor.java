@@ -1,5 +1,6 @@
 package fun.vyse.colud.extension.aop;
 
+import fun.vyse.cloud.context.Context;
 import fun.vyse.colud.extension.annotation.Extension;
 import fun.vyse.colud.extension.annotation.ExtensionService;
 import fun.vyse.colud.extension.script.SpringELParser;
@@ -53,50 +54,57 @@ public class ExtensionInterceptor implements ApplicationContextAware {
      *
      * @param joinPoint
      */
-    @SuppressWarnings("unchecked")
-	public void afterMethod(JoinPoint joinPoint) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public Object afterMethod(JoinPoint joinPoint) {
     	//后置方法名称
-    	String methodName = "afterMethod";
+    	final String methodName = "after";
+    	Object result = null;
     	MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         Method method = sign.getMethod();
         ExtensionService extensionService = method.getAnnotation(ExtensionService.class);
         try {
 	        Class clazz = extensionService.className();
 	        Map<String,Object> beansOfType = applicationContext.getBeansOfType(clazz);
-	        Class[] array = new Class[joinPoint.getArgs().length];
-	        List<String> list = Arrays.asList(joinPoint.getArgs()).stream().map(r -> r.getClass().getName()).collect(Collectors.toList());
-	        for (int i = 0; i < list.size(); i++) {
-	            array[i] = Class.forName(list.get(i));
-	        }
-	        LinkedHashMap <String,Object> dataLinkMap=(LinkedHashMap<String,Object>) sortHashMap(beansOfType,methodName);
-	        System.out.println(dataLinkMap);
+//	        Class[] array = new Class[joinPoint.getArgs().length];
+//	        List<String> list = Arrays.asList(joinPoint.getArgs()).stream().map(r -> r.getClass().getName()).collect(Collectors.toList());
+//	        for (int i = 0; i < list.size(); i++) {
+//	            array[i] = Class.forName(list.get(i));
+//	        }
+	        //根据前置方法注解中的 order排序 最小到达
+	        Map <String,Object> dataLinkMap=sortHashMap(beansOfType,methodName);
 	        for (Map.Entry<String, Object> entry : dataLinkMap.entrySet()) {
 	            Object bean = entry.getValue();
-
-	            Method me = bean.getClass().getDeclaredMethod(methodName,Object[].class);
+	            Method me = bean.getClass().getDeclaredMethod(methodName,Context.class);
 	            Extension extension = me.getAnnotation(Extension.class);
 	            boolean elValue = true;
+	            
 	            if(extension!=null){
 	                elValue = springELParser.getElValue(extension.condition(), joinPoint.getTarget(), joinPoint.getArgs());
 	            }
 	            if(elValue){
-	                Object invoke = me.invoke(bean, new Object[]{joinPoint.getArgs()});
-	                log.debug("result:{}",invoke);
-	                if(invoke!=null){
-	                    //return invoke;
-	                }
+	            	Context context=new Context();
+                	context.setArgs(joinPoint.getArgs());
+                	context.setCondition(extension!=null?extension.condition():null);
+                	context.setOrder(extension!=null?extension.order():0);
+	                me.invoke(bean,context);
+	                log.debug("result:{}",context.getResult());
+	                if(context.getResult()!=null){
+	                	result=context.getResult();
+                        return result;
+                    }
 	            }
 	         }
         } catch (Exception e) {
 			e.printStackTrace();
 		}
+        return result;
     }
     /**
      * 对拓展的实现方法排序
      *
      * @param map 
      */
-    public static HashMap<String,Object> sortHashMap(Map<String, Object> map,String MethodName) {
+    public static LinkedHashMap<String,Object> sortHashMap(Map<String, Object> map,String MethodName) {
         // 首先拿到 map 的键值对集合
         Set<Map.Entry<String, Object>> entrySet = map.entrySet();
         // 将 set 集合转为 List 集合，为什么，为了使用工具类的排序方法
@@ -105,29 +113,29 @@ public class ExtensionInterceptor implements ApplicationContextAware {
         Collections.sort(list, new Comparator<Map.Entry<String, Object>>() {
             @Override
             public int compare(Map.Entry<String, Object> o1, Map.Entry<String, Object> o2) {
-                //按照要求根据 User 的 age 的升序进行排,如果是倒序就是o2-o1
+                //按照要求根据  Extension 的 order 的升序进行排,如果是倒序就是o2-o1
             	try {
-	            Method me1 = o1.getValue().getClass().getDeclaredMethod(MethodName,Object[].class);
-	            Extension extension1 = me1.getAnnotation(Extension.class);
-	            Method me2 = o2.getValue().getClass().getDeclaredMethod(MethodName,Object[].class);
-	            Extension extension2 = me2.getAnnotation(Extension.class);
-                return  extension1.order()-extension2.order();
+			            Method me1 = o1.getValue().getClass().getDeclaredMethod(MethodName,Context.class);
+			            Extension extension1 = me1.getAnnotation(Extension.class);
+			            int num1=extension1!=null?extension1.order():0;
+			            Method me2 = o2.getValue().getClass().getDeclaredMethod(MethodName,Context.class);
+			            Extension extension2 = me2.getAnnotation(Extension.class);
+			            int num2=extension2!=null?extension2.order():0;
+			            return  num1-num2;
             	} catch (NoSuchMethodException e) {
-					e.printStackTrace();
+					log.error("error : 比较错误 {}",e.getMessage());
 					return -1;
 				} catch (SecurityException e) {
-					e.printStackTrace();
+					log.error("error : 比较错误 {}",e.getMessage());
 					return -1;
 				}
             }
         });
-        //创建一个新的有序的 HashMap 子类的集合
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<String, Object>();
         //将 List 中的数据存储在 LinkedHashMap 中
         for (Map.Entry<String, Object> entry : list) {
             linkedHashMap.put(entry.getKey(), entry.getValue());
         }
-        //返回结果
         return linkedHashMap;
     }
     /**
@@ -158,31 +166,40 @@ public class ExtensionInterceptor implements ApplicationContextAware {
      *
      * @param point
      */
-    public Object aroundMethod(ProceedingJoinPoint point) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public Object aroundMethod(ProceedingJoinPoint point) {
         ExtensionService annotation = getMethodAnnotation(point, ExtensionService.class);
         Object result = null;
-        String methodName ="beforeMethod";
+        //前置方法名称
+        final String methodName ="before";
         try {
             Class clazz = annotation.className();
             Map<String,Object> beansOfType = applicationContext.getBeansOfType(clazz);
-            Class[] array = new Class[point.getArgs().length];
-            List<String> list = Arrays.asList(point.getArgs()).stream().map(r -> r.getClass().getName()).collect(Collectors.toList());
-            for (int i = 0; i < list.size(); i++) {
-                array[i] = Class.forName(list.get(i));
-            }
-            for (Map.Entry<String, Object> entry : beansOfType.entrySet()){
+//            Class[] array = new Class[point.getArgs().length];
+//            List<String> list = Arrays.asList(point.getArgs()).stream().map(r -> r.getClass().getName()).collect(Collectors.toList());
+//            for (int i = 0; i < list.size(); i++) {
+//                array[i] = Class.forName(list.get(i));
+//            }
+            //根据order注解排序
+            Map <String,Object> dataLinkMap= sortHashMap(beansOfType,methodName);
+            
+            for (Map.Entry<String, Object> entry : dataLinkMap.entrySet()){
                 Object bean = entry.getValue();
-                Method me = bean.getClass().getDeclaredMethod(methodName, array);
+                Method me = bean.getClass().getDeclaredMethod(methodName, Context.class);
                 Extension extension = me.getAnnotation(Extension.class);
                 boolean elValue = true;
                 if(extension!=null){
                     elValue = springELParser.getElValue(extension.condition(), point.getTarget(), point.getArgs());
                 }
                 if(elValue){
-                    Object invoke = me.invoke(bean, point.getArgs());
-                    log.debug("result:{}",invoke);
-                    if(invoke!=null){
-                        return invoke;
+                	Context context=new Context();
+                	context.setArgs(point.getArgs());
+                	context.setCondition(extension!=null?extension.condition():null);
+                	context.setOrder(extension!=null?extension.order():0);
+                    me.invoke(bean, context);
+                    log.debug("result:{}",context.getResult());
+                    if(context.getResult()!=null){
+                        return context.getResult();
                     }
                 }
             }
