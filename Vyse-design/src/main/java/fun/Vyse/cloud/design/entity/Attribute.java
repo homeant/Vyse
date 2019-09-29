@@ -1,23 +1,24 @@
 package fun.vyse.cloud.design.entity;
 
+import fun.vyse.cloud.core.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 
 @Entity
-@Table(name = "v_attribute_ext")
-@PrimaryKeyJoinColumn(name = "attr_id")
+@Table(name = "v_attribute")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Attribute extends BaseAttribute{
+public class Attribute extends BaseEntity<Long> {
 
-    private int length;
+    private String name;
 
-    private boolean visible;
+    private String type;
 
-    private int required;
+    private String code;
+    @Column(name = "`desc`")
+    private String desc;
 }

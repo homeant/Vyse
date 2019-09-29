@@ -1,5 +1,6 @@
 package fun.vyse.cloud.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
@@ -51,38 +52,47 @@ public class ApplicationTest {
         List<Address> addresses = Lists.newArrayList();
         for (int i = 0; i < 10; i++) {
             Address address = new Address();
-            address.setAddress("北京"+i);
+            address.setAddress("北京" + i);
             addresses.add(address);
         }
         user.setAddresses(addresses);
+        Long time = 0L;
         for (int i = 0; i < 100; i++) {
-            user.setName(user.getName()+i);
+            user.setName(user.getName() + i);
             long startTime = System.currentTimeMillis();
-            mapperFacade.map(user,Map.class);
+            UserDto map = mapperFacade.map(user, UserDto.class);
             long endTime = System.currentTimeMillis();
-            log.debug("{}",endTime-startTime);
+            try {
+                log.debug("str:{}",objectMapper.writeValueAsString(map));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            time += endTime - startTime;
         }
+        log.debug("mapperFacade:{}", time);
     }
 
     @Test
-    public void test2(){
+    public void test2() {
         User user = new User();
         user.setName("hello");
         user.setDate(new Date());
         List<Address> addresses = Lists.newArrayList();
         for (int i = 0; i < 10; i++) {
             Address address = new Address();
-            address.setAddress("北京"+i);
+            address.setAddress("北京" + i);
             addresses.add(address);
         }
         user.setAddresses(addresses);
+        Long time = 0L;
         for (int i = 0; i < 100; i++) {
-            user.setName(user.getName()+i);
+            user.setName(user.getName() + i);
             long startTime = System.currentTimeMillis();
             mapper.map(user, UserDto.class);
             long endTime = System.currentTimeMillis();
-            log.debug("dozer:{}",endTime-startTime);
+            time += endTime - startTime;
         }
+        log.debug("dozer:{}", time);
     }
 
 
