@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration scan="true" >
-    <springProperty scope="context" name="app.name" source="spring.application.name"/>
+	<property name="app.name" value="vyse-integration"/>
     <property name="logDir" value="./logs"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
