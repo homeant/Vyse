@@ -170,10 +170,7 @@ public class ApplicationTest {
 					.channel(c -> c.queue("results"));
 		}
 
-		/**
-		 * servletContex中默认路径src/main/webapp
-		 */
-		@Value("../scripts/GroovyTransformerTests.groovy")
+		@Value("scripts/GroovyTransformerTests.groovy")
 		private Resource scriptResource;
 
 		@Bean
