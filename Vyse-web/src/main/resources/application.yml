@@ -1,3 +1,15 @@
 spring:
   application:
-    name: Vyse-web
+    name: vyse-web
+#  datasource:
+#    url: jdbc:mysql://140.143.66.80:3306/vyse
+#    username: vyse
+#    password: p@ssw0rd
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate:
+#      ddl-auto: update
+#      naming:
+#        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+#    show-sql: true

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fun.Vyse.cloud</groupId>
-    <artifactId>Vyse-parent</artifactId>
+    <groupId>fun.vyse.cloud</groupId>
+    <artifactId>vyse-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <description>Vyse development framework</description>
@@ -28,10 +28,12 @@
         </license>
     </licenses>
     <modules>
-        <module>Vyse-core</module>
-        <module>Vyse-web</module>
-        <module>Vyse-design</module>
-        <module>Vyse-model-transform</module>
+        <module>vyse-core</module>
+        <module>vyse-web</module>
+        <module>vyse-design</module>
+        <module>vyse-model-transform</module>
+        <module>Vyse-extension-point</module>
+        <module>vyse-integration</module>
     </modules>
 
     <properties>
@@ -54,7 +56,8 @@
         <druid.version>1.1.16</druid.version>
         <mysql.version>8.0.16</mysql.version>
         <mybatis-plus.version>3.1.1</mybatis-plus.version>
-
+        <jackson.version>2.9.8</jackson.version>
+        <dozer.version>5.5.1</dozer.version>
         <!-- 编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -76,6 +79,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>3.0-alpha-1</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
@@ -86,9 +94,34 @@
                 <version>${commons-collections4.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guave.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer-spring</artifactId>
+                <version>${dozer.version}</version>
             </dependency>
             <dependency>
                 <groupId>ma.glasnost.orika</groupId>
@@ -127,7 +160,6 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -229,20 +261,6 @@
                         <skipTests>true</skipTests>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${maven-gpg-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -267,8 +285,27 @@
                 </snapshotRepository>
             </distributionManagement>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-gpg-plugin</artifactId>
+                            <version>${maven-gpg-plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>sign-artifacts</id>
+                                    <phase>verify</phase>
+                                    <goals>
+                                        <goal>sign</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                     </plugin>
                 </plugins>

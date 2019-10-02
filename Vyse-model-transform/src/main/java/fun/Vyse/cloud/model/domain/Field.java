@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.model.domain;
+package fun.vyse.cloud.model.domain;
 
 import lombok.Data;
 
@@ -7,10 +7,4 @@ public class Field {
     private String a;
 
     private String b;
-
-    private String dateFormat;
-
-    private String mapperClass;
-
-    private String ref;
 }

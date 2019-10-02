@@ -3,18 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>Vyse-parent</artifactId>
-        <groupId>fun.Vyse.cloud</groupId>
+        <artifactId>vyse-parent</artifactId>
+        <groupId>fun.vyse.cloud</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Vyse-model-transform</artifactId>
+    <artifactId>vyse-model-transform</artifactId>
     <dependencies>
-        <dependency>
-            <groupId>fun.Vyse.cloud</groupId>
+        <!--<dependency>
+            <groupId>fun.vyse.cloud</groupId>
             <artifactId>Vyse-core</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -23,6 +35,14 @@
         <dependency>
             <groupId>ma.glasnost.orika</groupId>
             <artifactId>orika-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer-spring</artifactId>
         </dependency>
         <dependency>
             <groupId>org.dom4j</groupId>

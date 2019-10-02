@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.web;
+package fun.vyse.cloud.web;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

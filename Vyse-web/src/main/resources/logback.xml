@@ -46,7 +46,7 @@
         </encoder>
     </appender>
 
-    <logger name="fun.Vyse.cloud" level="debug"/>
+    <logger name="fun.vyse.cloud" level="debug"/>
 
     <root level="info">
         <appender-ref ref="CONSOLE" />

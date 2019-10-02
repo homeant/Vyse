@@ -1,7 +1,6 @@
-package fun.Vyse.cloud.test;
+package fun.vyse.cloud.test;
 
 import lombok.extern.slf4j.Slf4j;
-import ma.glasnost.orika.MapperFacade;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ApplicationTest {
 
-    @Autowired
-    private MapperFacade mapperFacade;
 
     @Test
     public void test() {
-        log.debug("facade:{}",mapperFacade);
+
     }
 
 

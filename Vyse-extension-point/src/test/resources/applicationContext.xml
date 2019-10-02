@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="aopInterceptor" class="fun.vyse.colud.extension.aop.ExtensionInterceptor"/>
+
+    <aop:config>
+        <aop:pointcut id="pointcut" expression="execution(public !void fun.vyse.cloud.*..*(..)) &amp;&amp; @annotation(fun.vyse.colud.extension.annotation.ExtensionService)"/>
+        <aop:aspect ref="aopInterceptor">
+            <aop:before pointcut-ref="pointcut" method="beforMethod"/>
+            <aop:after-returning pointcut-ref="pointcut" method="afterReturnMethod" returning="result"/>
+            <aop:after method="afterMethod" pointcut-ref="pointcut"/>
+            <aop:around method="aroundMethod" pointcut-ref="pointcut"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

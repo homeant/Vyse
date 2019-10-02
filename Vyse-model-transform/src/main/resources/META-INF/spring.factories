@@ -1,3 +1,5 @@
 # Spring Boot Auto-configuration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  fun.Vyse.cloud.model.ModelTransformAutoConfiguration
+  fun.vyse.cloud.orika.OrikaAutoConfiguration,\
+  fun.vyse.cloud.model.ModelTransformAutoConfiguration,\
+  fun.vyse.cloud.dozer.DozerAutoConfiguration

@@ -1,4 +1,4 @@
-package fun.Vyse.cloud.model.util;
+package fun.vyse.cloud.model.util;
 
 public class ClassUtils {
     public static Class getClass(String className) throws ClassNotFoundException{
