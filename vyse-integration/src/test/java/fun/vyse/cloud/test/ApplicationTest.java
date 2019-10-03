@@ -13,23 +13,30 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpMethod;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
+import org.springframework.integration.channel.ExecutorChannel;
 import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.handler.LoggingHandler;
 import org.springframework.integration.http.dsl.Http;
 import org.springframework.integration.scripting.dsl.Scripts;
 import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.PollableChannel;
+import org.springframework.messaging.*;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.context.junit4.SpringRunner;
 
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,12 +59,19 @@ public class ApplicationTest {
 	private PollableChannel groovyResult;
 
 	@Autowired
+	private ExecutorChannel executorChannel;
+
+	@Autowired
 	@Qualifier("scriptFilter.input")
 	private MessageChannel filterInput;
 
 	@Autowired
 	@Qualifier("scriptTransform.input")
 	private MessageChannel scriptTransform;
+
+	@Autowired
+	@Qualifier("executorFolw.input")
+	private MessageChannel executorFolw;
 
 	@Test
 	public void test() {
@@ -105,6 +119,24 @@ public class ApplicationTest {
 		log.debug("result:{}", receive);
 	}
 
+	@Test
+	public void executorFlow() throws InterruptedException {
+		for (int i = 0; i < 10; i++) {
+			final Integer num = i+1;
+			Runnable runnable = () -> {
+				QueueChannel replyChannel = new QueueChannel();
+				Message<?> testMessage =
+						MessageBuilder.withPayload("test_"+num)
+								.setReplyChannel(replyChannel)
+								.build();
+				executorFolw.send(testMessage);
+				Message<?> receive = replyChannel.receive(1000);
+				log.debug("result:{}", receive);
+			};
+			runnable.run();
+		}
+	}
+
 
 	@Configuration
 	@EnableIntegration
@@ -126,14 +158,21 @@ public class ApplicationTest {
 
 		@Bean
 		public IntegrationFlow convert() {
-			return f -> f.handle(Http.outboundGateway("https://api.github.com/users/{name}")
-					.httpMethod(HttpMethod.GET).expectedResponseType(String.class).uriVariable("name", r -> r.getPayload())).log(LoggingHandler.Level.DEBUG).bridge();
+			return f -> f
+					.handle(Http.outboundGateway("https://api.github.com/users/{name}")
+							.httpMethod(HttpMethod.GET)
+							.expectedResponseType(String.class)
+							.uriVariable("name", r -> r.getPayload()))
+					.log(LoggingHandler.Level.DEBUG).bridge();
 		}
 
 		@Bean
 		public IntegrationFlow userInfo() {
-			return f -> f.handle(Http.outboundGateway("https://api.github.com/users/{name}").uriVariable("name", r -> r.getPayload())
-					.httpMethod(HttpMethod.GET).expectedResponseType(UserInfo.class))
+			return f -> f
+					.handle(Http.outboundGateway("https://api.github.com/users/{name}")
+							.uriVariable("name", r -> r.getPayload())
+							.httpMethod(HttpMethod.GET)
+							.expectedResponseType(UserInfo.class))
 					.log(LoggingHandler.Level.DEBUG).bridge();
 		}
 
@@ -179,6 +218,43 @@ public class ApplicationTest {
 					.transform(Scripts.processor(scriptResource)
 							.lang("groovy"))
 					.channel(c -> c.queue("groovyResult"));
+		}
+
+		@Bean
+		public ExecutorChannel executorChannel() {
+			ExecutorChannel channel = new ExecutorChannel(executor());
+			channel.addInterceptor(new ChannelInterceptor(){
+				@Override
+				public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
+					log.debug("time:{},{}",message.getPayload(),System.currentTimeMillis());
+				}
+			});
+			return channel;
+		}
+
+		@Bean
+		public Executor executor() {
+			ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+			taskExecutor.setCorePoolSize(5);
+			taskExecutor.setMaxPoolSize(10);
+			taskExecutor.setQueueCapacity(25);
+			taskExecutor.initialize();
+			return taskExecutor;
+		}
+
+		@Bean
+		public IntegrationFlow executorFolw() {
+			return f -> f
+					.gateway("executorChannel");
+		}
+
+		@Bean
+		public IntegrationFlow integrationFlow() {
+			return IntegrationFlows.from("executorChannel")
+					.handle(Http.outboundGateway("https://api.github.com/users/homeant")
+							.httpMethod(HttpMethod.GET)
+							.expectedResponseType(String.class)).transform(r->r)
+					.get();
 		}
 	}
 }

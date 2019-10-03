@@ -32,7 +32,6 @@ import org.w3c.dom.Node;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -75,8 +74,6 @@ public class WebServiceTest {
 
 		@Bean
 		public IntegrationFlow webService() {
-			Map<String, Object> headerMap = Maps.newHashMap();
-			headerMap.put("Content-Type", "application/soap+xml; charset=utf-8");
 			return f -> f
 					.transform(r -> {
 						try {
