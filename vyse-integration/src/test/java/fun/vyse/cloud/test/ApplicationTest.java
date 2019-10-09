@@ -169,7 +169,7 @@ public class ApplicationTest {
 			return f -> f
 					.handle(Http.outboundGateway("https://api.github.com/users/{name}")
 							.uriVariable("name", r -> r.getPayload())
-							.httpMethod(HttpMethod.GET)
+							.httpMethod(HttpMethod.GET).charset("UTF-8")
 							.expectedResponseType(UserInfo.class))
 					.log(LoggingHandler.Level.DEBUG).bridge();
 		}
