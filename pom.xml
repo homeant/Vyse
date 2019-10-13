@@ -32,7 +32,6 @@
         <module>vyse-web</module>
         <module>vyse-design</module>
         <module>vyse-model-transform</module>
-        <module>Vyse-extension-point</module>
         <module>vyse-integration</module>
     </modules>
 
