@@ -17,18 +17,20 @@
  *
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.design.entity;
 
+import fun.vyse.cloud.core.domain.AbstractEntity;
 import lombok.Data;
-
+import lombok.EqualsAndHashCode;
 
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
+ * fun.vyse.cloud.design.entity.FixedModeEO
  *
- * @Author junchen
- * @Date 2019-10-13 10:00
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-14 15:18
  */
 @Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+@EqualsAndHashCode(callSuper = false)
+public class FixedModeEO extends AbstractEntity {
+    private String className;
 }

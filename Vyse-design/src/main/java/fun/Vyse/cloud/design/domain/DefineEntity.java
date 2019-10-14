@@ -17,18 +17,42 @@
  *
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.design.domain;
 
+import fun.vyse.cloud.core.domain.IEntity;
 import lombok.Data;
 
+import java.util.Map;
 
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
- *
- * @Author junchen
- * @Date 2019-10-13 10:00
+ * fun.vyse.cloud.design.domain.DefineEntity
+ * 操作的entity
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-12 14:34
  */
 @Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+public class DefineEntity implements IEntity<Long> {
+
+    private DefineModel model;
+
+    private Map<String,Object> extend;
+
+    public DefineEntity(){
+        this.model = null;
+    }
+
+    public DefineEntity(DefineModel model){
+        this.model = model;
+    }
+
+
+    @Override
+    public Long getId() {
+        return this.model.getId();
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.model.setId(id);
+    }
 }

@@ -20,15 +20,16 @@
 package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
-
+import lombok.EqualsAndHashCode;
 
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
+ * fun.vyse.cloud.design.domain.InternalFixedModelEO
  *
- * @Author junchen
- * @Date 2019-10-13 10:00
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-14 14:37
  */
 @Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+@EqualsAndHashCode(callSuper = false)
+public class InternalFixedModelEO extends AbstractEntity implements IFixedEntity {
+    private Long defineId;
 }

@@ -19,16 +19,16 @@
 
 package fun.vyse.cloud.core.domain;
 
-import lombok.Data;
-
-
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
- *
- * @Author junchen
- * @Date 2019-10-13 10:00
+ * fun.vyse.cloud.design.domain.ITenantEntity
+ * 租户接口类
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-12 14:24
  */
-@Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+public interface ITenantEntity {
+
+    String getTenantId();
+
+    void setTenantId(String tenantId);
+
 }

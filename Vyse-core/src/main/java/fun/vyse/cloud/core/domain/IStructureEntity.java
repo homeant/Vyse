@@ -19,16 +19,22 @@
 
 package fun.vyse.cloud.core.domain;
 
-import lombok.Data;
-
+import java.util.Date;
 
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
+ * fun.vyse.cloud.core.domain.IStructure
  *
  * @Author junchen
- * @Date 2019-10-13 10:00
+ * @Date 2019-10-13 10:18
  */
-@Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+public interface IStructureEntity extends IEntity{
+
+	Date getCreateTime();
+
+	Date getUpdateTime();
+
+	String getCreator();
+
+	String getMender();
+
 }

@@ -19,22 +19,21 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.util.Date;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * fun.vyse.cloud.core.domain.IStructure
+ * fun.vyse.cloud.design.domain.DefineModelEO
  *
- * @Author junchen
- * @Date 2019-10-13 10:18
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-14 14:34
  */
-public interface IStructure extends IEntity{
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class DefineModelEO extends InternalFixedModelEO {
+    private String defineName;
 
-	Date getCreateTime();
+    private String defineCode;
 
-	Date getUpdateTime();
-
-	String getCreator();
-
-	String getMender();
-
+    private String definePath;
 }

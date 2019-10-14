@@ -17,18 +17,22 @@
  *
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.design.service;
 
-import lombok.Data;
 
+import fun.vyse.cloud.design.domain.MetaDefinition;
 
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
+ * fun.vyse.cloud.design.service.IMetaDefinitionService
  *
- * @Author junchen
- * @Date 2019-10-13 10:00
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-14 10:34
  */
-@Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+public interface IMetaDefinitionService {
+    /**
+     * 根据租户id查询定义
+     * @param tenantId
+     * @return
+     */
+    MetaDefinition<Long> getMetaDefinition(String tenantId);
 }

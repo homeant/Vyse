@@ -17,36 +17,24 @@
  *
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.design.entity;
 
+import fun.vyse.cloud.core.domain.DefineModelEO;
+import fun.vyse.cloud.core.domain.ITenantEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import java.util.Date;
 
 /**
- * fun.vyse.cloud.core.domain.FixedEntity
- * 静态表实体
- * @Author junchen
- * @Date 2019-10-13 10:01
+ * com.ifa.cloud.channel.model.entity.ModelDataEO
+ *
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-12 14:48
  */
 @Data
+@ToString
 @EqualsAndHashCode(callSuper = false)
-public class FixedEntity<T> extends AbstractEntity<T> implements ITenant, IStructure {
-
-	private String tenantId;
-
-	private Date createTime;
-
-	private Date updateTime;
-
-	private String creator;
-
-	private String mender;
-
-	public final String TENANT_ID = "tenantId";
-	public final String CREATE_TIME = "createTime";
-	public final String UPDATE_TIME = "updateTime";
-	public final String CREATOR = "creator";
-	public final String MENDER = "mender";
+public class ModelDataEO extends DefineModelEO implements ITenantEntity {
+    private String tenantId;
 }

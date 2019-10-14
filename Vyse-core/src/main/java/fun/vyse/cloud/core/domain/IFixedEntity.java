@@ -19,16 +19,12 @@
 
 package fun.vyse.cloud.core.domain;
 
-import lombok.Data;
-
-
 /**
- * fun.vyse.cloud.core.domain.AbstractEntity
+ * fun.vyse.cloud.design.domain.IFixedEntity
  *
- * @Author junchen
- * @Date 2019-10-13 10:00
+ * @Author junchen homeanter@163.com
+ * @Date 2019-10-12 14:42
  */
-@Data
-public class AbstractEntity implements IEntity<Long> {
-	private Long id;
+public interface IFixedEntity extends IEntity<Long> {
+
 }
