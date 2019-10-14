@@ -33,6 +33,11 @@ import fun.vyse.cloud.design.entity.PropertyEO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +49,8 @@ import java.util.Map;
  * @Date 2019-10-14 11:39
  */
 @Slf4j
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class DefineEntityTest {
 
     private static ModelDataEO dataEO = new ModelDataEO();
@@ -132,4 +139,10 @@ public class DefineEntityTest {
         model.setData(data);
         log.debug("role:{}",mapper.writeValueAsString(model.getEntity()));
     }
+
+	@Configuration
+	@EnableAutoConfiguration
+	public static class Config {
+
+	}
 }

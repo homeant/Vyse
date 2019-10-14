@@ -1,0 +1,5 @@
+logging:
+  level:
+    fun:
+      vyse:
+        cloud: debug
