@@ -24,4 +24,5 @@ package fun.vyse.cloud.core.domain;
  */
 public interface IFixedEntity<T> extends IEntity<T>{
 
+
 }
