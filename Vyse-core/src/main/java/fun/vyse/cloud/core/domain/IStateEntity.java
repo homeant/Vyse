@@ -26,7 +26,7 @@ import fun.vyse.cloud.core.constant.EntityState;
  * @Date 2019-10-16 14:39
  */
 public interface IStateEntity {
-    EntityState getState();
+    EntityState getState$();
 
-    void setState(EntityState state);
+    void setState$(EntityState state);
 }

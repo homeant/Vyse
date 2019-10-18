@@ -45,7 +45,7 @@ import java.util.Set;
  * @Date 2019-10-12 14:34
  */
 @ToString
-public class DomainModel extends AbstractBaseEntity<Long> implements IModel, ITenantEntity {
+public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
 	private ModelDataEO entity;
 	@JsonIgnore
@@ -67,7 +67,10 @@ public class DomainModel extends AbstractBaseEntity<Long> implements IModel, ITe
 	@JsonIgnore
 	private transient BeanMap fixedModelMap = null;
 
+	private Map<String,Object> modelMap = Maps.newConcurrentMap();
+
 	private Map<Long, ModelPropertyEO> propertyMap = Maps.newConcurrentMap();
+
 
 	@Getter
 	@Setter
@@ -127,7 +130,8 @@ public class DomainModel extends AbstractBaseEntity<Long> implements IModel, ITe
 	 */
 	public void setPropertyValue(String code, Object value) {
 		this.initFixedPropertyMap();
-		Set<String> basePropertys = Sets.newHashSet("domainId", "domainCode");
+		Set<String> basePropertys = Sets.newHashSet("domainId", "domainCode","topId","firstId","lastId");
+
 		if (!basePropertys.contains(code)) {
 			this.setFixedValue(code, value);
 		}
@@ -184,7 +188,15 @@ public class DomainModel extends AbstractBaseEntity<Long> implements IModel, ITe
 		return Collections.emptyList();
 	}
 
-	public <T> T findChildren(Class<T> classType, String code, Integer index) {
+	public <T extends IEntity> T findChildren(Class<T> classType, String code, Integer index) {
+		if(classType == DomainModel.class){
+			Object value = this.modelMap.get(code);
+			if(value instanceof DomainModel){
+				return (T) value;
+			}else if(value instanceof List && index < ((List)value).size()){
+				return (T) ((List)value).get(index);
+			}
+		}
 		return null;
 	}
 
@@ -218,5 +230,13 @@ public class DomainModel extends AbstractBaseEntity<Long> implements IModel, ITe
 
 	private Boolean isMap(Object object) {
 		return object instanceof Map;
+	}
+
+	public Long getId(){
+		return this.entity.getId();
+	}
+
+	public void setId(Long id){
+		this.entity.setId(id);
 	}
 }

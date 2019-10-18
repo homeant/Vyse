@@ -22,6 +22,6 @@ package fun.vyse.cloud.core.domain;
  * @Author junchen homeanter@163.com
  * @Date 2019-10-12 14:23
  */
-public interface IModel extends IEntity {
+public interface IModel<T> extends IEntity<T> {
     IEntity getEntity();
 }

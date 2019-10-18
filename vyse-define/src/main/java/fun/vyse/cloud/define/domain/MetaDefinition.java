@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.core.domain.IEntity;
-import fun.vyse.cloud.core.domain.InternalFixedModelEO;
+import fun.vyse.cloud.core.domain.InternalFixedEO;
 import fun.vyse.cloud.define.entity.ConnectionEO;
 import fun.vyse.cloud.define.entity.FixedModeEO;
 import fun.vyse.cloud.define.entity.ModelEO;
@@ -34,6 +34,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
  * @Date 2019-10-12 14:55
  */
 @Slf4j
-public class MetaDefinition<T> implements IEntity {
+public class MetaDefinition<T> implements Serializable {
 
 	/**
 	 * 模型定义
@@ -69,7 +70,7 @@ public class MetaDefinition<T> implements IEntity {
 	private Map<T, FixedModeEO> fixedModel = Maps.newConcurrentMap();
 
 	@JsonIgnore
-	private transient Map<String, List> domainCaCheMap;
+	private transient Map<String, List> domainCacheMap;
 
 	/**
 	 * 字段表映射
@@ -109,26 +110,26 @@ public class MetaDefinition<T> implements IEntity {
 		}
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(typeKey)) {
 			List list;
-			if (this.domainCaCheMap.containsKey(key)) {
-				list = this.domainCaCheMap.get(key);
+			if (this.domainCacheMap.containsKey(key)) {
+				list = this.domainCacheMap.get(key);
 			} else {
 				list = Lists.newArrayList();
-				this.domainCaCheMap.put(key, list);
+				this.domainCacheMap.put(key, list);
 			}
 			list.add(r);
-			if (this.domainCaCheMap.containsKey(typeKey)) {
-				list = this.domainCaCheMap.get(typeKey);
+			if (this.domainCacheMap.containsKey(typeKey)) {
+				list = this.domainCacheMap.get(typeKey);
 			} else {
 				list = Lists.newArrayList();
-				this.domainCaCheMap.put(typeKey, list);
+				this.domainCacheMap.put(typeKey, list);
 			}
 			list.add(r);
 		}
 	}
 
 	private void initDomainMap() {
-		if (this.domainCaCheMap == null) {
-			this.domainCaCheMap = Maps.newConcurrentMap();
+		if (this.domainCacheMap == null) {
+			this.domainCacheMap = Maps.newConcurrentMap();
 			this.model.values().forEach(this::putDomainMap);
 			this.property.values().forEach(this::putDomainMap);
 		}
@@ -141,14 +142,14 @@ public class MetaDefinition<T> implements IEntity {
 	public void addConcurrent(@NonNull ConnectionEO connectionEO) {
 		final T parentId = (T) connectionEO.getParentId();
 		final T subId = (T) connectionEO.getSubId();
-		Map<T, List<ConnectionEO>> children = null;
+		Map<T, List<ConnectionEO>> children;
 		if (connection.containsKey(parentId)) {
 			children = connection.get(parentId);
 		} else {
 			children = Maps.newConcurrentMap();
 			connection.put(parentId, children);
 		}
-		List<ConnectionEO> connectionEOS = null;
+		List<ConnectionEO> connectionEOS;
 		if (children.containsKey(subId)) {
 			connectionEOS = children.get(subId);
 		} else {
@@ -185,7 +186,7 @@ public class MetaDefinition<T> implements IEntity {
 		if (fixedPropertyMap == null) {
 			fixedPropertyMap = Maps.newConcurrentMap();
 			//内部属性
-			BeanMap basePropMap = BeanMap.create(new InternalFixedModelEO());
+			BeanMap basePropMap = BeanMap.create(new InternalFixedEO());
 			Map<Long, BeanMap> fixedBeanMap = Maps.newHashMap();
 			fixedModel.values().stream().forEach(r -> {
 				Object instance = r.createFixedInstance();
@@ -308,8 +309,8 @@ public class MetaDefinition<T> implements IEntity {
 		ObjectMapper objectMapper = new ObjectMapper();
 		builder.append("{");
 		try {
-			builder.append("domainCaChe:");
-			builder.append(objectMapper.writeValueAsString(domainCaCheMap));
+			builder.append("domainCache:");
+			builder.append(objectMapper.writeValueAsString(domainCacheMap));
 			builder.append(",");
 			builder.append("property:");
 			builder.append(objectMapper.writeValueAsString(fixedPropertyMap));

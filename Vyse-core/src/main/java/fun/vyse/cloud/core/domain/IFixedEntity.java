@@ -22,12 +22,6 @@ package fun.vyse.cloud.core.domain;
  * @Author junchen homeanter@163.com
  * @Date 2019-10-12 14:42
  */
-public interface IFixedEntity<T> extends IEntity {
-    T getDomainId();
+public interface IFixedEntity<T> extends IEntity<T>{
 
-    void setDomainId(T domainId);
-
-    T getTopId();
-
-    void setTopId(T topid);
 }

@@ -21,17 +21,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * fun.vyse.cloud.core.domain.InternalFixedModelEO
+ * fun.vyse.cloud.core.domain.InternalFixedEO
  *
  * @Author junchen homeanter@163.com
  * @Date 2019-10-14 14:37
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class InternalFixedModelEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
+public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
     private T domainId;
     private T topId;
-    private T id;
     @JsonAlias(value = "class")
     private String clazz;
 }

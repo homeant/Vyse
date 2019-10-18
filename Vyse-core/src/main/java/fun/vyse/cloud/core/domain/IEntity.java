@@ -24,6 +24,8 @@ import java.io.Serializable;
  * @Author junchen homeanter@163.com
  * @Date 2019-10-12 12:01
  */
-public interface IEntity extends Serializable,Cloneable {
+public interface IEntity<T> extends ITenantEntity,IStateEntity,Serializable,Cloneable {
+	T getId();
 
+	void setId(T id);
 }

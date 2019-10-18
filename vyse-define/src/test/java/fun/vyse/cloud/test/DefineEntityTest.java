@@ -103,7 +103,13 @@ public class DefineEntityTest {
 		data.put("domainCode", "main");
 		data.put("name", "tom");
 		model.setData(data);
-		log.debug("role:{}", mapper.writeValueAsString(model));
+		log.debug("model:{}", mapper.writeValueAsString(model));
+	}
+	@Test
+	public void modelTest()throws JsonProcessingException{
+		DomainEntity domainEntity = new DomainEntity();
+		domainEntity.setModel(domainModel);
+		log.debug("model:{}", mapper.writeValueAsString(domainModel));
 	}
 
 	@Configuration
@@ -116,7 +122,7 @@ public class DefineEntityTest {
 		}
 
 		@Bean
-		MetaDefinitionFactory factory(IMetaDefinitionService metaDefinitionService) {
+		public MetaDefinitionFactory factory(IMetaDefinitionService metaDefinitionService) {
 			return new MetaDefinitionFactory(metaDefinitionService);
 		}
 	}

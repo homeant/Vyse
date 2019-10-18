@@ -16,6 +16,7 @@
 
 package fun.vyse.cloud.core.domain;
 
+import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
 
 /**
@@ -25,8 +26,14 @@ import lombok.Data;
  * @Date 2019-10-12 13:25
  */
 @Data
-public class AbstractBaseEntity<T> implements IEntity {
+public abstract class AbstractBaseEntity<T> implements IEntity<T> {
     private T id;
 
-    public static final String ID = "id";
+    private EntityState state$;
+
+    private String tenantId;
+
+	public static final String ID = "id";
+
+	public static final String TENANT_ID = "tenantId";
 }

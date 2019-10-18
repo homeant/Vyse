@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class DomainModelEO extends InternalFixedModelEO<Long> {
+public class DomainModelEO extends InternalFixedEO<Long> {
     private String domainName;
 
     private String domainCode;

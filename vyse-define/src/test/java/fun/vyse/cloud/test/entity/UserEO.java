@@ -28,12 +28,6 @@ import lombok.Data;
  * @Date 2019-10-17 14:18
  */
 @Data
-public class UserEO extends AbstractBaseEntity implements IFixedEntity<Long>, ITenantEntity {
-    private Long domainId;
-
-    private Long topId;
-
-    private String tenantId;
-
+public class UserEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
     private String name;
 }
