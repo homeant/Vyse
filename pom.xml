@@ -30,9 +30,8 @@
     <modules>
         <module>vyse-core</module>
         <module>vyse-web</module>
-        <module>vyse-design</module>
+        <module>vyse-define</module>
         <module>vyse-model-transform</module>
-        <module>Vyse-extension-point</module>
         <module>vyse-integration</module>
     </modules>
 
@@ -58,6 +57,7 @@
         <mybatis-plus.version>3.1.1</mybatis-plus.version>
         <jackson.version>2.9.10</jackson.version>
         <dozer.version>5.5.1</dozer.version>
+		<cglib.version>3.3.0</cglib.version>
         <!-- 编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -128,6 +128,11 @@
                 <artifactId>orika-core</artifactId>
                 <version>${orika.version}</version>
             </dependency>
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib</artifactId>
+				<version>${cglib.version}</version>
+			</dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy</artifactId>

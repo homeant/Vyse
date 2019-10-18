@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<integration>
+	<http method="GET" url="https://api.github.com/users/{name}">
+		<uriVariable>
+			<name>homeant</name>
+		</uriVariable>
+		<response>
+			<type>fun.vyse.cloud.test.entity.UserInfo</type>
+		</response>
+	</http>
+	<ws url="http://ws.webxml.com.cn/WebServices/WeatherWS.asmx">
+		<request>
+			<header>
+				<ws_soapAction>http://WebXml.com.cn/getRegionCountry</ws_soapAction>
+			</header>
+			<template>templates/getRegionCountry_request.ftl</template>
+			<interceptors>
+				<interceptor ref=""/>
+			</interceptors>
+		</request>
+		<response>
+			<template>templates/getRegionCountry_request.ftl</template>
+			<interceptors>
+				<interceptor ref=""/>
+			</interceptors>
+		</response>
+	</ws>
+</integration>
