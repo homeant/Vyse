@@ -16,14 +16,12 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
-
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.core.domain.IModel
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-12 14:23
  */
-public interface IEntity extends Serializable,Cloneable {
-
+public interface IModel extends IEntity {
+    IEntity getEntity();
 }

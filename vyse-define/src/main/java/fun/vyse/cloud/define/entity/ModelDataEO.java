@@ -14,16 +14,24 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.define.entity;
 
-import java.io.Serializable;
+import fun.vyse.cloud.core.domain.DomainModelEO;
+import fun.vyse.cloud.core.domain.ITenantEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * com.ifa.cloud.channel.model.entity.ModelDataEO
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-12 14:48
  */
-public interface IEntity extends Serializable,Cloneable {
-
+@Data
+@ToString
+@EqualsAndHashCode(callSuper = false)
+public class ModelDataEO extends DomainModelEO implements ITenantEntity {
+    private String tenantId;
 }

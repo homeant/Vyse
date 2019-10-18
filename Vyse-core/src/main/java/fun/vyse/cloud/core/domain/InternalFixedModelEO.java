@@ -16,14 +16,22 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.core.domain.InternalFixedModelEO
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-14 14:37
  */
-public interface IEntity extends Serializable,Cloneable {
-
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class InternalFixedModelEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
+    private T domainId;
+    private T topId;
+    private T id;
+    @JsonAlias(value = "class")
+    private String clazz;
 }

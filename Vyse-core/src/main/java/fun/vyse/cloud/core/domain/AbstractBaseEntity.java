@@ -16,14 +16,17 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
+import lombok.Data;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.core.domain.AbstractBaseEntity
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-12 13:25
  */
-public interface IEntity extends Serializable,Cloneable {
+@Data
+public class AbstractBaseEntity<T> implements IEntity {
+    private T id;
 
+    public static final String ID = "id";
 }

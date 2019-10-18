@@ -14,16 +14,44 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.define.entity;
 
-import java.io.Serializable;
+import fun.vyse.cloud.core.domain.AbstractBaseEntity;
+import fun.vyse.cloud.core.domain.IFixedEntity;
+import lombok.Data;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.define.entity.ModelProperty
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-15 12:04
  */
-public interface IEntity extends Serializable,Cloneable {
+@Data
+public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
+	/**
+	 * 属性id
+	 */
+	private Long propertyId;
 
+	/**
+	 *
+	 */
+    private String value;
+
+    private String code;
+
+	/**
+	 * 主模型id
+	 */
+	private Long domainId;
+
+	/**
+	 * 父级模型id
+	 */
+	private Long parentId;
+
+	/**
+	 * 数据id
+	 */
+	private Long topId;
 }

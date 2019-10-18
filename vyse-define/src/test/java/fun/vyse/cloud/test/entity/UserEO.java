@@ -14,16 +14,26 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.test.entity;
 
-import java.io.Serializable;
+import fun.vyse.cloud.core.domain.AbstractBaseEntity;
+import fun.vyse.cloud.core.domain.IFixedEntity;
+import fun.vyse.cloud.core.domain.ITenantEntity;
+import lombok.Data;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * UserEO
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-17 14:18
  */
-public interface IEntity extends Serializable,Cloneable {
+@Data
+public class UserEO extends AbstractBaseEntity implements IFixedEntity<Long>, ITenantEntity {
+    private Long domainId;
 
+    private Long topId;
+
+    private String tenantId;
+
+    private String name;
 }

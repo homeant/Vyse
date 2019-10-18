@@ -14,16 +14,17 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
-
-import java.io.Serializable;
+package fun.vyse.cloud.core.constant;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * com.ifa.cloud.channel.constant.State
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-16 14:41
  */
-public interface IEntity extends Serializable,Cloneable {
-
+public enum EntityState {
+    New,
+    Modify,
+    Delete,
+    None
 }

@@ -16,14 +16,23 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.core.domain.DefineModelEO
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-14 14:34
  */
-public interface IEntity extends Serializable,Cloneable {
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class DomainModelEO extends InternalFixedModelEO<Long> {
+    private String domainName;
 
+    private String domainCode;
+
+    private String domainPath;
+
+    private Long fixedId;
 }

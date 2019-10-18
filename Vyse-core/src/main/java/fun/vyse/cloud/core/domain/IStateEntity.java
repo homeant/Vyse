@@ -16,14 +16,17 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
+
+import fun.vyse.cloud.core.constant.EntityState;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.core.domain.IStateEntity
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-16 14:39
  */
-public interface IEntity extends Serializable,Cloneable {
+public interface IStateEntity {
+    EntityState getState();
 
+    void setState(EntityState state);
 }

@@ -14,16 +14,15 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
-
-import java.io.Serializable;
+package fun.vyse.cloud.core.constant;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.define.constant.ModelType
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-16 13:24
  */
-public interface IEntity extends Serializable,Cloneable {
-
+public enum ModelType {
+    Model,
+    Product
 }

@@ -16,14 +16,15 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
+import lombok.Data;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * DomainEntityEO
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-17 12:09
  */
-public interface IEntity extends Serializable,Cloneable {
+@Data
+public class DomainEntityEO extends AbstractBaseEntity<Long> {
 
 }

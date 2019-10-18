@@ -14,16 +14,22 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.define.service;
 
-import java.io.Serializable;
+
+import fun.vyse.cloud.define.domain.MetaDefinition;
 
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.define.service.IMetaDefinitionService
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-14 10:34
  */
-public interface IEntity extends Serializable,Cloneable {
-
+public interface IMetaDefinitionService {
+    /**
+     * 根据租户id查询定义
+     * @param tenantId
+     * @return
+     */
+    MetaDefinition<Long> getMetaDefinition(String tenantId);
 }

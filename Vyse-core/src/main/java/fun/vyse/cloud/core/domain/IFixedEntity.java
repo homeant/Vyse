@@ -16,14 +16,18 @@
 
 package fun.vyse.cloud.core.domain;
 
-import java.io.Serializable;
-
 /**
- * fun.vyse.cloud.core.domain.IEnyity
+ * fun.vyse.cloud.core.domain.IFixedEntity
  *
  * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @Date 2019-10-12 14:42
  */
-public interface IEntity extends Serializable,Cloneable {
+public interface IFixedEntity<T> extends IEntity {
+    T getDomainId();
 
+    void setDomainId(T domainId);
+
+    T getTopId();
+
+    void setTopId(T topid);
 }
