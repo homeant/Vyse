@@ -20,6 +20,7 @@ import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.core.domain.ITenantEntity;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * UserEO
@@ -28,6 +29,7 @@ import lombok.Data;
  * @Date 2019-10-17 14:18
  */
 @Data
+@ToString
 public class UserEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
     private String name;
 }

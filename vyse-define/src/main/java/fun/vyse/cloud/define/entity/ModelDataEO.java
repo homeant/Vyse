@@ -16,8 +16,7 @@
 
 package fun.vyse.cloud.define.entity;
 
-import fun.vyse.cloud.core.domain.DomainModelEO;
-import fun.vyse.cloud.core.domain.ITenantEntity;
+import fun.vyse.cloud.core.domain.DomainEO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,8 +29,8 @@ import lombok.ToString;
  * @Date 2019-10-12 14:48
  */
 @Data
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class ModelDataEO extends DomainModelEO implements ITenantEntity {
-    private String tenantId;
+public class ModelDataEO extends DomainEO<Long> {
+
 }

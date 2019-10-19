@@ -17,25 +17,26 @@
 package fun.vyse.cloud.define.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import fun.vyse.cloud.core.common.ApplicationContextHelper;
+import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.*;
+import fun.vyse.cloud.define.entity.ConnectionEO;
 import fun.vyse.cloud.define.entity.ModelDataEO;
 import fun.vyse.cloud.define.entity.ModelPropertyEO;
+import fun.vyse.cloud.define.entity.PropertyEO;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
-import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -44,7 +45,7 @@ import java.util.Set;
  * @Author junchen homeanter@163.com
  * @Date 2019-10-12 14:34
  */
-@ToString
+@Slf4j
 public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
 	private ModelDataEO entity;
@@ -67,7 +68,10 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	@JsonIgnore
 	private transient BeanMap fixedModelMap = null;
 
-	private Map<String,Object> modelMap = Maps.newConcurrentMap();
+	/**
+	 * 子级model
+	 */
+	private Map<String, Object> modelMap = Maps.newConcurrentMap();
 
 	private Map<Long, ModelPropertyEO> propertyMap = Maps.newConcurrentMap();
 
@@ -78,6 +82,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
 	@Getter
 	@Setter
+	@JsonIgnore
 	private DomainModel parentModel;
 
 	public DomainModel() {
@@ -118,8 +123,38 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 			MetaDefinitionFactory factory = (MetaDefinitionFactory) ApplicationContextHelper.getBean(MetaDefinitionFactory.class);
 			if (factory != null) {
 				md = factory.getMetaDefinition(this.tenantId);
+			} else {
+				log.error("no bean found {}", MetaDefinitionFactory.class);
 			}
 		}
+	}
+
+	@JsonIgnore
+	public Map<String, Object> getProperty() {
+		return this.getProperty(EntityState.None);
+	}
+
+	@JsonIgnore
+	public Map<String, Object> getProperty(EntityState state) {
+		Map<String, Object> property = Maps.newHashMap();
+		List<ModelPropertyEO> children = this.findChildren(ModelPropertyEO.class);
+		if (CollectionUtils.isNotEmpty(children)) {
+			children.forEach(r -> {
+				Long index = r.getCurrentIndex();
+				for (Long i = 1L; i <= index; i++) {
+					String key = (String) r.get(ModelPropertyEO.PropertyType.code, i);
+					if (StringUtils.isNotBlank(key)) {
+						if (!property.containsKey(key)) {
+							property.put(key, r.get(i));
+						}
+					}
+				}
+			});
+		}
+		if(isFixed()){
+
+		}
+		return property;
 	}
 
 	/**
@@ -130,8 +165,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	 */
 	public void setPropertyValue(String code, Object value) {
 		this.initFixedPropertyMap();
-		Set<String> basePropertys = Sets.newHashSet("domainId", "domainCode","topId","firstId","lastId");
-
+		Set<String> basePropertys = Sets.newHashSet("id", "domainId", "code", "topId", "firstId", "lastId");
 		if (!basePropertys.contains(code)) {
 			this.setFixedValue(code, value);
 		}
@@ -168,6 +202,43 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	public void put(IEntity entity) {
 		if (entity instanceof ModelPropertyEO) {
 			this.put((ModelPropertyEO) entity);
+		} else if (entity instanceof DomainModel) {
+			this.put((DomainModel) entity);
+		}
+	}
+
+	/**
+	 * 添加子级模型
+	 *
+	 * @param model
+	 */
+	private void put(DomainModel model) {
+		Long id = model.getId();
+		Long parentId = model.getEntity().getParentId();
+		if (ObjectUtils.notEqual(this.entity.getId(), id) && !ObjectUtils.notEqual(this.entity.getId(), parentId)) {
+			String code = model.getEntity().getCode();
+			if (this.modelMap.containsKey(code)) {
+				Object value = this.modelMap.get(code);
+				if (value != null) {
+					List<DomainModel> rs;
+					if (value instanceof Collection) {
+						rs = (List) value;
+					} else {
+						rs = new ArrayList();
+						rs.add((DomainModel) value);
+						this.modelMap.put(code, rs);
+					}
+					rs.add(model);
+				} else {
+					this.modelMap.put(code, model);
+				}
+			} else {
+				this.modelMap.put(code, model);
+			}
+		} else {
+			log.warn("model relations do not correspond: " +
+					"childrenModel: {id: {},parentId :{}}," +
+					"model: {id: {}}", model.getId(), model.getEntity().getParentId(), this.entity.getId());
 		}
 	}
 
@@ -179,22 +250,44 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	private void put(ModelPropertyEO propertyEO) {
 		Long id = propertyEO.getId();
 		Long parentId = propertyEO.getParentId();
-		if (!this.entity.getDomainId().equals(id) && this.entity.getDomainId().equals(parentId)) {
+		if (ObjectUtils.notEqual(this.entity.getId(), id) && !ObjectUtils.notEqual(this.entity.getId(), parentId)) {
 			this.propertyMap.put(id, propertyEO);
+		} else {
+			log.warn("property relations do not correspond: " +
+					"property: {id: {},parentId: {}}," +
+					"model: {id :{}}", propertyEO.getId(), propertyEO.getParentId(), this.entity.getId());
 		}
 	}
 
+	public Map<String, Object> findChildren() {
+		return this.modelMap;
+	}
+
 	public <T> List<T> findChildren(Class<T> classType) {
-		return Collections.emptyList();
+		List<T> childrens = Lists.newArrayList();
+		if (classType == DomainModel.class) {
+			for (Object model : this.modelMap.values()) {
+				if (model instanceof DomainModel) {
+					childrens.add((T) model);
+				} else if (model instanceof List) {
+					childrens.addAll((List<T>) model);
+				}
+			}
+		} else if (classType == ModelPropertyEO.class) {
+			childrens.addAll((List<T>) this.propertyMap.values());
+		} else if (classType == IFixedEntity.class) {
+			childrens.add((T) this.fixedModel);
+		}
+		return childrens;
 	}
 
 	public <T extends IEntity> T findChildren(Class<T> classType, String code, Integer index) {
-		if(classType == DomainModel.class){
+		if (classType == DomainModel.class) {
 			Object value = this.modelMap.get(code);
-			if(value instanceof DomainModel){
+			if (value instanceof DomainModel) {
 				return (T) value;
-			}else if(value instanceof List && index < ((List)value).size()){
-				return (T) ((List)value).get(index);
+			} else if (value instanceof List && index < ((List) value).size()) {
+				return (T) ((List) value).get(index);
 			}
 		}
 		return null;
@@ -204,12 +297,64 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		return Collections.emptyList();
 	}
 
+	@JsonIgnore
+	public Map<String, Object> getData() {
+		return this.getInternalModel();
+	}
+
+	@JsonIgnore
+	private Map<String, Object> getInternalModel() {
+		this.initMetaDefinition();
+		Map<String, Object> data = this.getProperty();
+		List<DomainModel> childrens = this.findChildren(DomainModel.class);
+		if (CollectionUtils.isNotEmpty(childrens)) {
+			childrens.stream().forEach(r -> {
+				List<ConnectionEO> connectionEOS = this.md.getConnection(this.entity.getDomainId(), r.entity.getDomainId());
+				if (CollectionUtils.isNotEmpty(connectionEOS)) {
+					Map<String, Object> childrenInternalModel = r.getInternalModel();
+					ConnectionEO connectionEO = connectionEOS.get(0);
+					String code = r.entity.getCode();
+					Long max = connectionEO.getMaxmium();
+					if (data.containsKey(code)) {
+						Object value = data.get(code);
+						if (value != null) {
+							if (value instanceof Map) {
+								log.error("model must be an array,code: {},value: {}", code, value);
+								throw new RuntimeException("model must be an array");
+							}
+							if (!(value instanceof List)) {
+								log.error("model must be an array,code: {},value: {}", code, value);
+								throw new RuntimeException("model must be an array");
+							}
+							((List) value).add(childrenInternalModel);
+						} else {
+							if (max > 1) {
+								List<Map<String, Object>> lists = Lists.newArrayList(childrenInternalModel);
+								data.put(code, lists);
+							} else if (max == 1) {
+								data.put(code, childrenInternalModel);
+							}
+						}
+					} else {
+						if (max > 1) {
+							List<Map<String, Object>> lists = Lists.newArrayList(childrenInternalModel);
+							data.put(code, lists);
+						} else if (max == 1) {
+							data.put(code, childrenInternalModel);
+						}
+					}
+				}
+			});
+		}
+		return data;
+	}
+
 	public void setData(@NonNull Map<String, Object> map) {
 		Long domainId = (Long) map.get("domainId");
-		String domainCode = (String) map.get("domainCode");
+		String code = (String) map.get("code");
 		if (this.entity != null) {
 			if (!ObjectUtils.notEqual(this.entity.getDomainId(), domainId)) {
-				if (StringUtils.equals(this.entity.getDomainCode(), domainCode)) {
+				if (StringUtils.equals(this.entity.getCode(), code)) {
 					for (String r : map.keySet()) {
 						Object value = map.get(r);
 						if (!(value instanceof Map) && !(value instanceof List)) {
@@ -228,15 +373,26 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		}
 	}
 
+	@JsonIgnore
+	private Boolean isFixed() {
+		Long fixedId = this.entity.getFixedId();
+		return (fixedId != null && fixedId > 0L) ? true : false;
+	}
+
 	private Boolean isMap(Object object) {
 		return object instanceof Map;
 	}
 
-	public Long getId(){
+	public Long getId() {
 		return this.entity.getId();
 	}
 
-	public void setId(Long id){
+	public void setId(Long id) {
 		this.entity.setId(id);
+	}
+
+	@Override
+	public String toString() {
+		return this.entity.toString();
 	}
 }

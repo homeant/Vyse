@@ -18,6 +18,7 @@ package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * fun.vyse.cloud.core.domain.DefineModelEO
@@ -26,13 +27,22 @@ import lombok.EqualsAndHashCode;
  * @Date 2019-10-14 14:34
  */
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class DomainModelEO extends InternalFixedEO<Long> {
-    private String domainName;
+public class DomainEO<T> extends InternalFixedEO<T> implements IRecursiveEntity<T> {
 
-    private String domainCode;
+    private String name;
 
-    private String domainPath;
+    private String code;
 
-    private Long fixedId;
+    private String path;
+	/**
+	 * 静态表id
+	 */
+    private T fixedId;
+
+	/**
+	 * 数据父级id
+	 */
+	private T parentId;
 }

@@ -48,6 +48,7 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
         modelEO.setType("Product");
         modelEO.setFixedId(1L);
         modelEOS.add(modelEO);
+
         ModelEO modelEO2 = new ModelEO();
         modelEO2.setId(2L);
         modelEO2.setName("测试模型2");

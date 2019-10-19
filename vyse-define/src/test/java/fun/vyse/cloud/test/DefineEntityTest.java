@@ -57,6 +57,8 @@ public class DefineEntityTest {
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
+	private static MetaDefinition<Long> metaDefinition = null;
+
 	@Autowired
 	private IMetaDefinitionService metaDefinitionService;
 
@@ -64,9 +66,10 @@ public class DefineEntityTest {
 	public void init() {
 		dataEO.setId(8L);
 		dataEO.setDomainId(1L);
-		dataEO.setDomainCode("main");
+		dataEO.setCode("main");
 		dataEO.setFixedId(1L);
-		MetaDefinition<Long> metaDefinition = metaDefinitionService.getMetaDefinition("");
+		dataEO.setTopId(8L);
+		metaDefinition = metaDefinitionService.getMetaDefinition("");
 		domainModel = new DomainModel(dataEO, metaDefinition);
 		domainModel.setTenantId("");
 		FixedModeEO fixedModelEO = metaDefinition.getFixedModelEO(1L);
@@ -78,18 +81,6 @@ public class DefineEntityTest {
 		propertyEO.setId(4L);
 		propertyEO.setCode("city");
 		Assert.assertFalse(metaDefinition.isFixed(modelEO, propertyEO));
-		/**
-		 * 子级模型
-		 */
-//		ModelPropertyEO modelPropertyEO = new ModelPropertyEO();
-//		modelPropertyEO.setId(10L);
-//		modelPropertyEO.setDomainId(1L);
-//		modelPropertyEO.setParentId(2L);
-//		modelPropertyEO.setPropertyId(3L);
-//		modelPropertyEO.setTopId(8L);
-//		modelPropertyEO.setCode("city");
-//		modelPropertyEO.setValue("北京");
-//		domainModel.put(modelPropertyEO);
 	}
 
 	@Test
@@ -98,18 +89,45 @@ public class DefineEntityTest {
 		DomainModel model = domainEntity.getModel();
 		Map<String, Object> data = Maps.newHashMap();
 
-		//data.put("id", 8L);
+		data.put("id", 9L);
 		data.put("domainId", 1L);
-		data.put("domainCode", "main");
+		data.put("code", "main");
 		data.put("name", "tom");
 		model.setData(data);
-		log.debug("model:{}", mapper.writeValueAsString(model));
+		log.debug("data:{}", mapper.writeValueAsString(model.getData()));
+
 	}
 	@Test
-	public void modelTest()throws JsonProcessingException{
+	public void childrenModelTest()throws JsonProcessingException{
 		DomainEntity domainEntity = new DomainEntity();
 		domainEntity.setModel(domainModel);
 		log.debug("model:{}", mapper.writeValueAsString(domainModel));
+
+
+		ModelDataEO childrenData = new ModelDataEO();
+		childrenData.setId(9L);
+		childrenData.setDomainId(2L);
+		childrenData.setParentId(8L);
+		childrenData.setTopId(8L);
+		childrenData.setCode("test");
+
+		DomainModel children = new DomainModel(childrenData,metaDefinition);
+		children.setParentModel(domainModel);
+
+		//属性放置
+		ModelPropertyEO modelPropertyEO = new ModelPropertyEO();
+		modelPropertyEO.setId(10L);
+		modelPropertyEO.setDomainId(1L);
+		modelPropertyEO.setParentId(9L);
+		modelPropertyEO.setPropertyId(3L);
+		modelPropertyEO.setTopId(8L);
+		modelPropertyEO.setCode("city");
+		modelPropertyEO.setValue("北京");
+		children.put(modelPropertyEO);
+
+		domainModel.put(children);
+		DomainModel childrenModel = DefineEntityTest.domainModel.findChildren(DomainModel.class, "test", 0);
+		log.debug("children:{}",childrenModel);
 	}
 
 	@Configuration

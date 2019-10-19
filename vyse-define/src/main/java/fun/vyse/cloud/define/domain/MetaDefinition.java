@@ -17,11 +17,8 @@
 package fun.vyse.cloud.define.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import fun.vyse.cloud.core.domain.IEntity;
 import fun.vyse.cloud.core.domain.InternalFixedEO;
 import fun.vyse.cloud.define.entity.ConnectionEO;
 import fun.vyse.cloud.define.entity.FixedModeEO;
@@ -293,7 +290,7 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private List<ConnectionEO> getConnection(T id, T subId) {
+	public List<ConnectionEO> getConnection(T id, T subId) {
 		Map<T, List<ConnectionEO>> connectionMap = this.connection.get(id);
 		return Optional.ofNullable(connectionMap).map(r -> r.get(subId)).orElse(null);
 	}
@@ -302,26 +299,4 @@ public class MetaDefinition<T> implements Serializable {
 		this.init();
 		return this.fixedPropertyMap.get(fixedId);
 	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		ObjectMapper objectMapper = new ObjectMapper();
-		builder.append("{");
-		try {
-			builder.append("domainCache:");
-			builder.append(objectMapper.writeValueAsString(domainCacheMap));
-			builder.append(",");
-			builder.append("property:");
-			builder.append(objectMapper.writeValueAsString(fixedPropertyMap));
-			builder.append(",");
-			builder.append("concurrent:");
-			builder.append(objectMapper.writeValueAsString(connectionMap));
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-		builder.append("}");
-		return builder.toString();
-	}
-
 }

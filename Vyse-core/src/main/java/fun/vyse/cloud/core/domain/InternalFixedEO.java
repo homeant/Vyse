@@ -19,6 +19,7 @@ package fun.vyse.cloud.core.domain;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * fun.vyse.cloud.core.domain.InternalFixedEO
@@ -27,10 +28,18 @@ import lombok.EqualsAndHashCode;
  * @Date 2019-10-14 14:37
  */
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
+	/**
+	 * 模型id
+	 */
     private T domainId;
-    private T topId;
+	/**
+	 * 顶级模型数据id
+	 */
+	private T topId;
+
     @JsonAlias(value = "class")
     private String clazz;
 }

@@ -16,9 +16,14 @@
 
 package fun.vyse.cloud.define.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import lombok.Data;
+import net.sf.cglib.beans.BeanMap;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
 
 /**
  * fun.vyse.cloud.define.entity.ModelProperty
@@ -28,22 +33,26 @@ import lombok.Data;
  */
 @Data
 public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
+
+	private static final Long PROPERTY_NUMBER = 1L;
+
+	@JsonIgnore
+	private transient BeanMap bean;
+
+	private Long currentIndex;
+
 	/**
 	 * 属性id
 	 */
-	private Long propertyId;
+	private Long domainId1;
 
-	/**
-	 *
-	 */
-    private String value;
+	private String code1;
 
-    private String code;
+	private String value1;
 
-	/**
-	 * 主模型id
-	 */
-	private Long domainId;
+	private String dateType1;
+
+	private String path1;
 
 	/**
 	 * 父级模型id
@@ -54,4 +63,66 @@ public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedE
 	 * 数据id
 	 */
 	private Long topId;
+
+	public Object get(Long index) {
+		Long domainId = (Long) this.get(PropertyType.domainId, index);
+		if (domainId != null) {
+			String dataType = (String) this.get(PropertyType.dateType, index);
+			String value = this.getValue(index);
+			if (StringUtils.isNotBlank(dataType)) {
+				try {
+					Class clazz = Class.forName(dataType);
+					if (clazz == String.class) {
+						return value;
+					} else if (clazz == Date.class) {
+						return new Date();
+					}
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			return value;
+		}
+		return null;
+	}
+
+	public Object get(PropertyType type, Long id) {
+		if (this.bean == null) {
+			this.bean = BeanMap.create(this);
+		}
+		return this.bean.get(this.getProperName(type, id));
+	}
+
+	public String getValue(Long index) {
+		Long domainId = (Long) this.get(PropertyType.domainId, index);
+		if (domainId != null) {
+			return (String) this.get(PropertyType.value, index);
+		}
+		return null;
+	}
+
+	private String getProperName(PropertyType type, Long index) {
+		return type.toString() + index.toString();
+	}
+
+	public Long getCurrentIndex(){
+		if (this.currentIndex == null) {
+			for(Long i = PROPERTY_NUMBER; i >= 1; --i) {
+				Long domainId = (Long)this.get(PropertyType.domainId, i);
+				if (domainId != null) {
+					this.currentIndex = i;
+					break;
+				}
+			}
+		}
+		return this.currentIndex;
+	}
+
+	public enum PropertyType {
+		code,
+		value,
+		domainId,
+		path,
+		dateType
+	}
 }
