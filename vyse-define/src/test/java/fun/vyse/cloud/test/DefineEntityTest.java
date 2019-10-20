@@ -28,6 +28,7 @@ import fun.vyse.cloud.define.entity.*;
 import fun.vyse.cloud.define.service.IMetaDefinitionService;
 import fun.vyse.cloud.test.impl.MetaDefinitionServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * com.ifa.cloud.channel.test.DefineModelTest
@@ -97,8 +100,9 @@ public class DefineEntityTest {
 		log.debug("data:{}", mapper.writeValueAsString(model.getData()));
 
 	}
+
 	@Test
-	public void childrenModelTest()throws JsonProcessingException{
+	public void childrenModelTest() throws JsonProcessingException {
 		DomainEntity domainEntity = new DomainEntity();
 		domainEntity.setModel(domainModel);
 		log.debug("model:{}", mapper.writeValueAsString(domainModel));
@@ -111,25 +115,31 @@ public class DefineEntityTest {
 		childrenData.setTopId(8L);
 		childrenData.setCode("test");
 
-		DomainModel children = new DomainModel(childrenData,metaDefinition);
+		DomainModel children = new DomainModel(childrenData, metaDefinition);
 		children.setParentModel(domainModel);
 
 
-		PropertyEO property = metaDefinition.getProperty(4L);
-		//属性放置
-		ModelPropertyEO modelPropertyEO = new ModelPropertyEO();
-		modelPropertyEO.setId(10L);
-		modelPropertyEO.setDomainId1(property.getId());
-		modelPropertyEO.setParentId(9L);
-		modelPropertyEO.setTopId(8L);
-		modelPropertyEO.setCode1(property.getCode());
-		modelPropertyEO.setValue1(property.getDefValue());
-		modelPropertyEO.setDateType1(property.getDataType());
-		children.put(modelPropertyEO);
-
+		List<ConnectionEO> connections = metaDefinition.getConnection(2L, 4L);
+		if (CollectionUtils.isNotEmpty(connections)) {
+			Long id = 10L;
+			for (ConnectionEO connection : connections) {
+				PropertyEO property = metaDefinition.getProperty(connection.getSubId());
+				//属性放置
+				ModelPropertyEO modelPropertyEO = new ModelPropertyEO();
+				modelPropertyEO.setId(id);
+				modelPropertyEO.setDomainId1(property.getId());
+				modelPropertyEO.setParentId(9L);
+				modelPropertyEO.setTopId(8L);
+				modelPropertyEO.setCode1(property.getCode());
+				modelPropertyEO.setValue1(property.getDefValue());
+				modelPropertyEO.setDateType1(property.getDataType());
+				id++;
+				children.put(modelPropertyEO);
+			}
+		}
 		domainModel.put(children);
 		DomainModel childrenModel = DefineEntityTest.domainModel.findChildren(DomainModel.class, "test", 0);
-		log.debug("children:{}",childrenModel);
+		log.debug("children:{}", childrenModel);
 	}
 
 	@Configuration

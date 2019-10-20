@@ -22,8 +22,8 @@ import fun.vyse.cloud.core.constant.EntityState;
 /**
  * fun.vyse.cloud.core.domain.IStateEntity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-16 14:39
+ * @author junchen homeanter@163.com
+ * @date 2019-10-16 14:39
  */
 public interface IStateEntity {
     EntityState getState$();

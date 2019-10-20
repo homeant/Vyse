@@ -24,8 +24,8 @@ import lombok.ToString;
 /**
  * fun.vyse.cloud.core.domain.InternalFixedEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 14:37
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 14:37
  */
 @Data
 @ToString(callSuper = true)

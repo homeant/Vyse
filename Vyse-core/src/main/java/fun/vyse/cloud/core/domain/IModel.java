@@ -20,8 +20,8 @@ package fun.vyse.cloud.core.domain;
 
  * fun.vyse.cloud.core.domain.IModel
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:23
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:23
  */
 public interface IModel<T> extends IEntity<T> {
     IEntity getEntity();

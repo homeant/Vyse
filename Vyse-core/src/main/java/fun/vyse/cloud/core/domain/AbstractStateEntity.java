@@ -6,8 +6,8 @@ import lombok.Data;
 /**
  * AbstractStateEntity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-18 15:01
+ * @author junchen homeanter@163.com
+ * @date 2019-10-18 15:01
  */
 @Data
 public abstract class AbstractStateEntity implements IStateEntity {

@@ -19,8 +19,8 @@ package fun.vyse.cloud.core.constant;
 /**
  * fun.vyse.cloud.define.constant.ModelType
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-16 13:24
+ * @author junchen homeanter@163.com
+ * @date 2019-10-16 13:24
  */
 public enum ModelType {
     Model,

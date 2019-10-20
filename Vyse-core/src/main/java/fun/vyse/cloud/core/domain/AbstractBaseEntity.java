@@ -22,8 +22,8 @@ import lombok.Data;
 /**
  * fun.vyse.cloud.core.domain.AbstractBaseEntity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 13:25
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 13:25
  */
 @Data
 public abstract class AbstractBaseEntity<T> implements IEntity<T> {

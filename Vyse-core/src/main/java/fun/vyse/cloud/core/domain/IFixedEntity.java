@@ -19,8 +19,8 @@ package fun.vyse.cloud.core.domain;
 /**
  * fun.vyse.cloud.core.domain.IFixedEntity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:42
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:42
  */
 public interface IFixedEntity<T> extends IEntity<T>{
 
