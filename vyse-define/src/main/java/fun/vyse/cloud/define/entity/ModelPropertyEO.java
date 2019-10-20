@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import net.sf.cglib.beans.BeanMap;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,10 +30,12 @@ import java.util.Date;
 /**
  * fun.vyse.cloud.define.entity.ModelProperty
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-15 12:04
+ * @author junchen homeanter@163.com
+ * @date 2019-10-15 12:04
  */
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
 
 	private static final Long PROPERTY_NUMBER = 1L;
@@ -46,16 +50,28 @@ public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedE
 	 */
 	private Long domainId1;
 
+	/**
+	 * 属性编码
+	 */
 	private String code1;
 
+	/**
+	 * 属性值
+	 */
 	private String value1;
 
+	/**
+	 * 属性的数据类型
+	 */
 	private String dateType1;
 
+	/**
+	 * 属性的路径
+	 */
 	private String path1;
 
 	/**
-	 * 父级模型id
+	 * 父级数据id
 	 */
 	private Long parentId;
 
@@ -105,10 +121,10 @@ public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedE
 		return type.toString() + index.toString();
 	}
 
-	public Long getCurrentIndex(){
+	public Long getCurrentIndex() {
 		if (this.currentIndex == null) {
-			for(Long i = PROPERTY_NUMBER; i >= 1; --i) {
-				Long domainId = (Long)this.get(PropertyType.domainId, i);
+			for (Long i = PROPERTY_NUMBER; i >= 1; --i) {
+				Long domainId = (Long) this.get(PropertyType.domainId, i);
 				if (domainId != null) {
 					this.currentIndex = i;
 					break;

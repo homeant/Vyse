@@ -24,8 +24,8 @@ import java.util.Map;
 /**
  * fun.vyse.cloud.define.domain.MetaDefinitionFactory
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 10:31
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 10:31
  */
 public class MetaDefinitionFactory {
 

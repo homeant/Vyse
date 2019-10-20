@@ -25,8 +25,8 @@ import lombok.ToString;
 /**
  * UserEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-17 14:18
+ * @author junchen homeanter@163.com
+ * @date 2019-10-17 14:18
  */
 @Data
 @ToString

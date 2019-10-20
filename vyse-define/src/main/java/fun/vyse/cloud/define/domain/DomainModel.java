@@ -42,8 +42,8 @@ import java.util.*;
 /**
  * fun.vyse.cloud.core.domain.DefineModel
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:34
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:34
  */
 @Slf4j
 public class DomainModel extends AbstractStateEntity implements IModel<Long> {

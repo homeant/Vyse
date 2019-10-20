@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
 /**
  * fun.vyse.cloud.core.domain.MetaDefinition
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:55
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:55
  */
 @Slf4j
 public class MetaDefinition<T> implements Serializable {
@@ -224,11 +224,11 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private PropertyEO getProperty(ConnectionEO r) {
+	public PropertyEO getProperty(ConnectionEO r) {
 		return this.getProperty(r.getSubId());
 	}
 
-	private PropertyEO getProperty(Long id) {
+	public PropertyEO getProperty(Long id) {
 		return this.property.get(id);
 	}
 

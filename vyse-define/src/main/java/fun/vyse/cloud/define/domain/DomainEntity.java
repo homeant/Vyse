@@ -28,8 +28,8 @@ import java.util.Map;
  * fun.vyse.cloud.core.domain.DefineEntity
  * 操作的entity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:34
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:34
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

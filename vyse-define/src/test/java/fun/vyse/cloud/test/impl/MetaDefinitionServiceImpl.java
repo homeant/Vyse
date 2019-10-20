@@ -29,8 +29,8 @@ import java.util.List;
 /**
  * fun.vyse.cloud.define.service.impl.MetaDefinitionServiceImpl
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 10:34
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 10:34
  */
 public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
 
@@ -65,6 +65,8 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
         propertyEO2.setId(4L);
         propertyEO2.setCode("city");
         propertyEO2.setName("城市");
+        propertyEO2.setDefValue("北京");
+        propertyEO2.setDataType("java.lang.String");
         propertyEOS.add(propertyEO2);
 
         ConnectionEO connectionEO = new ConnectionEO();

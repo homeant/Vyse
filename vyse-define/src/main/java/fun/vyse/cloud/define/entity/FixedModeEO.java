@@ -23,8 +23,8 @@ import lombok.EqualsAndHashCode;
 /**
  * fun.vyse.cloud.define.entity.FixedModeEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 15:18
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 15:18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

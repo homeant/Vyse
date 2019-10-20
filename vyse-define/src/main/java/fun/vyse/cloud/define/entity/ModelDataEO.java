@@ -25,8 +25,8 @@ import lombok.ToString;
 /**
  * com.ifa.cloud.channel.model.entity.ModelDataEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:48
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:48
  */
 @Data
 @ToString(callSuper = true)

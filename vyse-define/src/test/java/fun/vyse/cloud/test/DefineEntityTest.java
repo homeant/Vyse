@@ -44,8 +44,8 @@ import java.util.Map;
 /**
  * com.ifa.cloud.channel.test.DefineModelTest
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 11:39
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 11:39
  */
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -114,15 +114,17 @@ public class DefineEntityTest {
 		DomainModel children = new DomainModel(childrenData,metaDefinition);
 		children.setParentModel(domainModel);
 
+
+		PropertyEO property = metaDefinition.getProperty(4L);
 		//属性放置
 		ModelPropertyEO modelPropertyEO = new ModelPropertyEO();
 		modelPropertyEO.setId(10L);
-		modelPropertyEO.setDomainId(1L);
+		modelPropertyEO.setDomainId1(property.getId());
 		modelPropertyEO.setParentId(9L);
-		modelPropertyEO.setPropertyId(3L);
 		modelPropertyEO.setTopId(8L);
-		modelPropertyEO.setCode("city");
-		modelPropertyEO.setValue("北京");
+		modelPropertyEO.setCode1(property.getCode());
+		modelPropertyEO.setValue1(property.getDefValue());
+		modelPropertyEO.setDateType1(property.getDataType());
 		children.put(modelPropertyEO);
 
 		domainModel.put(children);
