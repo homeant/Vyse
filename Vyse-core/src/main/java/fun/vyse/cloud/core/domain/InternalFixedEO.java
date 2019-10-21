@@ -16,7 +16,8 @@
 
 package fun.vyse.cloud.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,6 +30,11 @@ import lombok.ToString;
  */
 @Data
 @ToString(callSuper = true)
+@JsonTypeInfo(
+		use = JsonTypeInfo.Id.CLASS,
+		include = JsonTypeInfo.As.EXISTING_PROPERTY,
+		property = "class$"
+)
 @EqualsAndHashCode(callSuper = false)
 public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
 	/**
@@ -40,6 +46,11 @@ public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedE
 	 */
 	private T topId;
 
-    @JsonAlias(value = "class")
-    private String clazz;
+	private EntityState dirtyFlag;
+
+    private String class$ = this.getClass().getName();
+
+    public void setClass$(String value){
+
+	}
 }

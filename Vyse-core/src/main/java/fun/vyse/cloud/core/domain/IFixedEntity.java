@@ -16,6 +16,8 @@
 
 package fun.vyse.cloud.core.domain;
 
+import fun.vyse.cloud.core.constant.EntityState;
+
 /**
  * fun.vyse.cloud.core.domain.IFixedEntity
  *
@@ -23,6 +25,7 @@ package fun.vyse.cloud.core.domain;
  * @date 2019-10-12 14:42
  */
 public interface IFixedEntity<T> extends IEntity<T>{
+	EntityState getDirtyFlag();
 
-
+	void setDirtyFlag(EntityState state);
 }

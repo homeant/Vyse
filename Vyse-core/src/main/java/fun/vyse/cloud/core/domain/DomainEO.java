@@ -31,8 +31,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 public class DomainEO<T> extends InternalFixedEO<T> implements IRecursiveEntity<T> {
 
-    private String name;
-
     private String code;
 
     private String path;

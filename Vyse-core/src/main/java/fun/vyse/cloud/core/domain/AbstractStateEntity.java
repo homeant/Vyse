@@ -13,4 +13,6 @@ import lombok.Data;
 public abstract class AbstractStateEntity implements IStateEntity {
 
 	private EntityState state$;
+
+	public final static String STATE$ = "state$";
 }
