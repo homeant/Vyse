@@ -16,6 +16,7 @@
 
 package fun.vyse.cloud.test.entity;
 
+import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.core.domain.ITenantEntity;
@@ -32,4 +33,6 @@ import lombok.ToString;
 @ToString
 public class UserEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
     private String name;
+
+    private EntityState dirtyFlag;
 }

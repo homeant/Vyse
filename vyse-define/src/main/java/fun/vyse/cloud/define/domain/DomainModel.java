@@ -26,7 +26,6 @@ import fun.vyse.cloud.core.domain.*;
 import fun.vyse.cloud.define.entity.ConnectionEO;
 import fun.vyse.cloud.define.entity.ModelDataEO;
 import fun.vyse.cloud.define.entity.ModelPropertyEO;
-import fun.vyse.cloud.define.entity.PropertyEO;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -37,6 +36,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -99,11 +99,28 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		this.fixedModelMap = BeanMap.create(fixedModel);
 	}
 
+	private void setFixedModelMap() {
+		if (this.fixedModelMap == null) {
+			if (this.fixedModel != null) {
+				this.fixedModelMap = BeanMap.create(this.fixedModel);
+			}
+		}
+	}
+
 	@Override
 	public ModelDataEO getEntity() {
 		return entity;
 	}
 
+	/**
+	 * 获取顶级的model
+	 *
+	 * @return domainModel
+	 */
+	@JsonIgnore
+	public DomainModel getTopModel() {
+		return this.parentModel == null ? this : this.parentModel.getTopModel();
+	}
 
 	/**
 	 * 初始化静态属性映射
@@ -151,9 +168,27 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				}
 			});
 		}
-		if(isFixed()){
-
+		EntityState dirtyFlag;
+		if (isFixed()) {
+			if (this.fixedModel != null) {
+				dirtyFlag = this.fixedModel.getDirtyFlag();
+				if (state == EntityState.None || dirtyFlag == state) {
+					this.initFixedPropertyMap();
+					if (this.fixedPropertyMap != null) {
+						for (String code : fixedPropertyMap.keySet()) {
+							property.put(code, this.getFixedValue(code));
+						}
+					}
+				}
+			}
 		}
+		dirtyFlag = this.entity.getDirtyFlag();
+		if (state == EntityState.None || dirtyFlag == state) {
+			property.putAll(BeanMap.create(this.entity));
+		}
+		EntityState state$ = this.getState$();
+		property.put(this.STATE$, state$);
+
 		return property;
 	}
 
@@ -274,7 +309,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				}
 			}
 		} else if (classType == ModelPropertyEO.class) {
-			childrens.addAll((List<T>) this.propertyMap.values());
+			childrens.addAll((List<T>) this.propertyMap.values().stream().collect(Collectors.toList()));
 		} else if (classType == IFixedEntity.class) {
 			childrens.add((T) this.fixedModel);
 		}
@@ -288,6 +323,10 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				return (T) value;
 			} else if (value instanceof List && index < ((List) value).size()) {
 				return (T) ((List) value).get(index);
+			}
+		} else if(classType == ModelPropertyEO.class){
+			for(ModelPropertyEO propertyEO : this.propertyMap.values()){
+				boolean flag = propertyEO.containsKey(code);
 			}
 		}
 		return null;

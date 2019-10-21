@@ -60,7 +60,9 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
         propertyEO.setId(3L);
         propertyEO.setCode("name");
         propertyEO.setName("名称");
+		propertyEO.setDataType("java.lang.String");
         propertyEOS.add(propertyEO);
+
         PropertyEO propertyEO2 = new PropertyEO();
         propertyEO2.setId(4L);
         propertyEO2.setCode("city");
@@ -75,6 +77,7 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
         connectionEO.setSubId(2L);
         connectionEO.setParentType("Model");
         connectionEO.setSubType("Model");
+        connectionEO.setMaxmium(1L);
         connectionEOS.add(connectionEO);
 
 

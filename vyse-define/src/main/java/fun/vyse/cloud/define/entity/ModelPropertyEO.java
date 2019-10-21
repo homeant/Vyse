@@ -17,6 +17,8 @@
 package fun.vyse.cloud.define.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Maps;
+import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import lombok.Data;
@@ -26,6 +28,7 @@ import net.sf.cglib.beans.BeanMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * fun.vyse.cloud.define.entity.ModelProperty
@@ -42,6 +45,11 @@ public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedE
 
 	@JsonIgnore
 	private transient BeanMap bean;
+
+	@JsonIgnore
+	private transient Map<String, Integer> codeMap;
+
+	private EntityState dirtyFlag;
 
 	private Long currentIndex;
 
@@ -132,6 +140,17 @@ public class ModelPropertyEO extends AbstractBaseEntity<Long> implements IFixedE
 			}
 		}
 		return this.currentIndex;
+	}
+
+	public boolean containsKey(String code) {
+		this.init();
+		return true;
+	}
+
+	private void init(){
+		if(this.codeMap==null){
+			this.codeMap = Maps.newConcurrentMap();
+		}
 	}
 
 	public enum PropertyType {

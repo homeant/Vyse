@@ -118,7 +118,6 @@ public class DefineEntityTest {
 		DomainModel children = new DomainModel(childrenData, metaDefinition);
 		children.setParentModel(domainModel);
 
-
 		List<ConnectionEO> connections = metaDefinition.getConnection(2L, 4L);
 		if (CollectionUtils.isNotEmpty(connections)) {
 			Long id = 10L;
@@ -138,8 +137,18 @@ public class DefineEntityTest {
 			}
 		}
 		domainModel.put(children);
+
+		Map<String, Object> data = Maps.newHashMap();
+
+		data.put("id", 9L);
+		data.put("domainId", 1L);
+		data.put("code", "main");
+		data.put("name", "tom");
+		domainModel.setData(data);
+
 		DomainModel childrenModel = DefineEntityTest.domainModel.findChildren(DomainModel.class, "test", 0);
 		log.debug("children:{}", childrenModel);
+		log.debug("data:{}", mapper.writeValueAsString(domainModel.getData()));
 	}
 
 	@Configuration
