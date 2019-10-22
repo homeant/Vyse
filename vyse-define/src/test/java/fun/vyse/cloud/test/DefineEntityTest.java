@@ -17,7 +17,9 @@
 package fun.vyse.cloud.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainEntity;
@@ -42,7 +44,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * com.ifa.cloud.channel.test.DefineModelTest
@@ -58,7 +59,7 @@ public class DefineEntityTest {
 	private static ModelDataEO dataEO = new ModelDataEO();
 	private static DomainModel domainModel = null;
 
-	private static ObjectMapper mapper = new ObjectMapper();
+	private static ObjectMapper mapper = null;
 
 	private static MetaDefinition<Long> metaDefinition = null;
 
@@ -67,6 +68,8 @@ public class DefineEntityTest {
 
 	@Before
 	public void init() {
+		mapper = new ObjectMapper();
+		mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY,true);
 		dataEO.setId(8L);
 		dataEO.setDomainId(1L);
 		dataEO.setCode("main");
@@ -144,6 +147,14 @@ public class DefineEntityTest {
 		data.put("domainId", 1L);
 		data.put("code", "main");
 		data.put("name", "tom");
+
+		Map<String,Object> chData = Maps.newHashMap();
+		data.put("test",chData);
+		chData.put("id",10L);
+		chData.put("domainId",2L);
+		chData.put("code","test");
+		chData.put("city","上海");
+
 		domainModel.setData(data);
 
 		DomainModel childrenModel = DefineEntityTest.domainModel.findChildren(DomainModel.class, "test", 0);

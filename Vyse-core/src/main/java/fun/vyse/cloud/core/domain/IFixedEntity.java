@@ -28,4 +28,6 @@ public interface IFixedEntity<T> extends IEntity<T>{
 	EntityState getDirtyFlag();
 
 	void setDirtyFlag(EntityState state);
+
+	void updateDirtyFlag(EntityState state);
 }

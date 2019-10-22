@@ -29,4 +29,6 @@ public interface IStateEntity {
     EntityState getState$();
 
     void setState$(EntityState state);
+
+	void updateState$(EntityState var1);
 }

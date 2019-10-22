@@ -35,7 +35,7 @@ import lombok.ToString;
 		include = JsonTypeInfo.As.EXISTING_PROPERTY,
 		property = "class$"
 )
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
 	/**
 	 * 模型id
@@ -50,7 +50,12 @@ public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedE
 
     private String class$ = this.getClass().getName();
 
-    public void setClass$(String value){
+    public void setClass$(String value){}
 
+	public void updateDirtyFlag(EntityState state){
+		EntityState dirtyFlag = this.getDirtyFlag();
+		if(EntityState.New != dirtyFlag || EntityState.Modify != state){
+			this.setDirtyFlag(state);
+		}
 	}
 }

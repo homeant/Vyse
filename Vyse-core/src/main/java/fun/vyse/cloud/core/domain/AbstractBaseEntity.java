@@ -26,7 +26,7 @@ import lombok.Data;
  * @date 2019-10-12 13:25
  */
 @Data
-public abstract class AbstractBaseEntity<T> implements IEntity<T> {
+public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T> {
     private T id;
 
     private EntityState state$;

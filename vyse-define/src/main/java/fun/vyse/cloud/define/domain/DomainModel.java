@@ -22,6 +22,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import fun.vyse.cloud.core.common.ApplicationContextHelper;
 import fun.vyse.cloud.core.constant.EntityState;
+import fun.vyse.cloud.core.constant.SetPropertyType;
 import fun.vyse.cloud.core.domain.*;
 import fun.vyse.cloud.define.entity.ConnectionEO;
 import fun.vyse.cloud.define.entity.ModelDataEO;
@@ -74,6 +75,14 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	private Map<String, Object> modelMap = Maps.newConcurrentMap();
 
 	private Map<Long, ModelPropertyEO> propertyMap = Maps.newConcurrentMap();
+
+	/**
+	 * 调整过的map状态映射
+	 */
+	private Map<String, EntityState> propertyStateMap = Maps.newConcurrentMap();
+
+	@JsonIgnore
+	private List<Long> deleteModelIds = Lists.newArrayList();
 
 
 	@Getter
@@ -198,12 +207,39 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	 * @param code  编码
 	 * @param value 属性值
 	 */
-	public void setPropertyValue(String code, Object value) {
+	public SetPropertyType setPropertyValue(String code, Object value) {
 		this.initFixedPropertyMap();
+		SetPropertyType result = SetPropertyType.Failure;
 		Set<String> basePropertys = Sets.newHashSet("id", "domainId", "code", "topId", "firstId", "lastId");
 		if (!basePropertys.contains(code)) {
-			this.setFixedValue(code, value);
+			boolean exist = false;
+			if (this.isFixedProperty(code)) {//是否是静态属性
+				exist = true;
+				result = this.setFixedValue(code, value);
+			} else {
+				for (ModelPropertyEO property : this.propertyMap.values()) {
+					if (property.containsKey(code)) {
+						SetPropertyType setPropertyType = property.set(code, value);
+						if (setPropertyType == SetPropertyType.Success) {
+							this.getEntity().updateDirtyFlag(EntityState.Modify);
+							this.updateState$(code, EntityState.Modify);
+							this.updateState$(EntityState.Modify);
+							property.updateState$(EntityState.Modify);
+						}
+						exist = true;
+						result = setPropertyType;
+						break;
+					}
+				}
+			}
+			if (!exist) {
+
+			}
+			if(SetPropertyType.Success == result){
+				this.updateState$(EntityState.Modify);
+			}
 		}
+		return result;
 	}
 
 	/**
@@ -212,11 +248,18 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	 * @param code  编码
 	 * @param value 属性值
 	 */
-	private void setFixedValue(String code, Object value) {
+	private SetPropertyType setFixedValue(String code, Object value) {
 		Object oldValue = this.getFixedValue(code);
 		if (ObjectUtils.notEqual(oldValue, value)) {
 			String alias = this.fixedPropertyMap.get(code);
 			this.fixedModelMap.put(alias, value);
+			this.getEntity().updateDirtyFlag(EntityState.Modify);
+			this.fixedModel.updateDirtyFlag(EntityState.Modify);
+			this.updateState$(code, EntityState.Modify);
+			this.updateState$(EntityState.Modify);
+			return SetPropertyType.Success;
+		} else {
+			return SetPropertyType.Null;
 		}
 	}
 
@@ -319,21 +362,48 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	public <T extends IEntity> T findChildren(Class<T> classType, String code, Integer index) {
 		if (classType == DomainModel.class) {
 			Object value = this.modelMap.get(code);
-			if (value instanceof DomainModel) {
-				return (T) value;
-			} else if (value instanceof List && index < ((List) value).size()) {
-				return (T) ((List) value).get(index);
+			if (value != null) {
+				if (value instanceof DomainModel) {
+					return (T) value;
+				} else if (value instanceof List && index < ((List) value).size()) {
+					return (T) ((List) value).get(index);
+				}
 			}
-		} else if(classType == ModelPropertyEO.class){
-			for(ModelPropertyEO propertyEO : this.propertyMap.values()){
+		} else if (classType == ModelPropertyEO.class) {
+			for (ModelPropertyEO propertyEO : this.propertyMap.values()) {
 				boolean flag = propertyEO.containsKey(code);
+				if (flag) {
+					return (T) propertyEO;
+				}
 			}
 		}
 		return null;
 	}
 
-	public <T> List<T> findChildren(Class<T> classType, String code) {
-		return Collections.emptyList();
+	public <T extends IEntity> List<T> findChildren(Class<T> classType, String code) {
+		List<T> list;
+		if (classType == DomainModel.class) {
+			list = Lists.newArrayList();
+			Object value = this.modelMap.get(code);
+			if (value != null) {
+				if (value instanceof DomainModel) {
+					list.add((T) value);
+				} else if (value instanceof List) {
+					list.addAll((List<T>) value);
+				}
+			}
+			return list;
+		} else if (classType == ModelPropertyEO.class) {
+			list = Lists.newArrayList();
+			for (ModelPropertyEO propertyEO : this.propertyMap.values()) {
+				boolean flag = propertyEO.containsKey(code);
+				if (flag) {
+					list.add((T) propertyEO);
+				}
+			}
+			return list;
+		}
+		return null;
 	}
 
 	@JsonIgnore
@@ -345,6 +415,10 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	private Map<String, Object> getInternalModel() {
 		this.initMetaDefinition();
 		Map<String, Object> data = this.getProperty();
+		EntityState state = this.getState$();
+		if (data != null && state != null) {
+			data.put(STATE$, state);
+		}
 		List<DomainModel> childrens = this.findChildren(DomainModel.class);
 		if (CollectionUtils.isNotEmpty(childrens)) {
 			childrens.stream().forEach(r -> {
@@ -385,7 +459,23 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				}
 			});
 		}
+		this.cleanState$();
 		return data;
+	}
+
+	private void setState$(IStateEntity stateEntity) {
+		stateEntity.setState$(EntityState.None);
+	}
+
+	private void cleanState$() {
+		this.setState$(this);
+		this.propertyMap.values().forEach(this::setState$);
+		if (this.fixedModel != null) {
+			this.setState$(this.fixedModel);
+		}
+		this.propertyStateMap.entrySet().forEach(r -> r.setValue(EntityState.None));
+		this.deleteModelIds.clear();
+
 	}
 
 	public void setData(@NonNull Map<String, Object> map) {
@@ -410,6 +500,19 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				}
 			}
 		}
+	}
+
+	public void updateState$(String code, EntityState state) {
+		EntityState entityState = this.propertyStateMap.get(code);
+		//原来的状态不是新增 或者 目前的状态不是 修改
+		if (EntityState.New != entityState || EntityState.Modify != state) {
+			this.propertyStateMap.put(code, state);
+		}
+	}
+
+	private Boolean isFixedProperty(String code) {
+		this.initFixedPropertyMap();
+		return this.fixedPropertyMap != null ? this.fixedPropertyMap.containsKey(code) : false;
 	}
 
 	@JsonIgnore
