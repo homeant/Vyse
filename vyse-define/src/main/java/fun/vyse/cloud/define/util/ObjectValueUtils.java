@@ -46,7 +46,7 @@ public class ObjectValueUtils {
 		if (clazz == String.class) {
 			return value;
 		} else if (clazz == Date.class) {
-			return instance.date(value, pattern);
+			return instance.toDate(value, pattern);
 		}
 		return null;
 	}
@@ -62,7 +62,7 @@ public class ObjectValueUtils {
 		}
 	}
 
-	private Date date(String date, String pattern) {
+	private Date toDate(String date, String pattern) {
 		try {
 			return parseDate(date, pattern);
 		} catch (ParseException e) {

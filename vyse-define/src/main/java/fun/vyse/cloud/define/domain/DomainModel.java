@@ -19,11 +19,11 @@ package fun.vyse.cloud.define.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import fun.vyse.cloud.core.common.ApplicationContextHelper;
 import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.constant.SetPropertyType;
 import fun.vyse.cloud.core.domain.*;
+import fun.vyse.cloud.define.constant.ReservedProperty;
 import fun.vyse.cloud.define.entity.ConnectionEO;
 import fun.vyse.cloud.define.entity.ModelDataEO;
 import fun.vyse.cloud.define.entity.ModelPropertyEO;
@@ -210,8 +210,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	public SetPropertyType setPropertyValue(String code, Object value) {
 		this.initFixedPropertyMap();
 		SetPropertyType result = SetPropertyType.Failure;
-		Set<String> basePropertys = Sets.newHashSet("id", "domainId", "code", "topId", "firstId", "lastId");
-		if (!basePropertys.contains(code)) {
+		if (ReservedProperty.valueOf(code)==null) {
 			boolean exist = false;
 			if (this.isFixedProperty(code)) {//是否是静态属性
 				exist = true;
@@ -235,7 +234,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 			if (!exist) {
 
 			}
-			if(SetPropertyType.Success == result){
+			if (SetPropertyType.Success == result) {
 				this.updateState$(EntityState.Modify);
 			}
 		}
@@ -335,6 +334,10 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 					"property: {id: {},parentId: {}}," +
 					"model: {id :{}}", propertyEO.getId(), propertyEO.getParentId(), this.entity.getId());
 		}
+	}
+
+	public Object find(String path){
+		return null;
 	}
 
 	public Map<String, Object> findChildren() {
@@ -479,8 +482,8 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	}
 
 	public void setData(@NonNull Map<String, Object> map) {
-		Long domainId = (Long) map.get("domainId");
-		String code = (String) map.get("code");
+		Long domainId = (Long) map.get(ReservedProperty.domainId);
+		String code = (String) map.get(ReservedProperty.code);
 		if (this.entity != null) {
 			if (!ObjectUtils.notEqual(this.entity.getDomainId(), domainId)) {
 				if (StringUtils.equals(this.entity.getCode(), code)) {

@@ -50,6 +50,12 @@ public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedE
 
     private String class$ = this.getClass().getName();
 
+    public static final String DOMAIN_ID = "domainId";
+
+	public static final String TOP_ID = "topId";
+
+	public static final String DIRTY_FLAG = "dirtyFlag";
+
     public void setClass$(String value){}
 
 	public void updateDirtyFlag(EntityState state){

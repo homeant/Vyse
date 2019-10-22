@@ -18,6 +18,7 @@ package fun.vyse.cloud.core.domain;
 
 import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * fun.vyse.cloud.core.domain.AbstractBaseEntity
@@ -26,6 +27,7 @@ import lombok.Data;
  * @date 2019-10-12 13:25
  */
 @Data
+@ToString(callSuper = true)
 public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T> {
     private T id;
 
