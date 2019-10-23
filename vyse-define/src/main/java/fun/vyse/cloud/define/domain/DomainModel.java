@@ -336,6 +336,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		}
 	}
 
+	@Deprecated
 	public Object find(String path){
 		return null;
 	}

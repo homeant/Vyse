@@ -160,7 +160,6 @@ public class DefineEntityTest {
 		DomainModel childrenModel = DefineEntityTest.domainModel.findChildren(DomainModel.class, "test", 0);
 		log.debug("children:{}", childrenModel);
 		log.debug("data:{}", mapper.writeValueAsString(domainModel.getData()));
-		log.error("find result:{}",domainModel.find("test"));
 	}
 
 	@Configuration
