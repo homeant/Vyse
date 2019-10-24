@@ -25,7 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * fun.vyse.cloud.define.entity.FixedModeEO
+ * fun.vyse.cloud.define.entity.FixedModelEO
  *
  * @author junchen homeanter@163.com
  * @date 2019-10-14 15:18
@@ -35,7 +35,7 @@ import javax.persistence.Table;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class FixedModeEO extends AbstractBaseEntity<Long>  {
+public class FixedModelEO extends AbstractBaseEntity<Long>  {
     private String className;
 
     public Object createFixedInstance(){

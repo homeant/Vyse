@@ -2,9 +2,11 @@ package fun.vyse.cloud.define.service.impl;
 
 import fun.vyse.cloud.core.service.impl.BaseServiceImpl;
 import fun.vyse.cloud.define.entity.ModelEO;
+import fun.vyse.cloud.define.repository.IModelRepository;
 import fun.vyse.cloud.define.service.IModelService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * ModelServiceImpl
@@ -14,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ModelServiceImpl extends BaseServiceImpl<ModelEO,Long> implements IModelService {
+public class ModelServiceImpl extends BaseServiceImpl<ModelEO, Long, IModelRepository> implements IModelService {
 
-	@Override
-	public ModelEO get(Long id) {
-		return this.baseRepository.findById(id).orElse(null);
-	}
+
 }

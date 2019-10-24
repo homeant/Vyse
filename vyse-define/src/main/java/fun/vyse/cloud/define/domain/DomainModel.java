@@ -539,6 +539,6 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
 	@Override
 	public String toString() {
-		return this.entity.toString();
+		return this.entity!=null?this.entity.toString():"";
 	}
 }

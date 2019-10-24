@@ -18,6 +18,7 @@ package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
 import lombok.ToString;
+//import org.hibernate.annotations.ColumnMeta;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -32,14 +33,17 @@ import javax.persistence.Version;
 @MappedSuperclass
 @Data
 @ToString(callSuper = true)
-public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T>,IVersionEntity {
+public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T>, IVersionEntity {
 	@Id
-    private T id;
+	//@ColumnMeta(index = Integer.MIN_VALUE)
+	private T id;
 
-    private String tenantId;
+	//@ColumnMeta(index = Integer.MAX_VALUE - 1)
+	private String tenantId;
 
-    @Version
-    private Long version = 1L;
+	//@ColumnMeta(index = Integer.MAX_VALUE)
+	@Version
+	private Long version;
 
 	public static final String ID = "id";
 

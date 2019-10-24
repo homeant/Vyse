@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.core.domain.InternalFixedEO;
 import fun.vyse.cloud.define.entity.ConnectionEO;
-import fun.vyse.cloud.define.entity.FixedModeEO;
+import fun.vyse.cloud.define.entity.FixedModelEO;
 import fun.vyse.cloud.define.entity.ModelEO;
 import fun.vyse.cloud.define.entity.PropertyEO;
 import lombok.NonNull;
@@ -64,7 +64,7 @@ public class MetaDefinition<T> implements Serializable {
 	/**
 	 * 静态表
 	 */
-	private Map<T, FixedModeEO> fixedModel = Maps.newConcurrentMap();
+	private Map<T, FixedModelEO> fixedModel = Maps.newConcurrentMap();
 
 	@JsonIgnore
 	private transient Map<String, List> domainCacheMap;
@@ -197,7 +197,7 @@ public class MetaDefinition<T> implements Serializable {
 					.forEach(r -> {
 						BeanMap beanMap = fixedBeanMap.get(r.getId());
 						if (beanMap != null) {
-							//FixedModeEO bean = (FixedModeEO) beanMap.getBean();
+							//FixedModelEO bean = (FixedModelEO) beanMap.getBean();
 							List<PropertyEO> childrenProperty = this.findChildrenProperty(r.getId());
 							if (CollectionUtils.isNotEmpty(childrenProperty)) {
 								childrenProperty.stream().forEach(y -> {
@@ -249,11 +249,11 @@ public class MetaDefinition<T> implements Serializable {
 		return this.connectionMap.get(key);
 	}
 
-	public void addFixedModel(FixedModeEO fixedModeEO) {
-		this.fixedModel.put((T) fixedModeEO.getId(), fixedModeEO);
+	public void addFixedModel(FixedModelEO FixedModelEO) {
+		this.fixedModel.put((T) FixedModelEO.getId(), FixedModelEO);
 	}
 
-	public FixedModeEO getFixedModelEO(Long id) {
+	public FixedModelEO getFixedModelEO(Long id) {
 		return this.fixedModel.get(id);
 	}
 

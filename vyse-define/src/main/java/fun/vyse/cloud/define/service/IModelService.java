@@ -3,6 +3,7 @@ package fun.vyse.cloud.define.service;
 import fun.vyse.cloud.core.service.IBaseService;
 import fun.vyse.cloud.define.entity.ModelEO;
 
+
 /**
  * IModelService
  *
@@ -10,5 +11,4 @@ import fun.vyse.cloud.define.entity.ModelEO;
  * @date 2019-10-24 11:08
  */
 public interface IModelService extends IBaseService<ModelEO,Long> {
-	ModelEO get(Long id);
 }

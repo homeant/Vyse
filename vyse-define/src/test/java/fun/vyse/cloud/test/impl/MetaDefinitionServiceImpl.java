@@ -19,7 +19,7 @@ package fun.vyse.cloud.test.impl;
 import com.google.common.collect.Lists;
 import fun.vyse.cloud.define.domain.MetaDefinition;
 import fun.vyse.cloud.define.entity.ConnectionEO;
-import fun.vyse.cloud.define.entity.FixedModeEO;
+import fun.vyse.cloud.define.entity.FixedModelEO;
 import fun.vyse.cloud.define.entity.ModelEO;
 import fun.vyse.cloud.define.entity.PropertyEO;
 import fun.vyse.cloud.define.service.IMetaDefinitionService;
@@ -39,7 +39,7 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
         List<ModelEO> modelEOS = Lists.newArrayList();
         List<PropertyEO> propertyEOS = Lists.newArrayList();
         List<ConnectionEO> connectionEOS = Lists.newArrayList();
-        List<FixedModeEO> fixedModeEOS = Lists.newArrayList();
+        List<FixedModelEO> FixedModelEOS = Lists.newArrayList();
 
         ModelEO modelEO = new ModelEO();
         modelEO.setId(1L);
@@ -97,16 +97,16 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
         connectionEO2.setSubType("Property");
         connectionEOS.add(connectionEO2);
 
-        FixedModeEO fixedModeEO = new FixedModeEO();
-        fixedModeEO.setClassName("fun.vyse.cloud.test.entity.UserEO");
-        fixedModeEO.setId(1L);
-        fixedModeEOS.add(fixedModeEO);
+        FixedModelEO FixedModelEO = new FixedModelEO();
+        FixedModelEO.setClassName("fun.vyse.cloud.test.entity.UserEO");
+        FixedModelEO.setId(1L);
+        FixedModelEOS.add(FixedModelEO);
 
         MetaDefinition<Long> metaDefinition = new MetaDefinition<>();
         modelEOS.forEach(r -> metaDefinition.addModel(r));
         propertyEOS.forEach(r -> metaDefinition.addProperty(r));
         connectionEOS.forEach(r -> metaDefinition.addConcurrent(r));
-        fixedModeEOS.forEach(r->metaDefinition.addFixedModel(r));
+        FixedModelEOS.forEach(r->metaDefinition.addFixedModel(r));
         metaDefinition.init();
         return metaDefinition;
     }

@@ -77,7 +77,7 @@ public class DefineEntityTest {
 		metaDefinition = metaDefinitionService.getMetaDefinition("");
 		domainModel = new DomainModel(dataEO, metaDefinition);
 		domainModel.setTenantId("");
-		FixedModeEO fixedModelEO = metaDefinition.getFixedModelEO(1L);
+		FixedModelEO fixedModelEO = metaDefinition.getFixedModelEO(1L);
 		Object fixedInstance = fixedModelEO.createFixedInstance();
 		domainModel.setFixedModel((IFixedEntity) fixedInstance);
 
@@ -166,13 +166,8 @@ public class DefineEntityTest {
 	public static class Config {
 
 		@Bean
-		public IMetaDefinitionService metaDefinitionService() {
-			return new MetaDefinitionServiceImpl();
-		}
-
-		@Bean
-		public MetaDefinitionFactory factory(IMetaDefinitionService metaDefinitionService) {
-			return new MetaDefinitionFactory(metaDefinitionService);
+		public MetaDefinitionFactory factory() {
+			return new MetaDefinitionFactory(new MetaDefinitionServiceImpl());
 		}
 	}
 }
