@@ -22,19 +22,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+
 /**
  * fun.vyse.cloud.core.domain.InternalFixedEO
  *
  * @author junchen homeanter@163.com
  * @date 2019-10-14 14:37
  */
-@Data
-@ToString(callSuper = true)
+@MappedSuperclass
 @JsonTypeInfo(
 		use = JsonTypeInfo.Id.CLASS,
 		include = JsonTypeInfo.As.EXISTING_PROPERTY,
 		property = "class$"
 )
+@Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
 	/**
@@ -46,8 +50,10 @@ public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedE
 	 */
 	private T topId;
 
+	@Transient
 	private EntityState dirtyFlag;
 
+	@Transient
     private String class$ = this.getClass().getName();
 
     public static final String DOMAIN_ID = "domainId";

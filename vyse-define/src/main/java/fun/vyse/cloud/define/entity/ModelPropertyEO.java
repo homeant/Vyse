@@ -22,13 +22,15 @@ import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.constant.SetPropertyType;
 import fun.vyse.cloud.core.domain.IRecursiveEntity;
 import fun.vyse.cloud.core.domain.InternalFixedEO;
-import fun.vyse.cloud.define.domain.DomainModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import net.sf.cglib.beans.BeanMap;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Map;
 
 import static fun.vyse.cloud.define.util.ObjectValueUtils.toObjectValue;
@@ -40,6 +42,8 @@ import static fun.vyse.cloud.define.util.ObjectValueUtils.toStringValue;
  * @author junchen homeanter@163.com
  * @date 2019-10-15 12:04
  */
+@Entity
+@Table(name="t_model_property")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
@@ -53,6 +57,7 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 	@JsonIgnore
 	private transient Map<String, Long> codeMap;
 
+	@Transient
 	private EntityState dirtyFlag;
 
 	private Long currentIndex;
@@ -63,42 +68,54 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 	private Long domainId1;
 
 	/**
-	 * 属性编码
-	 */
-	private String code1;
-
-	/**
 	 * 属性值
 	 */
 	private String value1;
 
 	/**
+	 * 属性编码
+	 */
+	@Transient
+	private String code1;
+
+	/**
 	 * 属性的数据类型
 	 */
+	@Transient
 	private String dateType1;
 
 	/**
 	 * 时间类型转换格式
 	 */
+	@Transient
 	private String pattern1;
 
+	@Transient
 	/**
 	 * 属性的路径
 	 */
 	private String path1;
 
 	private Long domainId2;
-	private String code2;
 	private String value2;
+	@Transient
+	private String code2;
+	@Transient
 	private String dateType2;
+	@Transient
 	private String pattern2;
+	@Transient
 	private String path2;
 
 	private Long domainId3;
-	private String code3;
 	private String value3;
+	@Transient
+	private String code3;
+	@Transient
 	private String dateType3;
+	@Transient
 	private String pattern3;
+	@Transient
 	private String path3;
 
 	/**

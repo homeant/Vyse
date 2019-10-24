@@ -20,12 +20,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
+
 /**
  * fun.vyse.cloud.core.domain.DefineModelEO
  *
  * @author junchen homeanter@163.com
  * @date 2019-10-14 14:34
  */
+@MappedSuperclass
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)

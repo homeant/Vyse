@@ -21,6 +21,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 
 /**
  * com.ifa.cloud.channel.model.entity.ModelDataEO
@@ -28,6 +31,8 @@ import lombok.ToString;
  * @author junchen homeanter@163.com
  * @date 2019-10-12 14:48
  */
+@Entity
+@Table(name = "t_model_data")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)

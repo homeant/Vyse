@@ -22,6 +22,7 @@ import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IEntity;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -33,7 +34,7 @@ import java.util.Map;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DomainEntity extends AbstractBaseEntity<Long> implements IEntity<Long> {
+public class DomainEntity implements Serializable {
 
 	@JsonIgnore
 	private DomainModel model;
@@ -46,16 +47,6 @@ public class DomainEntity extends AbstractBaseEntity<Long> implements IEntity<Lo
 
 	public DomainEntity(DomainModel model) {
 		this.model = model;
-	}
-
-	@Override
-	public Long getId() {
-		return this.model.getId();
-	}
-
-	@Override
-	public void setId(Long id) {
-		this.model.setId(id);
 	}
 
 	@Override

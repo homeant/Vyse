@@ -16,9 +16,12 @@
 
 package fun.vyse.cloud.core.domain;
 
-import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
 import lombok.ToString;
+
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
  * fun.vyse.cloud.core.domain.AbstractBaseEntity
@@ -26,16 +29,20 @@ import lombok.ToString;
  * @author junchen homeanter@163.com
  * @date 2019-10-12 13:25
  */
+@MappedSuperclass
 @Data
 @ToString(callSuper = true)
-public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T> {
+public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T>,IVersionEntity {
+	@Id
     private T id;
 
-    private EntityState state$;
-
     private String tenantId;
+
+    @Version
+    private Long version = 1L;
 
 	public static final String ID = "id";
 
 	public static final String TENANT_ID = "tenantId";
+
 }

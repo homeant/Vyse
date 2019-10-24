@@ -19,6 +19,10 @@ package fun.vyse.cloud.define.entity;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * fun.vyse.cloud.define.entity.FixedModeEO
@@ -26,7 +30,10 @@ import lombok.EqualsAndHashCode;
  * @author junchen homeanter@163.com
  * @date 2019-10-14 15:18
  */
+@Entity
+@Table(name = "t_fixedModel")
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 public class FixedModeEO extends AbstractBaseEntity<Long>  {
     private String className;

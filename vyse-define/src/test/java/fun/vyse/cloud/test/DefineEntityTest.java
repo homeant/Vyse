@@ -19,7 +19,6 @@ package fun.vyse.cloud.test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainEntity;

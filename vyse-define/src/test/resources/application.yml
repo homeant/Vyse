@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: vyse-define
+  aop:
+    auto: true
+  datasource:
+    url: jdbc:mysql://9.7.32.6:3306/define
+    username: root
+    password: p@ssw0rd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    show-sql: true
+
+logging:
+  level:
+    fun:
+      vyse:
+        cloud: debug

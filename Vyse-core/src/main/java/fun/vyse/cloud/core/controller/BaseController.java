@@ -4,12 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
 /**
  * 基本控制器
  */
 public class BaseController {
+
+	/*@Autowired
+	public HttpServletRequest request;
+
+	@Autowired
+	public HttpServletResponse response;*/
+
     @Autowired
     private MessageSource messageSource;
 
