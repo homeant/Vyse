@@ -132,7 +132,7 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private ModelEO getModel(Long id) {
+	public ModelEO getModel(Long id) {
 		return this.model.get(id);
 	}
 

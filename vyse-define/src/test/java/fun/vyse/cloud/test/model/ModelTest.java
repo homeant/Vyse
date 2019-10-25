@@ -46,6 +46,12 @@ public class ModelTest {
 	@Autowired
 	private IMetaDefinitionService metaDefinitionService;
 
+	@Autowired
+	private IDomainEntityService domainEntityService;
+
+	@Autowired
+	private IDomainModelService domainModelService;
+
 	@Ignore
 	@Test
 	public void insert() {
@@ -121,6 +127,16 @@ public class ModelTest {
 	}
 
 	@Test
+	public void idTest(){
+		ModelEO modelEO = new ModelEO();
+		modelEO.setName("id测试模型");
+		modelEO.setCode("main");
+		modelEO.setType("Product");
+		modelEO.setFixedId(1L);
+		modelService.saveAndFlush(modelEO);
+	}
+
+	@Test
 	public void test() {
 		log.debug("bean:{}", modelService.findOne(1L));
 		MetaDefinition<Long> metaDefinition = metaDefinitionService.getMetaDefinition(null);
@@ -128,6 +144,12 @@ public class ModelTest {
 		DomainModel model = new DomainModel(null,metaDefinition);
 		entity.setModel(model);
 		log.debug("model:{}",model);
+	}
+
+	@Test
+	public void domainEntityTest(){
+		DomainModel domainModel = domainModelService.createDomainModel(1L);
+		log.info("model:{}",domainModel);
 	}
 
 	@Configuration
