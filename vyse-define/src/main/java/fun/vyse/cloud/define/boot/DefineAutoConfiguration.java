@@ -64,4 +64,14 @@ public class DefineAutoConfiguration {
 	public IModelPropertyService modelPropertyService(){
 		return new ModelPropertyServiceImpl();
 	}
+
+	@Bean
+	public IDomainEntityService domainEntityService(){
+		return new DomainEntityServiceImpl();
+	}
+
+	@Bean
+	public IDomainModelService domainModelService(){
+		return new DomainModelServiceImpl();
+	}
 }
