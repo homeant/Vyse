@@ -4,6 +4,8 @@ import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.ITenantEntity;
 import fun.vyse.cloud.core.repository.IBaseRepository;
 import fun.vyse.cloud.core.service.IBaseService;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -17,6 +19,9 @@ import java.util.List;
  * @date 2019-10-24 12:22
  */
 public class BaseServiceImpl<T,ID,M extends IBaseRepository<T,ID>> implements IBaseService<T,ID> {
+
+	@Getter
+	@Setter
 	@Autowired
 	public M baseRepository;
 

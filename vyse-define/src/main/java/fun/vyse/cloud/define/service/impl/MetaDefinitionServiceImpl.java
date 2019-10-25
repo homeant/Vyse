@@ -7,7 +7,6 @@ import fun.vyse.cloud.define.entity.ModelEO;
 import fun.vyse.cloud.define.entity.PropertyEO;
 import fun.vyse.cloud.define.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 16:20
  */
-@Service
 public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
 
 	@Autowired

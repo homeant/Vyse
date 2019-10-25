@@ -51,9 +51,11 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 
 	private static final Long PROPERTY_NUMBER = 3L;
 
+	@Transient
 	@JsonIgnore
 	private transient BeanMap bean;
 
+	@Transient
 	@JsonIgnore
 	private transient Map<String, Long> codeMap;
 
