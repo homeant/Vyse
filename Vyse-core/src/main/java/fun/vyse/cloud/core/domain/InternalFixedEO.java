@@ -62,6 +62,7 @@ public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedE
 
 	public static final String DIRTY_FLAG = "dirtyFlag";
 
+	@Deprecated
     public void setClass$(String value){}
 
 	public void updateDirtyFlag(EntityState state){
