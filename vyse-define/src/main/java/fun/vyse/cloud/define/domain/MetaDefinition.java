@@ -132,7 +132,7 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	public ModelEO getModel(Long id) {
+	public ModelEO getModel(T id) {
 		return this.model.get(id);
 	}
 
@@ -198,7 +198,7 @@ public class MetaDefinition<T> implements Serializable {
 						BeanMap beanMap = fixedBeanMap.get(r.getId());
 						if (beanMap != null) {
 							//FixedModelEO bean = (FixedModelEO) beanMap.getBean();
-							List<PropertyEO> childrenProperty = this.findChildrenProperty(r.getId());
+							List<PropertyEO> childrenProperty = this.findChildrenProperty((T) r.getId());
 							if (CollectionUtils.isNotEmpty(childrenProperty)) {
 								childrenProperty.stream().forEach(y -> {
 									String code = y.getCode();
@@ -225,14 +225,14 @@ public class MetaDefinition<T> implements Serializable {
 	}
 
 	public PropertyEO getProperty(ConnectionEO r) {
-		return this.getProperty(r.getSubId());
+		return this.getProperty((T) r.getSubId());
 	}
 
-	public PropertyEO getProperty(Long id) {
+	public PropertyEO getProperty(T id) {
 		return this.property.get(id);
 	}
 
-	private List<PropertyEO> findChildrenProperty(Long id) {
+	private List<PropertyEO> findChildrenProperty(T id) {
 		ModelEO parent = this.getModel(id);
 		if (parent != null) {
 			List<ConnectionEO> connectionEOS = this.findChildrenConnection(id, "Property");
@@ -244,7 +244,7 @@ public class MetaDefinition<T> implements Serializable {
 		return null;
 	}
 
-	private List<ConnectionEO> findChildrenConnection(Long id, String type) {
+	private List<ConnectionEO> findChildrenConnection(T id, String type) {
 		String key = String.format(CONNECTION_KEY, id, type);
 		return this.connectionMap.get(key);
 	}
@@ -253,7 +253,7 @@ public class MetaDefinition<T> implements Serializable {
 		this.fixedModel.put((T) FixedModelEO.getId(), FixedModelEO);
 	}
 
-	public FixedModelEO getFixedModelEO(Long id) {
+	public FixedModelEO getFixedModelEO(T id) {
 		return this.fixedModel.get(id);
 	}
 
@@ -265,14 +265,14 @@ public class MetaDefinition<T> implements Serializable {
 	 * @return
 	 */
 	public Boolean isFixed(ModelEO model, PropertyEO propertyEO) {
-		Long fixedId = model.getFixedId();
+		T fixedId = (T) model.getFixedId();
 		if (fixedId != null && this.fixedModel.containsKey(fixedId)) {
 			List<ConnectionEO> connection = this.getConnection((T) model.getId(), (T) propertyEO.getId());
 			if (CollectionUtils.isNotEmpty(connection) && connection.size() > 0) {
 				ConnectionEO connectionEO = connection.get(0);
-				if(connectionEO!=null){
-					String alias = this.getFixedPropertyAlias(fixedId,propertyEO.getCode());
-					if(StringUtils.isNotBlank(alias)){
+				if (connectionEO != null) {
+					String alias = this.getFixedPropertyAlias(fixedId, propertyEO.getCode());
+					if (StringUtils.isNotBlank(alias)) {
 						return true;
 					}
 				}
@@ -281,7 +281,7 @@ public class MetaDefinition<T> implements Serializable {
 		return false;
 	}
 
-	private String getFixedPropertyAlias(Long id, String code) {
+	private String getFixedPropertyAlias(T id, String code) {
 		if (this.fixedPropertyMap.containsKey(id)) {
 			DualHashBidiMap<String, String> ms = this.fixedPropertyMap.get(id);
 			return ms.get(code);
@@ -298,5 +298,57 @@ public class MetaDefinition<T> implements Serializable {
 	public Map<String, String> getFixedProperty(T fixedId) {
 		this.init();
 		return this.fixedPropertyMap.get(fixedId);
+	}
+
+	public Model buildModel(Model parent, T id) {
+		ModelEO modelEO = this.getModel(id);
+		if (modelEO != null) {
+			Model model = new Model(modelEO);
+			if (parent != null) {
+				model.setParent(parent);
+				String pPath = parent.getPath();
+				if (StringUtils.isNotBlank(pPath)) {
+					model.setPath(pPath + "." + modelEO.getCode());
+				} else {
+					model.setPath(modelEO.getCode());
+				}
+			} else {
+				model.setPath(null);
+			}
+			T fixedId = (T) modelEO.getFixedId();
+			if (fixedId != null) {
+				FixedModelEO fixedModelEO = this.getFixedModelEO(fixedId);
+				model.setFixedModel(fixedModelEO);
+			}
+			List<ConnectionEO> connections = this.findChildrenConnection(id, "Model");
+			if (CollectionUtils.isNotEmpty(connections)) {
+				connections.forEach(r->{
+					T subId = (T)r.getSubId();
+					ModelEO subModel = this.getModel(subId);
+					if(subModel!=null){
+						model.put(r);
+						Model childrenModel = this.buildModel(model,subId);
+						if(childrenModel!=null){
+							model.put(childrenModel);
+						}
+					}
+				});
+			}
+			connections = this.findChildrenConnection(id,"Property");
+			if (CollectionUtils.isNotEmpty(connections)) {
+				connections.forEach(r->{
+					T subId = (T)r.getSubId();
+					PropertyEO property = this.getProperty(subId);
+					if(property!=null){
+						model.put(r);
+						model.put(property);
+					}
+				});
+			}
+
+			//action
+			return model;
+		}
+		return null;
 	}
 }

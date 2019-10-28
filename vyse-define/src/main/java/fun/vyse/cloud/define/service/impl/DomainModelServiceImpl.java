@@ -4,6 +4,7 @@ import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
+import fun.vyse.cloud.define.domain.Model;
 import fun.vyse.cloud.define.entity.FixedModelEO;
 import fun.vyse.cloud.define.entity.ModelDataEO;
 import fun.vyse.cloud.define.entity.ModelEO;
@@ -46,7 +47,9 @@ public class DomainModelServiceImpl implements IDomainModelService {
 				Object fixedInstance = fixedModelEO.createFixedInstance();
 				domainModel.setFixedModel((IFixedEntity) fixedInstance);
 			}
+			Model model = md.buildModel(null,modelEO.getId());
 			//添加proptyer默认值
+
 			//添加action对象
 			//添加子模型
 			domainModel.updateState$(EntityState.New);
