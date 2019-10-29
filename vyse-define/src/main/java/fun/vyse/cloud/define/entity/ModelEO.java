@@ -19,7 +19,11 @@ package fun.vyse.cloud.define.entity;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <p>
@@ -29,12 +33,13 @@ import lombok.experimental.Accessors;
  * @author junchen
  * @since 2019-10-12
  */
+@Entity
+@Table(name = "t_model")
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class ModelEO extends AbstractBaseEntity<Long>  {
-
-    private static final long serialVersionUID=1L;
 
     /**
      * 模型名称

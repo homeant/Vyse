@@ -22,8 +22,8 @@ import fun.vyse.cloud.define.domain.MetaDefinition;
 /**
  * fun.vyse.cloud.define.service.IMetaDefinitionService
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 10:34
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 10:34
  */
 public interface IMetaDefinitionService {
     /**

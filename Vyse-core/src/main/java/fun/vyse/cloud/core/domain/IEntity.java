@@ -22,8 +22,8 @@ import java.io.Serializable;
 
  * fun.vyse.cloud.core.domain.IEnyity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 12:01
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 12:01
  */
 
 public interface IEntity<T> extends ITenantEntity,IStateEntity,Serializable,Cloneable {

@@ -16,24 +16,37 @@
 
 package fun.vyse.cloud.core.domain;
 
-import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
+import lombok.ToString;
+//import org.hibernate.annotations.ColumnMeta;
+
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
  * fun.vyse.cloud.core.domain.AbstractBaseEntity
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 13:25
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 13:25
  */
+@MappedSuperclass
 @Data
-public abstract class AbstractBaseEntity<T> implements IEntity<T> {
-    private T id;
+@ToString(callSuper = true)
+public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T>, IVersionEntity {
+	@Id
+	//@ColumnMeta(index = Integer.MIN_VALUE)
+	private T id;
 
-    private EntityState state$;
+	//@ColumnMeta(index = Integer.MAX_VALUE - 1)
+	private String tenantId;
 
-    private String tenantId;
+	//@ColumnMeta(index = Integer.MAX_VALUE)
+	@Version
+	private Long version;
 
 	public static final String ID = "id";
 
 	public static final String TENANT_ID = "tenantId";
+
 }

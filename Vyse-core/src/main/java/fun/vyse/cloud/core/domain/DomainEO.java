@@ -18,21 +18,33 @@ package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
  * fun.vyse.cloud.core.domain.DefineModelEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 14:34
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 14:34
  */
+@MappedSuperclass
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class DomainModelEO extends InternalFixedEO<Long> {
-    private String domainName;
+public class DomainEO<T> extends InternalFixedEO<T> implements IRecursiveEntity<T> {
 
-    private String domainCode;
+    private String code;
 
-    private String domainPath;
+    private String path;
+	/**
+	 * 静态表id
+	 */
+    private T fixedId;
 
-    private Long fixedId;
+	/**
+	 * 数据父级id
+	 */
+	private T parentId;
 }

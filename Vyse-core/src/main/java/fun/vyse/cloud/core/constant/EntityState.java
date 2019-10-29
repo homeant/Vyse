@@ -19,8 +19,8 @@ package fun.vyse.cloud.core.constant;
 /**
  * com.ifa.cloud.channel.constant.State
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-16 14:41
+ * @author junchen homeanter@163.com
+ * @date 2019-10-16 14:41
  */
 public enum EntityState {
     New,

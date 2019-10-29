@@ -19,8 +19,8 @@ package fun.vyse.cloud.core.domain;
 /**
  * fun.vyse.cloud.core.domain.ITenantEntity
  * 租户接口类
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:24
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:24
  */
 public interface ITenantEntity {
 

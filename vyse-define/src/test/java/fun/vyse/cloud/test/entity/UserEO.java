@@ -15,19 +15,18 @@
  */
 
 package fun.vyse.cloud.test.entity;
-
-import fun.vyse.cloud.core.domain.AbstractBaseEntity;
-import fun.vyse.cloud.core.domain.IFixedEntity;
-import fun.vyse.cloud.core.domain.ITenantEntity;
+import fun.vyse.cloud.core.domain.InternalFixedEO;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * UserEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-17 14:18
+ * @author junchen homeanter@163.com
+ * @date 2019-10-17 14:18
  */
 @Data
-public class UserEO extends AbstractBaseEntity<Long> implements IFixedEntity<Long> {
+@ToString
+public class UserEO extends InternalFixedEO<Long> {
     private String name;
 }

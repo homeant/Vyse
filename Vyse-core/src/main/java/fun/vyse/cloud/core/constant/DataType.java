@@ -19,8 +19,8 @@ package fun.vyse.cloud.core.constant;
 /**
  * fun.vyse.cloud.define.constant.DataType
  * 数据类型
- * @Author junchen homeanter@163.com
- * @Date 2019-10-16 13:21
+ * @author junchen homeanter@163.com
+ * @date 2019-10-16 13:21
  */
 public enum DataType {
     String,

@@ -17,14 +17,11 @@
 package fun.vyse.cloud.define.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import fun.vyse.cloud.core.domain.IEntity;
 import fun.vyse.cloud.core.domain.InternalFixedEO;
 import fun.vyse.cloud.define.entity.ConnectionEO;
-import fun.vyse.cloud.define.entity.FixedModeEO;
+import fun.vyse.cloud.define.entity.FixedModelEO;
 import fun.vyse.cloud.define.entity.ModelEO;
 import fun.vyse.cloud.define.entity.PropertyEO;
 import lombok.NonNull;
@@ -35,6 +32,7 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +41,8 @@ import java.util.stream.Collectors;
 /**
  * fun.vyse.cloud.core.domain.MetaDefinition
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-12 14:55
+ * @author junchen homeanter@163.com
+ * @date 2019-10-12 14:55
  */
 @Slf4j
 public class MetaDefinition<T> implements Serializable {
@@ -67,7 +65,7 @@ public class MetaDefinition<T> implements Serializable {
 	/**
 	 * 静态表
 	 */
-	private Map<T, FixedModeEO> fixedModel = Maps.newConcurrentMap();
+	private Map<T, FixedModelEO> fixedModel = Maps.newConcurrentMap();
 
 	@JsonIgnore
 	private transient Map<String, List> domainCacheMap;
@@ -135,7 +133,7 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private ModelEO getModel(Long id) {
+	public ModelEO getModel(T id) {
 		return this.model.get(id);
 	}
 
@@ -200,8 +198,8 @@ public class MetaDefinition<T> implements Serializable {
 					.forEach(r -> {
 						BeanMap beanMap = fixedBeanMap.get(r.getId());
 						if (beanMap != null) {
-							//FixedModeEO bean = (FixedModeEO) beanMap.getBean();
-							List<PropertyEO> childrenProperty = this.findChildrenProperty(r.getId());
+							//FixedModelEO bean = (FixedModelEO) beanMap.getBean();
+							List<PropertyEO> childrenProperty = this.findChildrenProperty((T) r.getId());
 							if (CollectionUtils.isNotEmpty(childrenProperty)) {
 								childrenProperty.stream().forEach(y -> {
 									String code = y.getCode();
@@ -227,15 +225,15 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private PropertyEO getProperty(ConnectionEO r) {
-		return this.getProperty(r.getSubId());
+	public PropertyEO getProperty(ConnectionEO r) {
+		return this.getProperty((T) r.getSubId());
 	}
 
-	private PropertyEO getProperty(Long id) {
+	public PropertyEO getProperty(T id) {
 		return this.property.get(id);
 	}
 
-	private List<PropertyEO> findChildrenProperty(Long id) {
+	private List<PropertyEO> findChildrenProperty(T id) {
 		ModelEO parent = this.getModel(id);
 		if (parent != null) {
 			List<ConnectionEO> connectionEOS = this.findChildrenConnection(id, "Property");
@@ -247,16 +245,16 @@ public class MetaDefinition<T> implements Serializable {
 		return null;
 	}
 
-	private List<ConnectionEO> findChildrenConnection(Long id, String type) {
+	private List<ConnectionEO> findChildrenConnection(T id, String type) {
 		String key = String.format(CONNECTION_KEY, id, type);
 		return this.connectionMap.get(key);
 	}
 
-	public void addFixedModel(FixedModeEO fixedModeEO) {
-		this.fixedModel.put((T) fixedModeEO.getId(), fixedModeEO);
+	public void addFixedModel(FixedModelEO FixedModelEO) {
+		this.fixedModel.put((T) FixedModelEO.getId(), FixedModelEO);
 	}
 
-	public FixedModeEO getFixedModelEO(Long id) {
+	public FixedModelEO getFixedModelEO(T id) {
 		return this.fixedModel.get(id);
 	}
 
@@ -268,14 +266,14 @@ public class MetaDefinition<T> implements Serializable {
 	 * @return
 	 */
 	public Boolean isFixed(ModelEO model, PropertyEO propertyEO) {
-		Long fixedId = model.getFixedId();
+		T fixedId = (T) model.getFixedId();
 		if (fixedId != null && this.fixedModel.containsKey(fixedId)) {
-			List<ConnectionEO> connection = this.getConnection((T) model.getId(), (T) propertyEO.getId());
+			List<ConnectionEO> connection = this.getConnections((T) model.getId(), (T) propertyEO.getId());
 			if (CollectionUtils.isNotEmpty(connection) && connection.size() > 0) {
 				ConnectionEO connectionEO = connection.get(0);
-				if(connectionEO!=null){
-					String alias = this.getFixedPropertyAlias(fixedId,propertyEO.getCode());
-					if(StringUtils.isNotBlank(alias)){
+				if (connectionEO != null) {
+					String alias = this.getFixedPropertyAlias(fixedId, propertyEO.getCode());
+					if (StringUtils.isNotBlank(alias)) {
 						return true;
 					}
 				}
@@ -284,7 +282,7 @@ public class MetaDefinition<T> implements Serializable {
 		return false;
 	}
 
-	private String getFixedPropertyAlias(Long id, String code) {
+	private String getFixedPropertyAlias(T id, String code) {
 		if (this.fixedPropertyMap.containsKey(id)) {
 			DualHashBidiMap<String, String> ms = this.fixedPropertyMap.get(id);
 			return ms.get(code);
@@ -293,9 +291,28 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private List<ConnectionEO> getConnection(T id, T subId) {
+	public List<ConnectionEO> getConnections(T id, T subId) {
 		Map<T, List<ConnectionEO>> connectionMap = this.connection.get(id);
 		return Optional.ofNullable(connectionMap).map(r -> r.get(subId)).orElse(null);
+	}
+
+	public ConnectionEO getConnection(T id, T subId, Date effectiveDate) {
+		List<ConnectionEO> connections = this.getConnections(id, subId);
+		if (CollectionUtils.isNotEmpty(connections)) {
+			for (ConnectionEO connection : connections) {
+				if(isEffectiveConnection(connection,null)){
+					return connection;
+				}
+			}
+		}
+		return null;
+	}
+
+	public Boolean isEffectiveConnection(ConnectionEO connectionEO, Date effectiveDate) {
+		if (effectiveDate == null) {
+			return true;
+		}
+		return true;
 	}
 
 	public Map<String, String> getFixedProperty(T fixedId) {
@@ -303,25 +320,55 @@ public class MetaDefinition<T> implements Serializable {
 		return this.fixedPropertyMap.get(fixedId);
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		ObjectMapper objectMapper = new ObjectMapper();
-		builder.append("{");
-		try {
-			builder.append("domainCache:");
-			builder.append(objectMapper.writeValueAsString(domainCacheMap));
-			builder.append(",");
-			builder.append("property:");
-			builder.append(objectMapper.writeValueAsString(fixedPropertyMap));
-			builder.append(",");
-			builder.append("concurrent:");
-			builder.append(objectMapper.writeValueAsString(connectionMap));
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-		builder.append("}");
-		return builder.toString();
-	}
+	public Model buildModel(Model parent, T id) {
+		ModelEO modelEO = this.getModel(id);
+		if (modelEO != null) {
+			Model model = new Model(modelEO);
+			if (parent != null) {
+				model.setParent(parent);
+				String pPath = parent.getPath();
+				if (StringUtils.isNotBlank(pPath)) {
+					model.setPath(pPath + "." + modelEO.getCode());
+				} else {
+					model.setPath(modelEO.getCode());
+				}
+			} else {
+				model.setPath(null);
+			}
+			T fixedId = (T) modelEO.getFixedId();
+			if (fixedId != null) {
+				FixedModelEO fixedModelEO = this.getFixedModelEO(fixedId);
+				model.setFixedModel(fixedModelEO);
+			}
+			List<ConnectionEO> connections = this.findChildrenConnection(id, "Model");
+			if (CollectionUtils.isNotEmpty(connections)) {
+				connections.forEach(r -> {
+					T subId = (T) r.getSubId();
+					ModelEO subModel = this.getModel(subId);
+					if (subModel != null) {
+						model.put(r);
+						Model childrenModel = this.buildModel(model, subId);
+						if (childrenModel != null) {
+							model.put(childrenModel);
+						}
+					}
+				});
+			}
+			connections = this.findChildrenConnection(id, "Property");
+			if (CollectionUtils.isNotEmpty(connections)) {
+				connections.forEach(r -> {
+					T subId = (T) r.getSubId();
+					PropertyEO property = this.getProperty(subId);
+					if (property != null) {
+						model.put(r);
+						model.put(property);
+					}
+				});
+			}
 
+			//action
+			return model;
+		}
+		return null;
+	}
 }

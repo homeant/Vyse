@@ -16,21 +16,59 @@
 
 package fun.vyse.cloud.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 /**
  * fun.vyse.cloud.core.domain.InternalFixedEO
  *
- * @Author junchen homeanter@163.com
- * @Date 2019-10-14 14:37
+ * @author junchen homeanter@163.com
+ * @date 2019-10-14 14:37
  */
+@MappedSuperclass
+@JsonTypeInfo(
+		use = JsonTypeInfo.Id.CLASS,
+		include = JsonTypeInfo.As.EXISTING_PROPERTY,
+		property = "class$"
+)
 @Data
-@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class InternalFixedEO<T> extends AbstractBaseEntity<T> implements IFixedEntity<T> {
+	/**
+	 * 模型id
+	 */
     private T domainId;
-    private T topId;
-    @JsonAlias(value = "class")
-    private String clazz;
+	/**
+	 * 顶级模型数据id
+	 */
+	private T topId;
+
+	@Transient
+	private EntityState dirtyFlag;
+
+	@Transient
+    private String class$ = this.getClass().getName();
+
+    public static final String DOMAIN_ID = "domainId";
+
+	public static final String TOP_ID = "topId";
+
+	public static final String DIRTY_FLAG = "dirtyFlag";
+
+	@Deprecated
+    public void setClass$(String value){}
+
+	public void updateDirtyFlag(EntityState state){
+		EntityState dirtyFlag = this.getDirtyFlag();
+		if(EntityState.New != dirtyFlag || EntityState.Modify != state){
+			this.setDirtyFlag(state);
+		}
+	}
 }

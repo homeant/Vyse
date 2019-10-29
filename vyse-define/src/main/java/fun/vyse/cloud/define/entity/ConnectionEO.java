@@ -19,7 +19,11 @@ package fun.vyse.cloud.define.entity;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <p>
@@ -29,7 +33,10 @@ import lombok.experimental.Accessors;
  * @author junchen
  * @since 2019-10-12
  */
+@Entity
+@Table(name = "t_connection")
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class ConnectionEO extends AbstractBaseEntity<Long>  {
@@ -52,7 +59,7 @@ public class ConnectionEO extends AbstractBaseEntity<Long>  {
     private Integer buildNumber;
 
     /**
-     * 加载类型
+     * 加载类型 0 即时加载 -1 按需加载
      */
     private Integer loadType;
 
