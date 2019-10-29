@@ -59,7 +59,7 @@ public class ConnectionEO extends AbstractBaseEntity<Long>  {
     private Integer buildNumber;
 
     /**
-     * 加载类型
+     * 加载类型 0 即时加载 -1 按需加载
      */
     private Integer loadType;
 

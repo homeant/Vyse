@@ -13,4 +13,9 @@ import fun.vyse.cloud.define.service.IModelPropertyService;
  */
 public class ModelPropertyServiceImpl extends BaseServiceImpl<ModelPropertyEO,Long, IModelPropertyRepository> implements IModelPropertyService {
 
+	@Override
+	public ModelPropertyEO createModelProperty(Long id) {
+
+		return null;
+	}
 }

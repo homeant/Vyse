@@ -49,7 +49,7 @@ import static fun.vyse.cloud.define.util.ObjectValueUtils.toStringValue;
 @EqualsAndHashCode(callSuper = false)
 public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursiveEntity<Long> {
 
-	private static final Long PROPERTY_NUMBER = 3L;
+	public static final Integer PROPERTY_NUMBER = 3;
 
 	@Transient
 	@JsonIgnore
@@ -57,12 +57,17 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 
 	@Transient
 	@JsonIgnore
-	private transient Map<String, Long> codeMap;
+	private transient Map<String, Integer> codeMap;
 
 	@Transient
 	private EntityState dirtyFlag;
 
-	private Long currentIndex;
+	private Integer currentIndex;
+
+	/**
+	 * 序列化索引
+	 */
+	private int serialIndex;
 
 	/**
 	 * 属性id
@@ -125,7 +130,7 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 	 */
 	private Long parentId;
 
-	public Object get(Long index) {
+	public Object get(Integer index) {
 		Long domainId = (Long) this.get(PropertyType.domainId, index);
 		if (domainId != null) {
 			String dataType = (String) this.get(PropertyType.dateType, index);
@@ -139,14 +144,14 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 		return null;
 	}
 
-	public Object get(PropertyType type, Long index) {
+	public Object get(PropertyType type, Integer index) {
 		if (this.bean == null) {
 			this.bean = BeanMap.create(this);
 		}
 		return this.bean.get(this.getProperName(type, index));
 	}
 
-	public String getValue(Long index) {
+	public String getValue(Integer index) {
 		Long domainId = (Long) this.get(PropertyType.domainId, index);
 		if (domainId != null) {
 			return (String) this.get(PropertyType.value, index);
@@ -154,13 +159,13 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 		return null;
 	}
 
-	private String getProperName(PropertyType type, Long index) {
+	private String getProperName(PropertyType type, Integer index) {
 		return type.toString() + index.toString();
 	}
 
-	public Long getCurrentIndex() {
+	public Integer getCurrentIndex() {
 		if (this.currentIndex == null) {
-			for (Long i = PROPERTY_NUMBER; i >= 1; --i) {
+			for (Integer i = PROPERTY_NUMBER; i >= 1; --i) {
 				Long domainId = (Long) this.get(PropertyType.domainId, i);
 				if (domainId != null) {
 					this.currentIndex = i;
@@ -182,7 +187,7 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 			if (this.bean == null) {
 				this.bean = BeanMap.create(this);
 			}
-			for (Long i = 1L; i <= this.getCurrentIndex(); i++) {
+			for (Integer i = 1; i <= this.getCurrentIndex(); i++) {
 				String key = (String) this.get(PropertyType.code, i);
 				this.codeMap.put(key, i);
 			}
@@ -192,14 +197,14 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 
 	public SetPropertyType set(String code, Object value) {
 		this.init();
-		Long index = this.codeMap.get(code);
+		Integer index = this.codeMap.get(code);
 		if (index != null) {
 			return this.set(index, value);
 		}
 		return SetPropertyType.Failure;
 	}
 
-	public SetPropertyType set(Long index, Object value) {
+	public SetPropertyType set(Integer index, Object value) {
 		Long domainId = (Long) this.get(PropertyType.domainId, index);
 		if (domainId != null) {
 			String pattern = (String) this.get(PropertyType.pattern, index);
@@ -216,14 +221,14 @@ public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursive
 		return SetPropertyType.Failure;
 	}
 
-	private void setValue(Long index, String value) {
+	private void setValue(Integer index, String value) {
 		Long domainId = (Long) this.get(PropertyType.domainId, index);
 		if (domainId != null) {
 			this.set(PropertyType.value, index, value);
 		}
 	}
 
-	private void set(PropertyType type, Long index, Object value) {
+	public void set(PropertyType type, Integer index, Object value) {
 		if (this.bean == null) {
 			this.bean = BeanMap.create(this);
 		}

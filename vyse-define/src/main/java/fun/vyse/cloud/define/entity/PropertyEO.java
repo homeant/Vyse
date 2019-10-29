@@ -68,6 +68,11 @@ public class PropertyEO extends AbstractBaseEntity<Long> {
      */
     private String sort;
 
+	/**
+	 * 时间格式化
+	 */
+	private String pattern;
+
 
     public static final String CODE = "code";
 

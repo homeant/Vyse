@@ -1,13 +1,20 @@
 package fun.vyse.cloud.core.service.impl;
 
+import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
+import fun.vyse.cloud.core.domain.IEntity;
+import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.core.domain.ITenantEntity;
 import fun.vyse.cloud.core.repository.IBaseRepository;
 import fun.vyse.cloud.core.service.IBaseService;
+import net.sf.cglib.core.ReflectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -16,7 +23,7 @@ import java.util.List;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 12:22
  */
-public class BaseServiceImpl<T,ID,M extends IBaseRepository<T,ID>> implements IBaseService<T,ID> {
+public class BaseServiceImpl<T extends IFixedEntity,ID,M extends IBaseRepository<T,ID>> implements IBaseService<T,ID> {
 
 	@Autowired
 	public M baseRepository;
@@ -46,5 +53,27 @@ public class BaseServiceImpl<T,ID,M extends IBaseRepository<T,ID>> implements IB
 			}
 			return criteriaBuilder.isNull(root.get(AbstractBaseEntity.TENANT_ID));
 		});
+	}
+
+	/**
+	 * 创建新的模型对象
+	 *
+	 * @param id id
+	 * @return 模型对象
+	 */
+	@Override
+	public T newActual(ID id) {
+		Type type = getClass().getGenericSuperclass();
+		if (type instanceof ParameterizedType) {
+			Type[] actualTypes = ((ParameterizedType) type).getActualTypeArguments();
+			IFixedEntity actual = (IFixedEntity) ReflectUtils.newInstance((Class) actualTypes[0]);
+			actual.setState$(EntityState.New);
+			actual.setDirtyFlag(EntityState.New);
+			if(id!=null){
+				actual.setId(id);
+			}
+			return (T)actual;
+		}
+		return null;
 	}
 }

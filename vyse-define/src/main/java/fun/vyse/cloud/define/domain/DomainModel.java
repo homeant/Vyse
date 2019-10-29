@@ -166,8 +166,8 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		List<ModelPropertyEO> children = this.findChildren(ModelPropertyEO.class);
 		if (CollectionUtils.isNotEmpty(children)) {
 			children.forEach(r -> {
-				Long index = r.getCurrentIndex();
-				for (Long i = 1L; i <= index; i++) {
+				Integer index = r.getCurrentIndex();
+				for (Integer i = 1; i <= index; i++) {
 					String key = (String) r.get(ModelPropertyEO.PropertyType.code, i);
 					if (StringUtils.isNotBlank(key)) {
 						if (!property.containsKey(key)) {
@@ -247,7 +247,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	 * @param code  编码
 	 * @param value 属性值
 	 */
-	private SetPropertyType setFixedValue(String code, Object value) {
+	public SetPropertyType setFixedValue(String code, Object value) {
 		Object oldValue = this.getFixedValue(code);
 		if (ObjectUtils.notEqual(oldValue, value)) {
 			String alias = this.fixedPropertyMap.get(code);

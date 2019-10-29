@@ -74,7 +74,7 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 			PropertyEO property = (PropertyEO) entity;
 			String code = property.getCode();
 			if (!this.isExist(PropertyEO.class, code)) {
-				this.put(Model.class, "modelType", entity);
+				this.put(PropertyEO.class, "modelType", entity);
 				this.put(PropertyEO.class, "code", code, entity);
 				this.put(PropertyEO.class, "type", "Property", entity);
 			}
@@ -127,5 +127,9 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 
 	private Boolean isExist(Class<? extends IEntity> entity, String code) {
 		return this.containsKey(entity, "code", code);
+	}
+
+	public <T extends IEntity> List<T>  findChildren(Class<T> clazz) {
+		return (List)this.multiKeyMap.get(clazz,"type");
 	}
 }

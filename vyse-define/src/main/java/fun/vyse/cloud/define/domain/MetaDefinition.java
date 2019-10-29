@@ -32,6 +32,7 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -267,7 +268,7 @@ public class MetaDefinition<T> implements Serializable {
 	public Boolean isFixed(ModelEO model, PropertyEO propertyEO) {
 		T fixedId = (T) model.getFixedId();
 		if (fixedId != null && this.fixedModel.containsKey(fixedId)) {
-			List<ConnectionEO> connection = this.getConnection((T) model.getId(), (T) propertyEO.getId());
+			List<ConnectionEO> connection = this.getConnections((T) model.getId(), (T) propertyEO.getId());
 			if (CollectionUtils.isNotEmpty(connection) && connection.size() > 0) {
 				ConnectionEO connectionEO = connection.get(0);
 				if (connectionEO != null) {
@@ -290,9 +291,28 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	public List<ConnectionEO> getConnection(T id, T subId) {
+	public List<ConnectionEO> getConnections(T id, T subId) {
 		Map<T, List<ConnectionEO>> connectionMap = this.connection.get(id);
 		return Optional.ofNullable(connectionMap).map(r -> r.get(subId)).orElse(null);
+	}
+
+	public ConnectionEO getConnection(T id, T subId, Date effectiveDate) {
+		List<ConnectionEO> connections = this.getConnections(id, subId);
+		if (CollectionUtils.isNotEmpty(connections)) {
+			for (ConnectionEO connection : connections) {
+				if(isEffectiveConnection(connection,null)){
+					return connection;
+				}
+			}
+		}
+		return null;
+	}
+
+	public Boolean isEffectiveConnection(ConnectionEO connectionEO, Date effectiveDate) {
+		if (effectiveDate == null) {
+			return true;
+		}
+		return true;
 	}
 
 	public Map<String, String> getFixedProperty(T fixedId) {
@@ -322,24 +342,24 @@ public class MetaDefinition<T> implements Serializable {
 			}
 			List<ConnectionEO> connections = this.findChildrenConnection(id, "Model");
 			if (CollectionUtils.isNotEmpty(connections)) {
-				connections.forEach(r->{
-					T subId = (T)r.getSubId();
+				connections.forEach(r -> {
+					T subId = (T) r.getSubId();
 					ModelEO subModel = this.getModel(subId);
-					if(subModel!=null){
+					if (subModel != null) {
 						model.put(r);
-						Model childrenModel = this.buildModel(model,subId);
-						if(childrenModel!=null){
+						Model childrenModel = this.buildModel(model, subId);
+						if (childrenModel != null) {
 							model.put(childrenModel);
 						}
 					}
 				});
 			}
-			connections = this.findChildrenConnection(id,"Property");
+			connections = this.findChildrenConnection(id, "Property");
 			if (CollectionUtils.isNotEmpty(connections)) {
-				connections.forEach(r->{
-					T subId = (T)r.getSubId();
+				connections.forEach(r -> {
+					T subId = (T) r.getSubId();
 					PropertyEO property = this.getProperty(subId);
-					if(property!=null){
+					if (property != null) {
 						model.put(r);
 						model.put(property);
 					}

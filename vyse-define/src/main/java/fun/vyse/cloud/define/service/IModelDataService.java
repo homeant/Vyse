@@ -10,5 +10,10 @@ import fun.vyse.cloud.define.entity.ModelDataEO;
  * @date 2019-10-24 18:59
  */
 public interface IModelDataService extends IBaseService<ModelDataEO,Long> {
-
+	/**
+	 * 创建业务模型数据对象
+	 * @param id
+	 * @return
+	 */
+	ModelDataEO createModelData(Long id);
 }

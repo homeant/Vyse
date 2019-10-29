@@ -11,4 +11,5 @@ import fun.vyse.cloud.define.entity.ModelPropertyEO;
  */
 public interface IModelPropertyService extends IBaseService<ModelPropertyEO,Long> {
 
+	ModelPropertyEO createModelProperty(Long id);
 }
