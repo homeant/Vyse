@@ -120,7 +120,7 @@ public class DefineEntityTest {
 		DomainModel children = new DomainModel(childrenData, metaDefinition);
 		children.setParentModel(domainModel);
 
-		List<ConnectionEO> connections = metaDefinition.getConnection(2L, 4L);
+		List<ConnectionEO> connections = metaDefinition.getConnections(2L, 4L);
 		if (CollectionUtils.isNotEmpty(connections)) {
 			Long id = 10L;
 			for (ConnectionEO connection : connections) {

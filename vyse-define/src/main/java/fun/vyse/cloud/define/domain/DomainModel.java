@@ -426,7 +426,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		List<DomainModel> childrens = this.findChildren(DomainModel.class);
 		if (CollectionUtils.isNotEmpty(childrens)) {
 			childrens.stream().forEach(r -> {
-				List<ConnectionEO> connectionEOS = this.md.getConnection(this.entity.getDomainId(), r.entity.getDomainId());
+				List<ConnectionEO> connectionEOS = this.md.getConnections(this.entity.getDomainId(), r.entity.getDomainId());
 				if (CollectionUtils.isNotEmpty(connectionEOS)) {
 					Map<String, Object> childrenInternalModel = r.getInternalModel();
 					ConnectionEO connectionEO = connectionEOS.get(0);

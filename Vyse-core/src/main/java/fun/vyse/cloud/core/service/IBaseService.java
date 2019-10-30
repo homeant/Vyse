@@ -1,5 +1,6 @@
 package fun.vyse.cloud.core.service;
 
+import fun.vyse.cloud.core.domain.IEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.core.domain.ITenantEntity;
 import org.springframework.data.domain.Example;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 12:21
  */
-public interface IBaseService<T extends IFixedEntity,ID> {
+public interface IBaseService<T extends IEntity,ID> {
 	T findOne(ID id);
 
 	<S extends T> List<S> findList(Example<S> example);
@@ -26,5 +27,5 @@ public interface IBaseService<T extends IFixedEntity,ID> {
 	 * @param id id
 	 * @return 模型对象
 	 */
-	T newActual(ID id);
+	<T extends IFixedEntity> T newActual(ID id);
 }

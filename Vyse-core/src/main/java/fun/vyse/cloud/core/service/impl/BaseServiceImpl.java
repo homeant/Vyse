@@ -23,7 +23,7 @@ import java.util.List;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 12:22
  */
-public class BaseServiceImpl<T extends IFixedEntity,ID,M extends IBaseRepository<T,ID>> implements IBaseService<T,ID> {
+public class BaseServiceImpl<T extends IEntity,ID,M extends IBaseRepository<T,ID>> implements IBaseService<T,ID> {
 
 	@Autowired
 	public M baseRepository;
@@ -62,7 +62,7 @@ public class BaseServiceImpl<T extends IFixedEntity,ID,M extends IBaseRepository
 	 * @return 模型对象
 	 */
 	@Override
-	public T newActual(ID id) {
+	public <T extends IFixedEntity> T newActual(ID id) {
 		Type type = getClass().getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
 			Type[] actualTypes = ((ParameterizedType) type).getActualTypeArguments();

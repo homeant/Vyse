@@ -1,5 +1,6 @@
 package fun.vyse.cloud.test.model;
 
+import com.google.common.collect.Maps;
 import fun.vyse.cloud.define.domain.DomainEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
@@ -61,7 +62,7 @@ public class ModelTest {
 		modelEO.setCode("main");
 		modelEO.setType("Product");
 		modelEO.setFixedId(1L);
-		modelEO.setVersion(0L);
+		modelEO.setVersion_(0L);
 		modelService.saveAndFlush(modelEO);
 
 		ModelEO modelEO2 = new ModelEO();
@@ -69,7 +70,7 @@ public class ModelTest {
 		modelEO2.setName("测试模型2");
 		modelEO2.setCode("test");
 		modelEO2.setType("Model");
-		modelEO2.setVersion(0L);
+		modelEO2.setVersion_(0L);
 		modelService.saveAndFlush(modelEO2);
 
 
@@ -78,7 +79,7 @@ public class ModelTest {
 		propertyEO.setCode("name");
 		propertyEO.setName("名称");
 		propertyEO.setDataType("java.lang.String");
-		propertyEO.setVersion(0L);
+		propertyEO.setVersion_(0L);
 		propertyService.saveAndFlush(propertyEO);
 
 		PropertyEO propertyEO2 = new PropertyEO();
@@ -87,7 +88,7 @@ public class ModelTest {
 		propertyEO2.setName("城市");
 		propertyEO2.setDefValue("北京");
 		propertyEO2.setDataType("java.lang.String");
-		propertyEO2.setVersion(0L);
+		propertyEO2.setVersion_(0L);
 		propertyService.saveAndFlush(propertyEO2);
 
 		ConnectionEO connectionEO = new ConnectionEO();
@@ -97,7 +98,7 @@ public class ModelTest {
 		connectionEO.setParentType("Model");
 		connectionEO.setSubType("Model");
 		connectionEO.setMaxmium(1L);
-		connectionEO.setVersion(0L);
+		connectionEO.setVersion_(0L);
 		connectionService.saveAndFlush(connectionEO);
 
 
@@ -107,7 +108,7 @@ public class ModelTest {
 		connectionEO1.setSubId(3L);
 		connectionEO1.setParentType("Model");
 		connectionEO1.setSubType("Property");
-		connectionEO1.setVersion(0L);
+		connectionEO1.setVersion_(0L);
 		connectionService.saveAndFlush(connectionEO1);
 
 		ConnectionEO connectionEO2 = new ConnectionEO();
@@ -116,13 +117,13 @@ public class ModelTest {
 		connectionEO2.setSubId(4L);
 		connectionEO2.setParentType("Model");
 		connectionEO2.setSubType("Property");
-		connectionEO2.setVersion(0L);
+		connectionEO2.setVersion_(0L);
 		connectionService.saveAndFlush(connectionEO2);
 
 		FixedModelEO fixedModelEO = new FixedModelEO();
 		fixedModelEO.setClassName("fun.vyse.cloud.test.entity.UserEO");
 		fixedModelEO.setId(1L);
-		fixedModelEO.setVersion(0L);
+		fixedModelEO.setVersion_(0L);
 		fixedModelService.saveAndFlush(fixedModelEO);
 	}
 
@@ -148,7 +149,7 @@ public class ModelTest {
 
 	@Test
 	public void domainEntityTest(){
-		DomainModel domainModel = domainModelService.createDomainModel(1L);
+		DomainModel domainModel = domainModelService.createDomainModel(1L, Maps.newHashMap());
 		log.info("model:{}",domainModel);
 	}
 
