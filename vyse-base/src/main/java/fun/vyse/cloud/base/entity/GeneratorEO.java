@@ -38,9 +38,14 @@ public class GeneratorEO extends AbstractBaseEntity<Long> {
 	private Long value;
 
 	/**
-	 * 增值
+	 * 自增值
 	 */
 	private Long increment;
+
+	/**
+	 * 序号的长度(位数)
+	 */
+	private int length;
 
 	public static final String SEQ_NAME = "seqName";
 

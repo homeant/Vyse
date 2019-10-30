@@ -10,4 +10,11 @@ import fun.vyse.cloud.core.service.IBaseService;
  * @date 2019-10-30 11:34
  */
 public interface IGeneratorService extends IBaseService<GeneratorEO,Long> {
+	/**
+	 * 获取值
+	 * @param seqName
+	 * @param tenantId
+	 * @return
+	 */
+	Object get(String seqName,String tenantId);
 }

@@ -1,6 +1,7 @@
 package fun.vyse.cloud.test.model;
 
 import com.google.common.collect.Maps;
+import fun.vyse.cloud.base.service.IGeneratorService;
 import fun.vyse.cloud.define.domain.DomainEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -151,6 +153,21 @@ public class ModelTest {
 	public void domainEntityTest(){
 		DomainModel domainModel = domainModelService.createDomainModel(1L, Maps.newHashMap());
 		log.info("model:{}",domainModel);
+	}
+
+	@Autowired
+	private IGeneratorService generatorService;
+
+	@Test
+	public void generatorTest(){
+		for (int i = 0; i < 10; i++) {
+			Object value = generatorService.get("test", null);
+			log.info("value{}:{}",i+1,value);
+		}
+		for (int i = 0; i < 2; i++) {
+			Long value = (Long) generatorService.get("pkId", null);
+			log.info("pkId{}:{}",i+1,value);
+		}
 	}
 
 	@Configuration
