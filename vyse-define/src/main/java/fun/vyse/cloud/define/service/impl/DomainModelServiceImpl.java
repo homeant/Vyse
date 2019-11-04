@@ -5,22 +5,22 @@ import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
 import fun.vyse.cloud.define.domain.Model;
-import fun.vyse.cloud.define.entity.actual.ActModelEO;
-import fun.vyse.cloud.define.entity.actual.ActPropertyEO;
-import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
-import fun.vyse.cloud.define.entity.specification.SpecFixedModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
-import fun.vyse.cloud.define.service.IActModelService;
-import fun.vyse.cloud.define.service.IActPropertyService;
+import fun.vyse.cloud.define.entity.actual.ModelActEO;
+import fun.vyse.cloud.define.entity.actual.PropertyActEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
+import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import fun.vyse.cloud.define.service.IDomainModelService;
 import fun.vyse.cloud.define.service.IMetaDefinitionService;
+import fun.vyse.cloud.define.service.IModelActService;
+import fun.vyse.cloud.define.service.IPropertyActService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static fun.vyse.cloud.define.entity.actual.ActPropertyEO.PropertyType;
+import static fun.vyse.cloud.define.entity.actual.PropertyActEO.PropertyType;
 
 
 import java.util.Iterator;
@@ -39,10 +39,10 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	private IMetaDefinitionService metaDefinitionService;
 
 	@Autowired
-	private IActModelService modelDataService;
+	private IModelActService modelDataService;
 
 	@Autowired
-	private IActPropertyService actPropertyService;
+	private IPropertyActService actPropertyService;
 
 	/**
 	 * 创建领域模型
@@ -68,9 +68,9 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	 */
 	@Override
 	public DomainModel createDomainModel(MetaDefinition<Long> md, DomainModel parent, Model model, Long id, Map<String, Object> entity) {
-		SpecModelEO modelEO = md.getModel(id);
+		ModelSpecEO modelEO = md.getModel(id);
 		if (modelEO != null) {
-			ActModelEO dataEO = new ActModelEO();
+			ModelActEO dataEO = new ModelActEO();
 			dataEO.setDomainId(id);
 			dataEO.setCode(modelEO.getCode());
 			dataEO.updateDirtyFlag(EntityState.New);
@@ -87,7 +87,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 				parent.updateState$(EntityState.Modify);
 				Long parentId = parent.getId();
 				dataEO.setParentId(parentId);
-				SpecConnectionEO connection = md.getConnection(parentId, id, null);
+				ConnectionSpecEO connection = md.getConnection(parentId, id, null);
 				if (connection != null) {
 					loadType = connection.getLoadType();
 				}
@@ -104,14 +104,14 @@ public class DomainModelServiceImpl implements IDomainModelService {
 
 			if (ObjectUtils.isNotEmpty(fixedId)) {
 				dataEO.setFixedId(modelEO.getFixedId());
-				SpecFixedModelEO fixedModelEO = md.getFixedModelEO(1L);
+				FixedModelSpecEO fixedModelEO = md.getFixedModelEO(1L);
 				Object fixedInstance = fixedModelEO.createFixedInstance();
 				domainModel.setFixedModel((IFixedEntity) fixedInstance);
 			}
 			//设置属性
-			List<SpecPropertyEO> propertyEOS = model.findChildren(SpecPropertyEO.class);
+			List<PropertySpecEO> propertyEOS = model.findChildren(PropertySpecEO.class);
 			if (CollectionUtils.isNotEmpty(propertyEOS)) {
-				ActPropertyEO property = null;
+				PropertyActEO property = null;
 				Iterator iterator = propertyEOS.iterator();
 				Integer index = 0;
 				int i = 0;
@@ -122,7 +122,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 							if (iterator.hasNext()) {
 								break while1;
 							}
-							SpecPropertyEO propertyEO = (SpecPropertyEO) iterator.next();
+							PropertySpecEO propertyEO = (PropertySpecEO) iterator.next();
 							Object defVal = propertyEO.getDefValue();
 							String code = propertyEO.getCode();
 							if (code != null && entity.containsKey(code)) {
@@ -157,7 +157,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 								domainModel.setFixedValue(code, defVal);
 							}
 						} while (property == null);
-					} while (index < ActPropertyEO.PROPERTY_NUMBER && i < propertyEOS.size());
+					} while (index < PropertyActEO.PROPERTY_NUMBER && i < propertyEOS.size());
 					property.setCurrentIndex(index);
 					domainModel.put(property);
 					property = null;

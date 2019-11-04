@@ -20,10 +20,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.core.domain.InternalFixedEO;
-import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
-import fun.vyse.cloud.define.entity.specification.SpecFixedModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
+import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
@@ -50,22 +50,22 @@ public class MetaDefinition<T> implements Serializable {
 	/**
 	 * 模型定义
 	 */
-	private Map<T, SpecModelEO> model = Maps.newConcurrentMap();
+	private Map<T, ModelSpecEO> model = Maps.newConcurrentMap();
 
 	/**
 	 * 属性定义
 	 */
-	private Map<T, SpecPropertyEO> property = Maps.newConcurrentMap();
+	private Map<T, PropertySpecEO> property = Maps.newConcurrentMap();
 
 	/**
 	 * 连接关系
 	 */
-	private Map<T, Map<T, List<SpecConnectionEO>>> connection = Maps.newConcurrentMap();
+	private Map<T, Map<T, List<ConnectionSpecEO>>> connection = Maps.newConcurrentMap();
 
 	/**
 	 * 静态表
 	 */
-	private Map<T, SpecFixedModelEO> fixedModel = Maps.newConcurrentMap();
+	private Map<T, FixedModelSpecEO> fixedModel = Maps.newConcurrentMap();
 
 	@JsonIgnore
 	private transient Map<String, List> domainCacheMap;
@@ -77,7 +77,7 @@ public class MetaDefinition<T> implements Serializable {
 	private transient Map<Long, DualHashBidiMap<String, String>> fixedPropertyMap;
 
 	@JsonIgnore
-	private transient Map<String, List<SpecConnectionEO>> connectionMap;
+	private transient Map<String, List<ConnectionSpecEO>> connectionMap;
 
 	private final static String CONNECTION_KEY = "ParentId:%s:Type:%s";
 
@@ -92,18 +92,18 @@ public class MetaDefinition<T> implements Serializable {
 		this.initPropertyMap();
 	}
 
-	public void addModel(@NonNull SpecModelEO modelEO) {
+	public void addModel(@NonNull ModelSpecEO modelEO) {
 		this.model.put((T) modelEO.getId(), modelEO);
 	}
 
 	private void putDomainMap(@NonNull Object r) {
 		String key = null;
 		String typeKey = null;
-		if (r instanceof SpecModelEO) {
-			key = String.format(CODE_KEY, r.getClass().getSimpleName(), ((SpecModelEO) r).getCode());
-			typeKey = String.format(TYPE_KEY, r.getClass().getSimpleName(), ((SpecModelEO) r).getType());
-		} else if (r instanceof SpecPropertyEO) {
-			key = String.format(CODE_KEY, r.getClass().getSimpleName(), ((SpecPropertyEO) r).getCode());
+		if (r instanceof ModelSpecEO) {
+			key = String.format(CODE_KEY, r.getClass().getSimpleName(), ((ModelSpecEO) r).getCode());
+			typeKey = String.format(TYPE_KEY, r.getClass().getSimpleName(), ((ModelSpecEO) r).getType());
+		} else if (r instanceof PropertySpecEO) {
+			key = String.format(CODE_KEY, r.getClass().getSimpleName(), ((PropertySpecEO) r).getCode());
 			typeKey = String.format(TYPE_KEY, r.getClass().getSimpleName(), "Property");
 		}
 		if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(typeKey)) {
@@ -133,21 +133,21 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	public SpecModelEO getModel(T id) {
+	public ModelSpecEO getModel(T id) {
 		return this.model.get(id);
 	}
 
-	public void addConcurrent(@NonNull SpecConnectionEO connectionEO) {
+	public void addConcurrent(@NonNull ConnectionSpecEO connectionEO) {
 		final T parentId = (T) connectionEO.getParentId();
 		final T subId = (T) connectionEO.getSubId();
-		Map<T, List<SpecConnectionEO>> children;
+		Map<T, List<ConnectionSpecEO>> children;
 		if (connection.containsKey(parentId)) {
 			children = connection.get(parentId);
 		} else {
 			children = Maps.newConcurrentMap();
 			connection.put(parentId, children);
 		}
-		List<SpecConnectionEO> connectionEOS;
+		List<ConnectionSpecEO> connectionEOS;
 		if (children.containsKey(subId)) {
 			connectionEOS = children.get(subId);
 		} else {
@@ -164,9 +164,9 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	private void initConnection(@NonNull SpecConnectionEO connectionEO) {
+	private void initConnection(@NonNull ConnectionSpecEO connectionEO) {
 		String key = String.format(CONNECTION_KEY, connectionEO.getParentId(), connectionEO.getSubType());
-		List<SpecConnectionEO> connectionEOS;
+		List<ConnectionSpecEO> connectionEOS;
 		if (this.connectionMap.containsKey(key)) {
 			connectionEOS = this.connectionMap.get(key);
 		} else {
@@ -176,7 +176,7 @@ public class MetaDefinition<T> implements Serializable {
 		connectionEOS.add(connectionEO);
 	}
 
-	public void addProperty(@NonNull SpecPropertyEO propertyEO) {
+	public void addProperty(@NonNull PropertySpecEO propertyEO) {
 		this.property.put((T) propertyEO.getId(), propertyEO);
 	}
 
@@ -198,8 +198,8 @@ public class MetaDefinition<T> implements Serializable {
 					.forEach(r -> {
 						BeanMap beanMap = fixedBeanMap.get(r.getId());
 						if (beanMap != null) {
-							//SpecFixedModelEO bean = (SpecFixedModelEO) beanMap.getBean();
-							List<SpecPropertyEO> childrenProperty = this.findChildrenProperty((T) r.getId());
+							//FixedModelSpecEO bean = (FixedModelSpecEO) beanMap.getBean();
+							List<PropertySpecEO> childrenProperty = this.findChildrenProperty((T) r.getId());
 							if (CollectionUtils.isNotEmpty(childrenProperty)) {
 								childrenProperty.stream().forEach(y -> {
 									String code = y.getCode();
@@ -225,36 +225,36 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	public SpecPropertyEO getProperty(SpecConnectionEO r) {
+	public PropertySpecEO getProperty(ConnectionSpecEO r) {
 		return this.getProperty((T) r.getSubId());
 	}
 
-	public SpecPropertyEO getProperty(T id) {
+	public PropertySpecEO getProperty(T id) {
 		return this.property.get(id);
 	}
 
-	private List<SpecPropertyEO> findChildrenProperty(T id) {
-		SpecModelEO parent = this.getModel(id);
+	private List<PropertySpecEO> findChildrenProperty(T id) {
+		ModelSpecEO parent = this.getModel(id);
 		if (parent != null) {
-			List<SpecConnectionEO> connectionEOS = this.findChildrenConnection(id, "Property");
+			List<ConnectionSpecEO> connectionEOS = this.findChildrenConnection(id, "Property");
 			if (CollectionUtils.isNotEmpty(connectionEOS)) {
-				List<SpecPropertyEO> propertyEOS = connectionEOS.stream().map(this::getProperty).collect(Collectors.toList());
+				List<PropertySpecEO> propertyEOS = connectionEOS.stream().map(this::getProperty).collect(Collectors.toList());
 				return propertyEOS;
 			}
 		}
 		return null;
 	}
 
-	private List<SpecConnectionEO> findChildrenConnection(T id, String type) {
+	private List<ConnectionSpecEO> findChildrenConnection(T id, String type) {
 		String key = String.format(CONNECTION_KEY, id, type);
 		return this.connectionMap.get(key);
 	}
 
-	public void addFixedModel(SpecFixedModelEO specFixedModelEO) {
+	public void addFixedModel(FixedModelSpecEO specFixedModelEO) {
 		this.fixedModel.put((T) specFixedModelEO.getId(), specFixedModelEO);
 	}
 
-	public SpecFixedModelEO getFixedModelEO(T id) {
+	public FixedModelSpecEO getFixedModelEO(T id) {
 		return this.fixedModel.get(id);
 	}
 
@@ -265,12 +265,12 @@ public class MetaDefinition<T> implements Serializable {
 	 * @param propertyEO 属性
 	 * @return
 	 */
-	public Boolean isFixed(SpecModelEO model, SpecPropertyEO propertyEO) {
+	public Boolean isFixed(ModelSpecEO model, PropertySpecEO propertyEO) {
 		T fixedId = (T) model.getFixedId();
 		if (fixedId != null && this.fixedModel.containsKey(fixedId)) {
-			List<SpecConnectionEO> connection = this.getConnections((T) model.getId(), (T) propertyEO.getId());
+			List<ConnectionSpecEO> connection = this.getConnections((T) model.getId(), (T) propertyEO.getId());
 			if (CollectionUtils.isNotEmpty(connection) && connection.size() > 0) {
-				SpecConnectionEO connectionEO = connection.get(0);
+				ConnectionSpecEO connectionEO = connection.get(0);
 				if (connectionEO != null) {
 					String alias = this.getFixedPropertyAlias(fixedId, propertyEO.getCode());
 					if (StringUtils.isNotBlank(alias)) {
@@ -291,15 +291,15 @@ public class MetaDefinition<T> implements Serializable {
 		}
 	}
 
-	public List<SpecConnectionEO> getConnections(T id, T subId) {
-		Map<T, List<SpecConnectionEO>> connectionMap = this.connection.get(id);
+	public List<ConnectionSpecEO> getConnections(T id, T subId) {
+		Map<T, List<ConnectionSpecEO>> connectionMap = this.connection.get(id);
 		return Optional.ofNullable(connectionMap).map(r -> r.get(subId)).orElse(null);
 	}
 
-	public SpecConnectionEO getConnection(T id, T subId, Date effectiveDate) {
-		List<SpecConnectionEO> connections = this.getConnections(id, subId);
+	public ConnectionSpecEO getConnection(T id, T subId, Date effectiveDate) {
+		List<ConnectionSpecEO> connections = this.getConnections(id, subId);
 		if (CollectionUtils.isNotEmpty(connections)) {
-			for (SpecConnectionEO connection : connections) {
+			for (ConnectionSpecEO connection : connections) {
 				if(isEffectiveConnection(connection,null)){
 					return connection;
 				}
@@ -308,7 +308,7 @@ public class MetaDefinition<T> implements Serializable {
 		return null;
 	}
 
-	public Boolean isEffectiveConnection(SpecConnectionEO connectionEO, Date effectiveDate) {
+	public Boolean isEffectiveConnection(ConnectionSpecEO connectionEO, Date effectiveDate) {
 		if (effectiveDate == null) {
 			return true;
 		}
@@ -321,7 +321,7 @@ public class MetaDefinition<T> implements Serializable {
 	}
 
 	public Model buildModel(Model parent, T id) {
-		SpecModelEO modelEO = this.getModel(id);
+		ModelSpecEO modelEO = this.getModel(id);
 		if (modelEO != null) {
 			Model model = new Model(modelEO);
 			if (parent != null) {
@@ -337,14 +337,14 @@ public class MetaDefinition<T> implements Serializable {
 			}
 			T fixedId = (T) modelEO.getFixedId();
 			if (fixedId != null) {
-				SpecFixedModelEO fixedSpecModelEO = this.getFixedModelEO(fixedId);
-				model.setFixedModel(fixedSpecModelEO);
+				FixedModelSpecEO fixedModelSpecEO = this.getFixedModelEO(fixedId);
+				model.setFixedModel(fixedModelSpecEO);
 			}
-			List<SpecConnectionEO> connections = this.findChildrenConnection(id, "Model");
+			List<ConnectionSpecEO> connections = this.findChildrenConnection(id, "Model");
 			if (CollectionUtils.isNotEmpty(connections)) {
 				connections.forEach(r -> {
 					T subId = (T) r.getSubId();
-					SpecModelEO subModel = this.getModel(subId);
+					ModelSpecEO subModel = this.getModel(subId);
 					if (subModel != null) {
 						model.put(r);
 						Model childrenModel = this.buildModel(model, subId);
@@ -358,7 +358,7 @@ public class MetaDefinition<T> implements Serializable {
 			if (CollectionUtils.isNotEmpty(connections)) {
 				connections.forEach(r -> {
 					T subId = (T) r.getSubId();
-					SpecPropertyEO property = this.getProperty(subId);
+					PropertySpecEO property = this.getProperty(subId);
 					if (property != null) {
 						model.put(r);
 						model.put(property);

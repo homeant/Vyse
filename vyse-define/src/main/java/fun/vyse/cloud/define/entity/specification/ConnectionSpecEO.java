@@ -39,7 +39,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class SpecConnectionEO extends AbstractBaseEntity<Long>  {
+public class ConnectionSpecEO extends AbstractBaseEntity<Long>  {
 
     private static final long serialVersionUID=1L;
 

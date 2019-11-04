@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.repository;
 
 import fun.vyse.cloud.core.repository.IBaseRepository;
-import fun.vyse.cloud.define.entity.specification.SpecModelEO;
+import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
 
 
 /**
@@ -11,6 +11,6 @@ import fun.vyse.cloud.define.entity.specification.SpecModelEO;
  * @date 2019-10-24 09:45
  */
 
-public interface ISpecModelRepository extends IBaseRepository<SpecModelEO,Long> {
+public interface IModelSpecRepository extends IBaseRepository<ModelSpecEO,Long> {
 
 }

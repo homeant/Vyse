@@ -14,9 +14,9 @@
  *  the License.
  */
 
-package fun.vyse.cloud.define.entity.specification;
+package fun.vyse.cloud.define.entity.actual;
 
-import fun.vyse.cloud.core.domain.AbstractBaseEntity;
+import fun.vyse.cloud.core.domain.DomainEO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,32 +24,18 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+
 /**
- * fun.vyse.cloud.define.entity.FixedModelEO
+ * com.ifa.cloud.channel.model.entity.ModelDataEO
  *
  * @author junchen homeanter@163.com
- * @date 2019-10-14 15:18
+ * @date 2019-10-12 14:48
  */
 @Entity
-@Table(name = "spec_fixedModel")
+@Table(name = "act_model")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class SpecFixedModelEO extends AbstractBaseEntity<Long>  {
-    private String className;
+public class ModelActEO extends DomainEO<Long> {
 
-    public Object createFixedInstance(){
-        try {
-            Class<?> clazz = Class.forName(this.className);
-            Object o = clazz.newInstance();
-            return o;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

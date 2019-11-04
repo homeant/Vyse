@@ -47,7 +47,7 @@ import static fun.vyse.cloud.define.util.ObjectValueUtils.toStringValue;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class ActPropertyEO extends InternalFixedEO<Long> implements IRecursiveEntity<Long> {
+public class PropertyActEO extends InternalFixedEO<Long> implements IRecursiveEntity<Long> {
 
 	public static final Integer PROPERTY_NUMBER = 3;
 

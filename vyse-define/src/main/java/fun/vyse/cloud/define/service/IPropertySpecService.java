@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.service;
 
 import fun.vyse.cloud.core.service.IBaseService;
-import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 
 /**
  * IPropertyService
@@ -9,6 +9,6 @@ import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 12:39
  */
-public interface ISpecPropertyService extends IBaseService<SpecPropertyEO,Long> {
+public interface IPropertySpecService extends IBaseService<PropertySpecEO,Long> {
 
 }

@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.repository;
 
 import fun.vyse.cloud.core.repository.IBaseRepository;
-import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 
 /**
  * IPropertyRepository
@@ -9,6 +9,6 @@ import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 12:53
  */
-public interface ISpecPropertyRepository extends IBaseRepository<SpecPropertyEO,Long> {
+public interface IPropertySpecRepository extends IBaseRepository<PropertySpecEO,Long> {
 
 }

@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.repository;
 
 import fun.vyse.cloud.core.repository.IBaseRepository;
-import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
 
 /**
  * IConnectionRepository
@@ -9,6 +9,6 @@ import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 17:22
  */
-public interface ISpecConnectionRepository extends IBaseRepository<SpecConnectionEO,Long> {
+public interface IConnectionSpecRepository extends IBaseRepository<ConnectionSpecEO,Long> {
 
 }

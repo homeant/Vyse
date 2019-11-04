@@ -5,13 +5,12 @@ import fun.vyse.cloud.base.service.IGeneratorService;
 import fun.vyse.cloud.define.domain.DomainEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
-import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
-import fun.vyse.cloud.define.entity.specification.SpecFixedModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
+import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import fun.vyse.cloud.define.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +33,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ModelTest {
 
 	@Autowired
-	private ISpecModelService specModelService;
+	private IModelSpecService specModelService;
 
 	@Autowired
-	private ISpecPropertyService specPropertyService;
+	private IPropertySpecService specPropertyService;
 
 	@Autowired
-	private ISpecConnectionService specConnectionService;
+	private IConnectionSpecService specConnectionService;
 
 	@Autowired
-	private ISpecFixedModelService specFixedModelService;
+	private IFixedModelSpecService specFixedModelService;
 
 	@Autowired
 	private IMetaDefinitionService metaDefinitionService;
@@ -56,7 +55,7 @@ public class ModelTest {
 
 	@Test
 	public void insert() {
-		SpecModelEO modelEO = new SpecModelEO();
+		ModelSpecEO modelEO = new ModelSpecEO();
 		modelEO.setId(1L);
 		modelEO.setName("测试模型");
 		modelEO.setCode("main");
@@ -65,7 +64,7 @@ public class ModelTest {
 		modelEO.setVersion_(0L);
 		specModelService.saveAndFlush(modelEO);
 
-		SpecModelEO modelEO2 = new SpecModelEO();
+		ModelSpecEO modelEO2 = new ModelSpecEO();
 		modelEO2.setId(2L);
 		modelEO2.setName("测试模型2");
 		modelEO2.setCode("test");
@@ -74,7 +73,7 @@ public class ModelTest {
 		specModelService.saveAndFlush(modelEO2);
 
 
-		SpecPropertyEO propertyEO = new SpecPropertyEO();
+		PropertySpecEO propertyEO = new PropertySpecEO();
 		propertyEO.setId(3L);
 		propertyEO.setCode("name");
 		propertyEO.setName("名称");
@@ -82,7 +81,7 @@ public class ModelTest {
 		propertyEO.setVersion_(0L);
 		specPropertyService.saveAndFlush(propertyEO);
 
-		SpecPropertyEO propertyEO2 = new SpecPropertyEO();
+		PropertySpecEO propertyEO2 = new PropertySpecEO();
 		propertyEO2.setId(4L);
 		propertyEO2.setCode("city");
 		propertyEO2.setName("城市");
@@ -91,7 +90,7 @@ public class ModelTest {
 		propertyEO2.setVersion_(0L);
 		specPropertyService.saveAndFlush(propertyEO2);
 
-		SpecConnectionEO connectionEO = new SpecConnectionEO();
+		ConnectionSpecEO connectionEO = new ConnectionSpecEO();
 		connectionEO.setId(5L);
 		connectionEO.setParentId(1L);
 		connectionEO.setSubId(2L);
@@ -102,7 +101,7 @@ public class ModelTest {
 		specConnectionService.saveAndFlush(connectionEO);
 
 
-		SpecConnectionEO connectionEO1 = new SpecConnectionEO();
+		ConnectionSpecEO connectionEO1 = new ConnectionSpecEO();
 		connectionEO1.setId(6L);
 		connectionEO1.setParentId(1L);
 		connectionEO1.setSubId(3L);
@@ -111,7 +110,7 @@ public class ModelTest {
 		connectionEO1.setVersion_(0L);
 		specConnectionService.saveAndFlush(connectionEO1);
 
-		SpecConnectionEO connectionEO2 = new SpecConnectionEO();
+		ConnectionSpecEO connectionEO2 = new ConnectionSpecEO();
 		connectionEO2.setId(7L);
 		connectionEO2.setParentId(2L);
 		connectionEO2.setSubId(4L);
@@ -120,7 +119,7 @@ public class ModelTest {
 		connectionEO2.setVersion_(0L);
 		specConnectionService.saveAndFlush(connectionEO2);
 
-		SpecFixedModelEO fixedModelEO = new SpecFixedModelEO();
+		FixedModelSpecEO fixedModelEO = new FixedModelSpecEO();
 		fixedModelEO.setClassName("fun.vyse.cloud.test.entity.UserEO");
 		fixedModelEO.setId(1L);
 		fixedModelEO.setVersion_(0L);

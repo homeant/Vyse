@@ -34,47 +34,54 @@ import javax.persistence.Table;
  * @since 2019-10-12
  */
 @Entity
-@Table(name = "spec_model")
+@Table(name = "spec_property")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class SpecModelEO extends AbstractBaseEntity<Long>  {
+public class PropertySpecEO extends AbstractBaseEntity<Long> {
 
     /**
-     * 模型名称
-     */
-    private String name;
-
-    /**
-     * 模型编码
+     * 编码
      */
     private String code;
 
     /**
-     * 模型类型
+     * 名称
      */
-    private String type;
+    private String name;
+
+    private String alias;
+
+    /**
+     * 默认值
+     */
+    private String defValue;
+
+    /**
+     * 字段类型
+     */
+    private String dataType;
 
     /**
      * 排序
      */
     private String sort;
 
-    /**
-     * 固定表id
-     */
-    private Long fixedId;
+	/**
+	 * 时间格式化
+	 */
+	private String pattern;
 
-
-    public static final String NAME = "name";
 
     public static final String CODE = "code";
 
-    public static final String TYPE = "type";
+    public static final String NAME = "name";
+
+    public static final String DEF_VALUE = "def_value";
+
+    public static final String DATA_TYPE = "data_type";
 
     public static final String SORT = "sort";
-
-    public static final String FIXED_ID = "fixed_id";
 
 }

@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.service;
 
 import fun.vyse.cloud.core.service.IBaseService;
-import fun.vyse.cloud.define.entity.actual.ActModelEO;
+import fun.vyse.cloud.define.entity.actual.ModelActEO;
 
 /**
  * IModelDataService
@@ -9,11 +9,11 @@ import fun.vyse.cloud.define.entity.actual.ActModelEO;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 18:59
  */
-public interface IActModelService extends IBaseService<ActModelEO,Long> {
+public interface IModelActService extends IBaseService<ModelActEO,Long> {
 	/**
 	 * 创建业务模型数据对象
 	 * @param id
 	 * @return
 	 */
-	ActModelEO createModel(Long id);
+	ModelActEO createModel(Long id);
 }

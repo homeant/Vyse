@@ -24,9 +24,9 @@ import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.constant.SetPropertyType;
 import fun.vyse.cloud.core.domain.*;
 import fun.vyse.cloud.define.constant.ReservedProperty;
-import fun.vyse.cloud.define.entity.actual.ActModelEO;
-import fun.vyse.cloud.define.entity.actual.ActPropertyEO;
-import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
+import fun.vyse.cloud.define.entity.actual.ModelActEO;
+import fun.vyse.cloud.define.entity.actual.PropertyActEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
-	private ActModelEO entity;
+	private ModelActEO entity;
 	@JsonIgnore
 	private transient MetaDefinition<Long> md = null;
 
@@ -74,7 +74,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	 */
 	private Map<String, Object> modelMap = Maps.newConcurrentMap();
 
-	private Map<Long, ActPropertyEO> propertyMap = Maps.newConcurrentMap();
+	private Map<Long, PropertyActEO> propertyMap = Maps.newConcurrentMap();
 
 	/**
 	 * 调整过的map状态映射
@@ -98,7 +98,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		this.entity = null;
 	}
 
-	public DomainModel(ActModelEO entity, MetaDefinition md) {
+	public DomainModel(ModelActEO entity, MetaDefinition md) {
 		this.entity = entity;
 		this.md = md;
 	}
@@ -117,7 +117,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	}
 
 	@Override
-	public ActModelEO getEntity() {
+	public ModelActEO getEntity() {
 		return entity;
 	}
 
@@ -163,12 +163,12 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	@JsonIgnore
 	public Map<String, Object> getProperty(EntityState state) {
 		Map<String, Object> property = Maps.newHashMap();
-		List<ActPropertyEO> children = this.findChildren(ActPropertyEO.class);
+		List<PropertyActEO> children = this.findChildren(PropertyActEO.class);
 		if (CollectionUtils.isNotEmpty(children)) {
 			children.forEach(r -> {
 				Integer index = r.getCurrentIndex();
 				for (Integer i = 1; i <= index; i++) {
-					String key = (String) r.get(ActPropertyEO.PropertyType.code, i);
+					String key = (String) r.get(PropertyActEO.PropertyType.code, i);
 					if (StringUtils.isNotBlank(key)) {
 						if (!property.containsKey(key)) {
 							property.put(key, r.get(i));
@@ -216,7 +216,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				exist = true;
 				result = this.setFixedValue(code, value);
 			} else {
-				for (ActPropertyEO property : this.propertyMap.values()) {
+				for (PropertyActEO property : this.propertyMap.values()) {
 					if (property.containsKey(code)) {
 						SetPropertyType setPropertyType = property.set(code, value);
 						if (setPropertyType == SetPropertyType.Success) {
@@ -277,8 +277,8 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	}
 
 	public void put(IEntity entity) {
-		if (entity instanceof ActPropertyEO) {
-			this.put((ActPropertyEO) entity);
+		if (entity instanceof PropertyActEO) {
+			this.put((PropertyActEO)entity);
 		} else if (entity instanceof DomainModel) {
 			this.put((DomainModel) entity);
 		}
@@ -324,7 +324,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 	 *
 	 * @param propertyEO 属性对象
 	 */
-	private void put(ActPropertyEO propertyEO) {
+	private void put(PropertyActEO propertyEO) {
 		Long id = propertyEO.getId();
 		Long parentId = propertyEO.getParentId();
 		if (ObjectUtils.notEqual(this.entity.getId(), id) && !ObjectUtils.notEqual(this.entity.getId(), parentId)) {
@@ -355,7 +355,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 					childrens.addAll((List<T>) model);
 				}
 			}
-		} else if (classType == ActPropertyEO.class) {
+		} else if (classType == PropertyActEO.class) {
 			childrens.addAll((List<T>) this.propertyMap.values().stream().collect(Collectors.toList()));
 		} else if (classType == IFixedEntity.class) {
 			childrens.add((T) this.fixedModel);
@@ -373,8 +373,8 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 					return (T) ((List) value).get(index);
 				}
 			}
-		} else if (classType == ActPropertyEO.class) {
-			for (ActPropertyEO propertyEO : this.propertyMap.values()) {
+		} else if (classType == PropertyActEO.class) {
+			for (PropertyActEO propertyEO : this.propertyMap.values()) {
 				boolean flag = propertyEO.containsKey(code);
 				if (flag) {
 					return (T) propertyEO;
@@ -397,9 +397,9 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 				}
 			}
 			return list;
-		} else if (classType == ActPropertyEO.class) {
+		} else if (classType == PropertyActEO.class) {
 			list = Lists.newArrayList();
-			for (ActPropertyEO propertyEO : this.propertyMap.values()) {
+			for (PropertyActEO propertyEO : this.propertyMap.values()) {
 				boolean flag = propertyEO.containsKey(code);
 				if (flag) {
 					list.add((T) propertyEO);
@@ -426,10 +426,10 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 		List<DomainModel> childrens = this.findChildren(DomainModel.class);
 		if (CollectionUtils.isNotEmpty(childrens)) {
 			childrens.stream().forEach(r -> {
-				List<SpecConnectionEO> connectionEOS = this.md.getConnections(this.entity.getDomainId(), r.entity.getDomainId());
+				List<ConnectionSpecEO> connectionEOS = this.md.getConnections(this.entity.getDomainId(), r.entity.getDomainId());
 				if (CollectionUtils.isNotEmpty(connectionEOS)) {
 					Map<String, Object> childrenInternalModel = r.getInternalModel();
-					SpecConnectionEO connectionEO = connectionEOS.get(0);
+					ConnectionSpecEO connectionEO = connectionEOS.get(0);
 					String code = r.entity.getCode();
 					Long max = connectionEO.getMaxmium();
 					if (data.containsKey(code)) {

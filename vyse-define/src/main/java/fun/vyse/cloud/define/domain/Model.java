@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import fun.vyse.cloud.core.domain.IEntity;
 import fun.vyse.cloud.core.domain.IModel;
-import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
-import fun.vyse.cloud.define.entity.specification.SpecFixedModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecModelEO;
-import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
+import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +28,7 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 
 	@Getter
 	@Setter
-	private SpecModelEO entity;
+	private ModelSpecEO entity;
 
 	@Getter
 	@Setter
@@ -40,11 +40,11 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 
 	@Getter
 	@Setter
-	private SpecFixedModelEO fixedModel;
+	private FixedModelSpecEO fixedModel;
 
 	private transient MultiKeyMap multiKeyMap = new MultiKeyMap<>();
 
-	public Model(SpecModelEO modelEO) {
+	public Model(ModelSpecEO modelEO) {
 		this.entity = modelEO;
 	}
 
@@ -69,24 +69,24 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 			}
 		}
 
-		if (entity instanceof SpecPropertyEO) {
-			SpecPropertyEO property = (SpecPropertyEO) entity;
+		if (entity instanceof PropertySpecEO) {
+			PropertySpecEO property = (PropertySpecEO) entity;
 			String code = property.getCode();
-			if (!this.isExist(SpecPropertyEO.class, code)) {
-				this.put(SpecPropertyEO.class, "modelType", entity);
-				this.put(SpecPropertyEO.class, "code", code, entity);
-				this.put(SpecPropertyEO.class, "type", "Property", entity);
+			if (!this.isExist(PropertySpecEO.class, code)) {
+				this.put(PropertySpecEO.class, "modelType", entity);
+				this.put(PropertySpecEO.class, "code", code, entity);
+				this.put(PropertySpecEO.class, "type", "Property", entity);
 			}
 		}
 
-		if (entity instanceof SpecConnectionEO) {
-			SpecConnectionEO connection = (SpecConnectionEO) entity;
+		if (entity instanceof ConnectionSpecEO) {
+			ConnectionSpecEO connection = (ConnectionSpecEO) entity;
 			Long parentId = connection.getParentId();
 			Long subId = connection.getSubId();
-			if (!this.containsKey(SpecConnectionEO.class, parentId, subId)) {
-				this.put(SpecConnectionEO.class, "modelType", entity);
-				this.put(SpecConnectionEO.class, parentId, subId, entity);
-				this.put(SpecConnectionEO.class, "type", connection.getParentType(), connection.getSubType(), entity);
+			if (!this.containsKey(ConnectionSpecEO.class, parentId, subId)) {
+				this.put(ConnectionSpecEO.class, "modelType", entity);
+				this.put(ConnectionSpecEO.class, parentId, subId, entity);
+				this.put(ConnectionSpecEO.class, "type", connection.getParentType(), connection.getSubType(), entity);
 			}
 		}
 		// anction
