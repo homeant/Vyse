@@ -14,37 +14,28 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.domain;
+package fun.vyse.cloud.define.entity.actual;
 
+import fun.vyse.cloud.core.domain.DomainEO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
-//import org.hibernate.annotations.ColumnMeta;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 
 /**
- * fun.vyse.cloud.core.domain.AbstractBaseEntity
+ * com.ifa.cloud.channel.model.entity.ModelDataEO
  *
  * @author junchen homeanter@163.com
- * @date 2019-10-12 13:25
+ * @date 2019-10-12 14:48
  */
-@MappedSuperclass
+@Entity
+@Table(name = "act_model")
 @Data
 @ToString(callSuper = true)
-public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T>, IVersionEntity {
-
-	@Id
-	private T id;
-
-	//@ColumnMeta(index = Integer.MAX_VALUE - 1)
-	private String tenantId;
-
-	//@ColumnMeta(index = Integer.MAX_VALUE)
-	@Version
-	private Long version_;
-
-	public static final String ID = "id";
-
-	public static final String TENANT_ID = "tenantId";
+@EqualsAndHashCode(callSuper = false)
+public class ModelActEO extends DomainEO<Long> {
 
 }

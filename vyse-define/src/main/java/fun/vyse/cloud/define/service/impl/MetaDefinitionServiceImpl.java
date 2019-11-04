@@ -1,10 +1,10 @@
 package fun.vyse.cloud.define.service.impl;
 
 import fun.vyse.cloud.define.domain.MetaDefinition;
-import fun.vyse.cloud.define.entity.ConnectionEO;
-import fun.vyse.cloud.define.entity.FixedModelEO;
-import fun.vyse.cloud.define.entity.ModelEO;
-import fun.vyse.cloud.define.entity.PropertyEO;
+import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
+import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
+import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import fun.vyse.cloud.define.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,16 +19,16 @@ import java.util.List;
 public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
 
 	@Autowired
-	private IModelService modelService;
+	private IModelSpecService specModelService;
 
 	@Autowired
-	private IPropertyService propertyService;
+	private IPropertySpecService specPropertyService;
 
 	@Autowired
-	private IConnectionService connectionService;
+	private IConnectionSpecService specConnectionService;
 
 	@Autowired
-	private IFixedModelService fixedModelService;
+	private IFixedModelSpecService specFixedModelService;
 
 	/**
 	 * 根据租户id查询定义
@@ -38,10 +38,10 @@ public class MetaDefinitionServiceImpl implements IMetaDefinitionService {
 	 */
 	@Override
 	public MetaDefinition<Long> getMetaDefinition(String tenantId) {
-		List<ModelEO> modelEOS = this.modelService.findListByTenantId(tenantId);
-		List<PropertyEO> propertyEOS = propertyService.findListByTenantId(tenantId);
-		List<ConnectionEO> connectionEOS = connectionService.findListByTenantId(tenantId);
-		List<FixedModelEO> FixedModelEOS = fixedModelService.findListByTenantId(tenantId);
+		List<ModelSpecEO> modelEOS = this.specModelService.findListByTenantId(tenantId);
+		List<PropertySpecEO> propertyEOS = specPropertyService.findListByTenantId(tenantId);
+		List<ConnectionSpecEO> connectionEOS = specConnectionService.findListByTenantId(tenantId);
+		List<FixedModelSpecEO> FixedModelEOS = specFixedModelService.findListByTenantId(tenantId);
 		MetaDefinition<Long> metaDefinition = new MetaDefinition<>();
 		modelEOS.forEach(r -> metaDefinition.addModel(r));
 		propertyEOS.forEach(r -> metaDefinition.addProperty(r));

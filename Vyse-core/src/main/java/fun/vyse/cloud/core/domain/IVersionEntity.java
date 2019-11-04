@@ -7,7 +7,7 @@ package fun.vyse.cloud.core.domain;
  * @date 2019-10-24 11:59
  */
 public interface IVersionEntity {
-	Long getVersion();
+	Long getVersion_();
 
-	void setVersion(Long version);
+	void setVersion_(Long version);
 }

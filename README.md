@@ -73,3 +73,9 @@
 ### 接口模型转换
 
 - 模型关系映射
+
+## 名词描述
+
+*spec* 全文*specification* [ˌspesɪfɪˈkeɪʃn] 大意为规范
+
+*act* 全文*actual* [ˈæktʃuəl] 大意为真实的

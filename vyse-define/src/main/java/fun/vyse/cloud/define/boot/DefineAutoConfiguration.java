@@ -25,24 +25,24 @@ public class DefineAutoConfiguration {
 		log.info("DefineAutoConfiguration init ...");
 	}
 
-	@Bean(name = "modelService")
-	public IModelService modelService(){
-		return new ModelServiceImpl();
+	@Bean
+	public IModelSpecService modelService(){
+		return new ModelSpecServiceImpl();
 	}
 
 	@Bean
-	public IPropertyService propertyService(){
-		return new PropertyServiceImpl();
+	public IPropertySpecService propertyService(){
+		return new PropertySpecServiceImpl();
 	}
 
 	@Bean
-	public IConnectionService connectionService(){
-		return new ConnectionServiceImpl();
+	public IConnectionSpecService connectionService(){
+		return new ConnectionSpecServiceImpl();
 	}
 
 	@Bean
-	public IFixedModelService fixedModelService(){
-		return new FixedModelServiceImpl();
+	public IFixedModelSpecService fixedModelService(){
+		return new FixedModelSpecServiceImpl();
 	}
 
 	@Bean
@@ -56,13 +56,13 @@ public class DefineAutoConfiguration {
 	}
 
 	@Bean
-	public IModelDataService modelDataService(){
-		return new ModelDataServiceImpl();
+	public IModelActService modelDataService(){
+		return new ModelActServiceImpl();
 	}
 
 	@Bean
-	public IModelPropertyService modelPropertyService(){
-		return new ModelPropertyServiceImpl();
+	public IPropertyActService modelPropertyService(){
+		return new PropertyActServiceImpl();
 	}
 
 	@Bean

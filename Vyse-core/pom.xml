@@ -73,6 +73,7 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
+			<scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>javax.persistence</groupId>

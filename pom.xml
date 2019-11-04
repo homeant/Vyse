@@ -33,7 +33,8 @@
         <module>vyse-define</module>
         <module>vyse-model-transform</module>
         <module>vyse-integration</module>
-    </modules>
+		<module>vyse-base</module>
+	</modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
