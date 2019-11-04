@@ -46,9 +46,4 @@ public class MetaDefinitionFactory {
             return metaDefinition;
         }
     }
-
-    public MetaDefinition getMetaDefinition(){
-
-        return this.getMetaDefinition();
-    }
 }
