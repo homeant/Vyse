@@ -14,7 +14,7 @@
  *  the License.
  */
 
-package fun.vyse.cloud.define.entity;
+package fun.vyse.cloud.define.entity.actual;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;
@@ -43,11 +43,11 @@ import static fun.vyse.cloud.define.util.ObjectValueUtils.toStringValue;
  * @date 2019-10-15 12:04
  */
 @Entity
-@Table(name="t_model_property")
+@Table(name="act_property")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class ModelPropertyEO extends InternalFixedEO<Long> implements IRecursiveEntity<Long> {
+public class ActPropertyEO extends InternalFixedEO<Long> implements IRecursiveEntity<Long> {
 
 	public static final Integer PROPERTY_NUMBER = 3;
 

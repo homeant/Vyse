@@ -14,7 +14,7 @@
  *  the License.
  */
 
-package fun.vyse.cloud.define.entity;
+package fun.vyse.cloud.define.entity.specification;
 
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import lombok.Data;
@@ -31,11 +31,11 @@ import javax.persistence.Table;
  * @date 2019-10-14 15:18
  */
 @Entity
-@Table(name = "t_fixedModel")
+@Table(name = "spec_fixedModel")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class FixedModelEO extends AbstractBaseEntity<Long>  {
+public class SpecFixedModelEO extends AbstractBaseEntity<Long>  {
     private String className;
 
     public Object createFixedInstance(){

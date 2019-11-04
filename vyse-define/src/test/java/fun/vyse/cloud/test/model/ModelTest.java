@@ -5,10 +5,10 @@ import fun.vyse.cloud.base.service.IGeneratorService;
 import fun.vyse.cloud.define.domain.DomainEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
-import fun.vyse.cloud.define.entity.ConnectionEO;
-import fun.vyse.cloud.define.entity.FixedModelEO;
-import fun.vyse.cloud.define.entity.ModelEO;
-import fun.vyse.cloud.define.entity.PropertyEO;
+import fun.vyse.cloud.define.entity.specification.SpecConnectionEO;
+import fun.vyse.cloud.define.entity.specification.SpecFixedModelEO;
+import fun.vyse.cloud.define.entity.specification.SpecModelEO;
+import fun.vyse.cloud.define.entity.specification.SpecPropertyEO;
 import fun.vyse.cloud.define.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -35,16 +34,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ModelTest {
 
 	@Autowired
-	private IModelService modelService;
+	private ISpecModelService specModelService;
 
 	@Autowired
-	private IPropertyService propertyService;
+	private ISpecPropertyService specPropertyService;
 
 	@Autowired
-	private IConnectionService connectionService;
+	private ISpecConnectionService specConnectionService;
 
 	@Autowired
-	private IFixedModelService fixedModelService;
+	private ISpecFixedModelService specFixedModelService;
 
 	@Autowired
 	private IMetaDefinitionService metaDefinitionService;
@@ -55,45 +54,44 @@ public class ModelTest {
 	@Autowired
 	private IDomainModelService domainModelService;
 
-	@Ignore
 	@Test
 	public void insert() {
-		ModelEO modelEO = new ModelEO();
+		SpecModelEO modelEO = new SpecModelEO();
 		modelEO.setId(1L);
 		modelEO.setName("测试模型");
 		modelEO.setCode("main");
 		modelEO.setType("Product");
 		modelEO.setFixedId(1L);
 		modelEO.setVersion_(0L);
-		modelService.saveAndFlush(modelEO);
+		specModelService.saveAndFlush(modelEO);
 
-		ModelEO modelEO2 = new ModelEO();
+		SpecModelEO modelEO2 = new SpecModelEO();
 		modelEO2.setId(2L);
 		modelEO2.setName("测试模型2");
 		modelEO2.setCode("test");
 		modelEO2.setType("Model");
 		modelEO2.setVersion_(0L);
-		modelService.saveAndFlush(modelEO2);
+		specModelService.saveAndFlush(modelEO2);
 
 
-		PropertyEO propertyEO = new PropertyEO();
+		SpecPropertyEO propertyEO = new SpecPropertyEO();
 		propertyEO.setId(3L);
 		propertyEO.setCode("name");
 		propertyEO.setName("名称");
 		propertyEO.setDataType("java.lang.String");
 		propertyEO.setVersion_(0L);
-		propertyService.saveAndFlush(propertyEO);
+		specPropertyService.saveAndFlush(propertyEO);
 
-		PropertyEO propertyEO2 = new PropertyEO();
+		SpecPropertyEO propertyEO2 = new SpecPropertyEO();
 		propertyEO2.setId(4L);
 		propertyEO2.setCode("city");
 		propertyEO2.setName("城市");
 		propertyEO2.setDefValue("北京");
 		propertyEO2.setDataType("java.lang.String");
 		propertyEO2.setVersion_(0L);
-		propertyService.saveAndFlush(propertyEO2);
+		specPropertyService.saveAndFlush(propertyEO2);
 
-		ConnectionEO connectionEO = new ConnectionEO();
+		SpecConnectionEO connectionEO = new SpecConnectionEO();
 		connectionEO.setId(5L);
 		connectionEO.setParentId(1L);
 		connectionEO.setSubId(2L);
@@ -101,47 +99,37 @@ public class ModelTest {
 		connectionEO.setSubType("Model");
 		connectionEO.setMaxmium(1L);
 		connectionEO.setVersion_(0L);
-		connectionService.saveAndFlush(connectionEO);
+		specConnectionService.saveAndFlush(connectionEO);
 
 
-		ConnectionEO connectionEO1 = new ConnectionEO();
+		SpecConnectionEO connectionEO1 = new SpecConnectionEO();
 		connectionEO1.setId(6L);
 		connectionEO1.setParentId(1L);
 		connectionEO1.setSubId(3L);
 		connectionEO1.setParentType("Model");
 		connectionEO1.setSubType("Property");
 		connectionEO1.setVersion_(0L);
-		connectionService.saveAndFlush(connectionEO1);
+		specConnectionService.saveAndFlush(connectionEO1);
 
-		ConnectionEO connectionEO2 = new ConnectionEO();
+		SpecConnectionEO connectionEO2 = new SpecConnectionEO();
 		connectionEO2.setId(7L);
 		connectionEO2.setParentId(2L);
 		connectionEO2.setSubId(4L);
 		connectionEO2.setParentType("Model");
 		connectionEO2.setSubType("Property");
 		connectionEO2.setVersion_(0L);
-		connectionService.saveAndFlush(connectionEO2);
+		specConnectionService.saveAndFlush(connectionEO2);
 
-		FixedModelEO fixedModelEO = new FixedModelEO();
+		SpecFixedModelEO fixedModelEO = new SpecFixedModelEO();
 		fixedModelEO.setClassName("fun.vyse.cloud.test.entity.UserEO");
 		fixedModelEO.setId(1L);
 		fixedModelEO.setVersion_(0L);
-		fixedModelService.saveAndFlush(fixedModelEO);
-	}
-
-	@Test
-	public void idTest(){
-		ModelEO modelEO = new ModelEO();
-		modelEO.setName("id测试模型");
-		modelEO.setCode("main");
-		modelEO.setType("Product");
-		modelEO.setFixedId(1L);
-		modelService.saveAndFlush(modelEO);
+		specFixedModelService.saveAndFlush(fixedModelEO);
 	}
 
 	@Test
 	public void test() {
-		log.debug("bean:{}", modelService.findOne(1L));
+		log.debug("bean:{}", specModelService.findOne(1L));
 		MetaDefinition<Long> metaDefinition = metaDefinitionService.getMetaDefinition(null);
 		DomainEntity entity = new DomainEntity();
 		DomainModel model = new DomainModel(null,metaDefinition);

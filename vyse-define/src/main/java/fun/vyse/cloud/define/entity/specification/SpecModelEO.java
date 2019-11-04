@@ -14,7 +14,7 @@
  *  the License.
  */
 
-package fun.vyse.cloud.define.entity;
+package fun.vyse.cloud.define.entity.specification;
 
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import lombok.Data;
@@ -34,12 +34,12 @@ import javax.persistence.Table;
  * @since 2019-10-12
  */
 @Entity
-@Table(name = "t_model")
+@Table(name = "spec_model")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class ModelEO extends AbstractBaseEntity<Long>  {
+public class SpecModelEO extends AbstractBaseEntity<Long>  {
 
     /**
      * 模型名称

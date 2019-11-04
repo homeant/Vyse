@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.service;
 
 import fun.vyse.cloud.core.service.IBaseService;
-import fun.vyse.cloud.define.entity.ModelPropertyEO;
+import fun.vyse.cloud.define.entity.actual.ActPropertyEO;
 
 /**
  * IModelPropertyService
@@ -9,7 +9,7 @@ import fun.vyse.cloud.define.entity.ModelPropertyEO;
  * @author junchen homeanter@163.com
  * @date 2019-10-24 19:00
  */
-public interface IModelPropertyService extends IBaseService<ModelPropertyEO,Long> {
+public interface IActPropertyService extends IBaseService<ActPropertyEO,Long> {
 
-	ModelPropertyEO createModelProperty(Long id);
+	ActPropertyEO createProperty(Long id);
 }

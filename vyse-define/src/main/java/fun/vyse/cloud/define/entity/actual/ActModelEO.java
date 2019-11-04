@@ -14,7 +14,7 @@
  *  the License.
  */
 
-package fun.vyse.cloud.define.entity;
+package fun.vyse.cloud.define.entity.actual;
 
 import fun.vyse.cloud.core.domain.DomainEO;
 import lombok.Data;
@@ -32,10 +32,10 @@ import javax.persistence.Table;
  * @date 2019-10-12 14:48
  */
 @Entity
-@Table(name = "t_model_data")
+@Table(name = "act_model")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class ModelDataEO extends DomainEO<Long> {
+public class ActModelEO extends DomainEO<Long> {
 
 }

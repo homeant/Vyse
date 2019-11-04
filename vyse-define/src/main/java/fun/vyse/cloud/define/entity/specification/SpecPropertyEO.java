@@ -14,7 +14,7 @@
  *  the License.
  */
 
-package fun.vyse.cloud.define.entity;
+package fun.vyse.cloud.define.entity.specification;
 
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
 import lombok.Data;
@@ -34,76 +34,53 @@ import javax.persistence.Table;
  * @since 2019-10-12
  */
 @Entity
-@Table(name = "t_connection")
+@Table(name = "spec_property")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class ConnectionEO extends AbstractBaseEntity<Long>  {
-
-    private static final long serialVersionUID=1L;
+public class SpecPropertyEO extends AbstractBaseEntity<Long> {
 
     /**
-     * 最大数
+     * 编码
      */
-    private Long maxmium;
+    private String code;
 
     /**
-     * 最小数
+     * 名称
      */
-    private Long minmiun;
+    private String name;
+
+    private String alias;
 
     /**
-     * 构建个数
+     * 默认值
      */
-    private Integer buildNumber;
+    private String defValue;
 
     /**
-     * 加载类型 0 即时加载 -1 按需加载
+     * 字段类型
      */
-    private Integer loadType;
-
-    /**
-     * 父级类型
-     */
-    private String parentType;
-
-    /**
-     * 父级id
-     */
-    private Long parentId;
-
-    /**
-     * 子级类型
-     */
-    private String subType;
-
-    /**
-     * 子级的id
-     */
-    private Long subId;
+    private String dataType;
 
     /**
      * 排序
      */
     private String sort;
 
+	/**
+	 * 时间格式化
+	 */
+	private String pattern;
 
-    public static final String MAXMIUM = "maxmium";
 
-    public static final String MINMIUN = "minmiun";
+    public static final String CODE = "code";
 
-    public static final String BUILD_NUMBER = "build_number";
+    public static final String NAME = "name";
 
-    public static final String LOAD_TYPE = "load_type";
+    public static final String DEF_VALUE = "def_value";
 
-    public static final String PARENT_TYPE = "parent_type";
-
-    public static final String PARENT_ID = "parent_id";
-
-    public static final String SUB_TYPE = "sub_type";
-
-    public static final String SUB_ID = "sub_id";
+    public static final String DATA_TYPE = "data_type";
 
     public static final String SORT = "sort";
 
