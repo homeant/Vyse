@@ -24,7 +24,7 @@ import java.util.List;
  * @date 2019-10-28 14:23
  */
 @ToString(callSuper = true)
-public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
+public class Specification extends AbstractBaseEntity<Long> implements IModel<Long> {
 
 	@Getter
 	@Setter
@@ -32,7 +32,7 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 
 	@Getter
 	@Setter
-	private Model parent;
+	private Specification parent;
 
 	@Getter
 	@Setter
@@ -44,7 +44,7 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 
 	private transient MultiKeyMap multiKeyMap = new MultiKeyMap<>();
 
-	public Model(ModelSpecEO modelEO) {
+	public Specification(ModelSpecEO modelEO) {
 		this.entity = modelEO;
 	}
 
@@ -59,13 +59,13 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 	public void put(IEntity entity) {
 		MultiKey key = new MultiKey(new Object[]{entity.getId()});
 		this.multiKeyMap.put(key, entity);
-		if (entity instanceof Model) {
-			Model model = (Model) entity;
+		if (entity instanceof Specification) {
+			Specification model = (Specification) entity;
 			String code = model.getCode();
-			if (!this.isExist(Model.class, code)) {
-				this.put(Model.class, "modelType", entity);
-				this.put(Model.class, "code", code, entity);
-				this.put(Model.class, "type", model.getType(), entity);
+			if (!this.isExist(Specification.class, code)) {
+				this.put(Specification.class, "modelType", entity);
+				this.put(Specification.class, "code", code, entity);
+				this.put(Specification.class, "type", model.getType(), entity);
 			}
 		}
 
@@ -128,7 +128,11 @@ public class Model extends AbstractBaseEntity<Long> implements IModel<Long> {
 		return this.containsKey(entity, "code", code);
 	}
 
-	public <T extends IEntity> List<T>  findChildren(Class<T> clazz) {
+	public <T extends IEntity> List<T> findChildren(Class<T> clazz) {
 		return (List)this.multiKeyMap.get(clazz,"type");
+	}
+
+	public List<ConnectionSpecEO> getConnection(Long id){
+		return (List)this.multiKeyMap.get(ConnectionSpecEO.class, this.getId(), id);
 	}
 }

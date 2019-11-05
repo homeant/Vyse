@@ -320,25 +320,25 @@ public class MetaDefinition<T> implements Serializable {
 		return this.fixedPropertyMap.get(fixedId);
 	}
 
-	public Model buildModel(Model parent, T id) {
+	public Specification buildSpec(Specification parent, T id) {
 		ModelSpecEO modelEO = this.getModel(id);
 		if (modelEO != null) {
-			Model model = new Model(modelEO);
+			Specification spec = new Specification(modelEO);
 			if (parent != null) {
-				model.setParent(parent);
+				spec.setParent(parent);
 				String pPath = parent.getPath();
 				if (StringUtils.isNotBlank(pPath)) {
-					model.setPath(pPath + "." + modelEO.getCode());
+					spec.setPath(pPath + "." + modelEO.getCode());
 				} else {
-					model.setPath(modelEO.getCode());
+					spec.setPath(modelEO.getCode());
 				}
 			} else {
-				model.setPath(null);
+				spec.setPath(null);
 			}
 			T fixedId = (T) modelEO.getFixedId();
 			if (fixedId != null) {
 				FixedModelSpecEO fixedModelSpecEO = this.getFixedModelEO(fixedId);
-				model.setFixedModel(fixedModelSpecEO);
+				spec.setFixedModel(fixedModelSpecEO);
 			}
 			List<ConnectionSpecEO> connections = this.findChildrenConnection(id, "Model");
 			if (CollectionUtils.isNotEmpty(connections)) {
@@ -346,10 +346,10 @@ public class MetaDefinition<T> implements Serializable {
 					T subId = (T) r.getSubId();
 					ModelSpecEO subModel = this.getModel(subId);
 					if (subModel != null) {
-						model.put(r);
-						Model childrenModel = this.buildModel(model, subId);
+						spec.put(r);
+						Specification childrenModel = this.buildSpec(spec, subId);
 						if (childrenModel != null) {
-							model.put(childrenModel);
+							spec.put(childrenModel);
 						}
 					}
 				});
@@ -360,14 +360,14 @@ public class MetaDefinition<T> implements Serializable {
 					T subId = (T) r.getSubId();
 					PropertySpecEO property = this.getProperty(subId);
 					if (property != null) {
-						model.put(r);
-						model.put(property);
+						spec.put(r);
+						spec.put(property);
 					}
 				});
 			}
 
 			//action
-			return model;
+			return spec;
 		}
 		return null;
 	}
