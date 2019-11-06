@@ -1,5 +1,6 @@
 package fun.vyse.cloud.define.service.impl;
 
+import com.google.common.collect.Lists;
 import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
@@ -79,7 +80,6 @@ public class DomainModelServiceImpl implements IDomainModelService {
 			domainModel.updateState$(EntityState.New);
 			Long topId;
 			String parentPath = "";
-			Integer loadType = 0;
 			if (parent == null) {
 				topId = id;
 				modelActEO.setTopId(topId);
@@ -89,6 +89,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 				Long parentId = parent.getId();
 				modelActEO.setParentId(parentId);
 				ConnectionSpecEO connection = md.getConnection(parentId, id, null);
+				Integer loadType = 0;
 				if (connection != null) {
 					loadType = connection.getLoadType();
 				}
@@ -98,7 +99,12 @@ public class DomainModelServiceImpl implements IDomainModelService {
 					parentPath = parent.getEntity().getPath();
 				} else if (loadType == -1) {
 					ConnectionActEO connectionActEO = new ConnectionActEO();
+					connectionActEO.setTenantId(modelActEO.getTenantId());
 					connectionActEO.setDomainId(modelActEO.getId());
+					connectionActEO.setParentId(parent.getEntity().getId());
+					connectionActEO.setTopId(topId);
+					connectionActEO.setDirtyFlag(EntityState.New);
+					domainModel.setConnection(connectionActEO);
 				}
 
 			}
@@ -166,19 +172,20 @@ public class DomainModelServiceImpl implements IDomainModelService {
 				}
 			}
 			//添加action对象
+
 			//添加子模型
 			List<Specification> children = spec.findChildren(Specification.class);
 			if (CollectionUtils.isNotEmpty(children)) {
-				children.forEach(childSpec -> {
+				children.stream().forEach(childSpec -> {
 					List<ConnectionSpecEO> connections = spec.getConnection(childSpec.getId());
 					if (CollectionUtils.isNotEmpty(connections)) {
 						ConnectionSpecEO connectionSpecEO = connections.get(0);
-						Integer loadType1 = connectionSpecEO.getLoadType();
+						Integer loadType = connectionSpecEO.getLoadType();
 						int buiderCount;
-						if (loadType1 == null) {
-							loadType1 = 0;
+						if (loadType == null) {
+							loadType = 0;
 						}
-						if (loadType1 == 0) {
+						if (loadType == 0) {
 							Integer buildNumber = connectionSpecEO.getBuildNumber();
 							Integer minmiun = connectionSpecEO.getMinmiun();
 							if (buildNumber == null) {
@@ -193,6 +200,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 							if (entity != null && entity.containsKey(code)) {
 								Object value = entity.get(code);
 								if (value instanceof Map) {
+									values = Lists.newArrayList();
 									values.add((Map) value);
 								}
 								if (value instanceof List) {
