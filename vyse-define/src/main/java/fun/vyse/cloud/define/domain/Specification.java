@@ -48,6 +48,11 @@ public class Specification extends AbstractBaseEntity<Long> implements IModel<Lo
 		this.entity = modelEO;
 	}
 
+	@Override
+	public Long getId() {
+		return this.entity.getId();
+	}
+
 	public String getCode() {
 		return this.entity.getCode();
 	}
@@ -63,7 +68,7 @@ public class Specification extends AbstractBaseEntity<Long> implements IModel<Lo
 			Specification model = (Specification) entity;
 			String code = model.getCode();
 			if (!this.isExist(Specification.class, code)) {
-				this.put(Specification.class, "modelType", entity);
+				this.put(Specification.class, "specType", entity);
 				this.put(Specification.class, "code", code, entity);
 				this.put(Specification.class, "type", model.getType(), entity);
 			}
@@ -73,7 +78,7 @@ public class Specification extends AbstractBaseEntity<Long> implements IModel<Lo
 			PropertySpecEO property = (PropertySpecEO) entity;
 			String code = property.getCode();
 			if (!this.isExist(PropertySpecEO.class, code)) {
-				this.put(PropertySpecEO.class, "modelType", entity);
+				this.put(PropertySpecEO.class, "specType", entity);
 				this.put(PropertySpecEO.class, "code", code, entity);
 				this.put(PropertySpecEO.class, "type", "Property", entity);
 			}
@@ -84,7 +89,7 @@ public class Specification extends AbstractBaseEntity<Long> implements IModel<Lo
 			Long parentId = connection.getParentId();
 			Long subId = connection.getSubId();
 			if (!this.containsKey(ConnectionSpecEO.class, parentId, subId)) {
-				this.put(ConnectionSpecEO.class, "modelType", entity);
+				this.put(ConnectionSpecEO.class, "specType", entity);
 				this.put(ConnectionSpecEO.class, parentId, subId, entity);
 				this.put(ConnectionSpecEO.class, "type", connection.getParentType(), connection.getSubType(), entity);
 			}
@@ -129,7 +134,7 @@ public class Specification extends AbstractBaseEntity<Long> implements IModel<Lo
 	}
 
 	public <T extends IEntity> List<T> findChildren(Class<T> clazz) {
-		return (List)this.multiKeyMap.get(clazz,"type");
+		return (List)this.multiKeyMap.get(clazz,"specType");
 	}
 
 	public List<ConnectionSpecEO> getConnection(Long id){

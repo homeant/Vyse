@@ -1,6 +1,7 @@
 package fun.vyse.cloud.define.service.impl;
 
 import com.google.common.collect.Lists;
+import fun.vyse.cloud.base.service.IGeneratorService;
 import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
@@ -38,6 +39,9 @@ import java.util.Map;
 public class DomainModelServiceImpl implements IDomainModelService {
 
 	@Autowired
+	private IGeneratorService generatorService;
+
+	@Autowired
 	private IMetaDefinitionService metaDefinitionService;
 
 	@Autowired
@@ -45,6 +49,10 @@ public class DomainModelServiceImpl implements IDomainModelService {
 
 	@Autowired
 	private IPropertyActService actPropertyService;
+
+	private Long get() {
+		return (Long) generatorService.get("act_seq", null);
+	}
 
 	/**
 	 * 创建领域模型
@@ -56,7 +64,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	public DomainModel createDomainModel(Long modelId, Map<String, Object> entity) {
 		MetaDefinition<Long> md = metaDefinitionService.getMetaDefinition("");
 		Specification model = md.buildSpec(null, modelId);
-		return this.createDomainModel(md, null, model, modelId, entity);
+		return this.createDomainModel(md, null, model, this.get(), entity);
 	}
 
 	/**
@@ -69,10 +77,11 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	 * @return
 	 */
 	private DomainModel createDomainModel(MetaDefinition<Long> md, DomainModel parent, Specification spec, Long id, Map<String, Object> entity) {
-		ModelSpecEO modelEO = md.getModel(id);
+		ModelSpecEO modelEO = md.getModel(spec.getEntity().getId());
 		if (modelEO != null) {
 			ModelActEO modelActEO = new ModelActEO();
-			modelActEO.setDomainId(id);
+			modelActEO.setId(id);
+			modelActEO.setDomainId(spec.getEntity().getId());
 			modelActEO.setCode(modelEO.getCode());
 			modelActEO.updateDirtyFlag(EntityState.New);
 			Long fixedId = modelEO.getFixedId();
@@ -212,7 +221,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 								if (CollectionUtils.isNotEmpty(values) && values.size() > i) {
 									value = values.get(i);
 								}
-								this.createDomainModel(md, domainModel, childSpec, null, value);
+								this.createDomainModel(md, domainModel, childSpec, this.get(), value);
 							}
 						}
 					}

@@ -1,5 +1,7 @@
 package fun.vyse.cloud.test.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.base.service.IGeneratorService;
 import fun.vyse.cloud.define.domain.DomainEntity;
@@ -53,6 +55,8 @@ public class ModelTest {
 	@Autowired
 	private IDomainModelService domainModelService;
 
+	private ObjectMapper mapper = new ObjectMapper();
+
 	@Test
 	public void insert() {
 		ModelSpecEO modelEO = new ModelSpecEO();
@@ -96,7 +100,7 @@ public class ModelTest {
 		connectionEO.setSubId(2L);
 		connectionEO.setParentType("Model");
 		connectionEO.setSubType("Model");
-		connectionEO.setMaxmium(1L);
+		connectionEO.setMaxmium(1);
 		connectionEO.setVersion_(0L);
 		specConnectionService.saveAndFlush(connectionEO);
 
@@ -137,9 +141,9 @@ public class ModelTest {
 	}
 
 	@Test
-	public void domainEntityTest(){
+	public void domainEntityTest() throws JsonProcessingException {
 		DomainModel domainModel = domainModelService.createDomainModel(1L, Maps.newHashMap());
-		log.info("model:{}",domainModel);
+		log.info("model:{}",mapper.writeValueAsString(domainModel.getData()));
 	}
 
 	@Autowired
