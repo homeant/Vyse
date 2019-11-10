@@ -45,10 +45,10 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	private IMetaDefinitionService metaDefinitionService;
 
 	@Autowired
-	private IModelActService modelDataService;
+	private IModelActService modelActService;
 
 	@Autowired
-	private IPropertyActService actPropertyService;
+	private IPropertyActService propertyActService;
 
 	private Long get() {
 		return (Long) generatorService.get("act_seq", null);
@@ -115,7 +115,6 @@ public class DomainModelServiceImpl implements IDomainModelService {
 					connectionActEO.setDirtyFlag(EntityState.New);
 					domainModel.setConnection(connectionActEO);
 				}
-
 			}
 			modelActEO.setTopId(topId);
 
@@ -148,7 +147,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 							Boolean fixed = md.isFixed(modelEO, propertyEO);
 							if (!fixed) {//不是静态表
 								if (property == null) {
-									property = actPropertyService.newActual(null);
+									property = propertyActService.newActual(null);
 									property.setSerialIndex(index);
 									property.setParentId(modelEO.getId());
 									property.setTopId(topId);

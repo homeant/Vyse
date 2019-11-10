@@ -8,8 +8,8 @@ import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
 import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
 import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
 import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.keyvalue.MultiKey;
@@ -23,26 +23,20 @@ import java.util.List;
  * @author junchen homeanter@163.com
  * @date 2019-10-28 14:23
  */
+@Data
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class Specification extends AbstractBaseEntity<Long> implements IModel<Long> {
 
-	@Getter
-	@Setter
 	private ModelSpecEO entity;
 
-	@Getter
-	@Setter
 	private Specification parent;
 
-	@Getter
-	@Setter
 	private String path;
 
-	@Getter
-	@Setter
 	private FixedModelSpecEO fixedModel;
 
-	private transient MultiKeyMap multiKeyMap = new MultiKeyMap<>();
+	private final transient MultiKeyMap multiKeyMap = new MultiKeyMap<>();
 
 	public Specification(ModelSpecEO modelEO) {
 		this.entity = modelEO;
