@@ -101,7 +101,6 @@ public class BaseServiceImpl<T extends IEntity, ID, M extends IBaseRepository<T,
 			BaseServiceImpl baseService = (BaseServiceImpl)AopContext.currentProxy();
 			ID id = (ID)baseService.get();
 			actual.setId(id);
-			int a = 1/0;
 			return (T) actual;
 		}
 		return null;
