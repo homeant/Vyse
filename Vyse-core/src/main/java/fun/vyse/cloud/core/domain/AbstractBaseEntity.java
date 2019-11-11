@@ -18,6 +18,8 @@ package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 //import org.hibernate.annotations.ColumnMeta;
 
 import javax.persistence.*;

@@ -28,4 +28,5 @@ public class BaseAutoConfiguration {
 	public IGeneratorService generatorService(){
 		return new GeneratorServiceImpl();
 	}
+
 }

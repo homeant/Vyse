@@ -1,7 +1,6 @@
 package fun.vyse.cloud.base.service;
 
 import fun.vyse.cloud.base.entity.GeneratorEO;
-import fun.vyse.cloud.core.service.IBaseService;
 
 /**
  * IGeneratorService

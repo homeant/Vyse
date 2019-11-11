@@ -147,7 +147,7 @@ public class DomainModelServiceImpl implements IDomainModelService {
 							Boolean fixed = md.isFixed(modelEO, propertyEO);
 							if (!fixed) {//不是静态表
 								if (property == null) {
-									property = propertyActService.newActual(null);
+									property = propertyActService.newActual();
 									property.setSerialIndex(index);
 									property.setParentId(modelEO.getId());
 									property.setTopId(topId);

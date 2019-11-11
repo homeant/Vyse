@@ -3,7 +3,6 @@ package fun.vyse.cloud.base.service.impl;
 import fun.vyse.cloud.base.entity.GeneratorEO;
 import fun.vyse.cloud.base.repository.IGeneratorRepository;
 import fun.vyse.cloud.base.service.IGeneratorService;
-import fun.vyse.cloud.core.service.impl.BaseServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2019-10-30 11:35
  */
 public class GeneratorServiceImpl extends BaseServiceImpl<GeneratorEO, Long, IGeneratorRepository> implements IGeneratorService {
-
 
 	/**
 	 * 获取值
@@ -40,11 +38,11 @@ public class GeneratorServiceImpl extends BaseServiceImpl<GeneratorEO, Long, IGe
 			Expression exp;
 			Long oldValue = generatorEO.getValue();
 			String expression = generatorEO.getExpression();
-			context.setVariable("tenantId",generatorEO.getTenantId());
-			if(generatorEO.getLength()>0){
-				context.setVariable("value",String.format("%0"+generatorEO.getLength()+"d",oldValue));
-			}else{
-				context.setVariable("value",oldValue);
+			context.setVariable("tenantId", generatorEO.getTenantId());
+			if (generatorEO.getLength() > 0) {
+				context.setVariable("value", String.format("%0" + generatorEO.getLength() + "d", oldValue));
+			} else {
+				context.setVariable("value", oldValue);
 			}
 			if (StringUtils.isNotBlank(expression)) {
 				exp = parser.parseExpression(expression);
@@ -53,9 +51,9 @@ public class GeneratorServiceImpl extends BaseServiceImpl<GeneratorEO, Long, IGe
 			}
 			value = exp.getValue(context);
 			exp = parser.parseExpression("#value + #increment");
-			context.setVariable("value",oldValue);
-			context.setVariable("increment",generatorEO.getIncrement());
-			Long newValue = (Long)exp.getValue(context);
+			context.setVariable("value", oldValue);
+			context.setVariable("increment", generatorEO.getIncrement());
+			Long newValue = (Long) exp.getValue(context);
 			generatorEO.setValue(newValue);
 			baseRepository.flush();
 		}

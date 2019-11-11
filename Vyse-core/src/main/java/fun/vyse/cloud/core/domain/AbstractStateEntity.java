@@ -2,6 +2,7 @@ package fun.vyse.cloud.core.domain;
 
 import fun.vyse.cloud.core.constant.EntityState;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Transient;
 
@@ -12,6 +13,7 @@ import javax.persistence.Transient;
  * @date 2019-10-18 15:01
  */
 @Data
+@ToString
 public abstract class AbstractStateEntity implements IStateEntity {
 	@Transient
 	private EntityState state$;
