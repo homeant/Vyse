@@ -34,7 +34,8 @@
         <module>vyse-model-transform</module>
         <module>vyse-integration</module>
 		<module>vyse-base</module>
-	</modules>
+        <module>vyse-id-generator</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -155,7 +155,6 @@ public class DomainModelServiceImpl implements IDomainModelService {
 								}
 								property.set(PropertyType.code, index, propertyEO.getCode());
 								property.set(PropertyType.domainId, index, propertyEO.getId());
-								property.set(PropertyType.domainId, index, propertyEO.getId());
 								property.set(PropertyType.dateType, index, propertyEO.getDataType());
 								property.set(PropertyType.pattern, index, propertyEO.getPattern());
 								String path;
