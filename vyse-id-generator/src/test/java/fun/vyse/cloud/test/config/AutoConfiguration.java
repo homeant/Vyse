@@ -27,12 +27,12 @@ public class AutoConfiguration {
 
 	@Bean
 	public IdConverter idConverter() {
-		return new IdConverterImpl(IdType.MAX_PEAK);
+		return new IdConverterImpl(IdType.MIN_GRANULARITY);
 	}
 
 	@Bean(initMethod = "init")
 	public IdService idService(MachineIdProvider provider, IdConverter converter) {
-		IdServiceImpl idService = new IdServiceImpl(IdType.MAX_PEAK);
+		IdServiceImpl idService = new IdServiceImpl(IdType.MIN_GRANULARITY);
 		idService.setMachineIdProvider(provider);
 		idService.setIdConverter(converter);
 		return idService;
