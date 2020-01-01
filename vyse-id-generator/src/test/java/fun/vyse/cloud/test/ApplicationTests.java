@@ -1,6 +1,5 @@
 package fun.vyse.cloud.test;
 
-import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
@@ -12,7 +11,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
  */
 @SpringBootTest
 public class ApplicationTests extends AbstractTestNGSpringContextTests {
-	@Test
-	public void contextLoads() {
-	}
+
+
 }
