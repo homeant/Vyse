@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class Address {
-    private String address;
+    private String code;
 
     private String name;
 }

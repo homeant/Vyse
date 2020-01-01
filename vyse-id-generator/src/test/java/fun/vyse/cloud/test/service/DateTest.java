@@ -74,18 +74,18 @@ public class DateTest extends ApplicationTests {
 		Long machineBits = 10L;
 		Long machineBitsMask = -1L ^ -1L << machineBits;
 		//看不懂算法，此处必须为30及以上
-		Long timeBits = 30L;
-		Long timeBitsStartPos = machineBits;
-		Long timeBitsMask = -1L ^ -1L << timeBits;
+//		Long timeBits = 30L;
+//		Long timeBitsStartPos = machineBits;
+//		Long timeBitsMask = -1L ^ -1L << timeBits;
 		Long seqBits = 10L;
-		Long seqBitsStartPos = machineBits + timeBits;
+		Long seqBitsStartPos = machineBits;
 		Long seqBitsMask = -1L ^ -1L << seqBits;
 
 		for (int i = 200; i < 250; i++) {
 			Long value = 0L;
 			log.debug("nowTime:{}", nowTime);
 			value |= machine;
-			value |= nowTime << timeBitsStartPos;
+			// value |= nowTime << timeBitsStartPos;
 			//value |= 1000000000L;
 			Long index = Long.parseLong(i + "");
 			value |= index << seqBitsStartPos;
@@ -93,7 +93,7 @@ public class DateTest extends ApplicationTests {
 
 			Long id = Long.parseLong(value + "");
 			log.debug("machine:{}", id & machineBitsMask);
-			log.debug("time:{}", (id >>> timeBitsStartPos) & timeBitsMask);
+			//log.debug("time:{}", (id >>> timeBitsStartPos) & timeBitsMask);
 			log.debug("index:{}", (id >>> seqBitsStartPos) & seqBitsMask);
 		}
 	}

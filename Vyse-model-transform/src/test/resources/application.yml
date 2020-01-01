@@ -4,7 +4,6 @@ vyse:
     enable: false
 
 
-
 logging:
   level:
     fun: debug

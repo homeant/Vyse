@@ -12,5 +12,7 @@ public class User {
 
     private Date date;
 
-    private List<Address> addresses;
+    private UserInfo userInfo;
+
+    private List<Address> addressList;
 }

@@ -15,15 +15,14 @@ import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
 import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import fun.vyse.cloud.define.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.testng.annotations.Test;
 
 
 /**
@@ -33,9 +32,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @date 2019-10-24 09:49
  */
 @Slf4j
-@RunWith(SpringRunner.class)
 @SpringBootTest
-public class ModelTest {
+public class ModelTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	private IModelSpecService specModelService;
