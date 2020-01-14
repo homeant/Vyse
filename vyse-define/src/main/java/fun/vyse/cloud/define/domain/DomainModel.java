@@ -24,6 +24,7 @@ import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.constant.SetPropertyType;
 import fun.vyse.cloud.core.domain.*;
 import fun.vyse.cloud.define.constant.ReservedProperty;
+import fun.vyse.cloud.define.entity.actual.ConnectionActEO;
 import fun.vyse.cloud.define.entity.actual.ModelActEO;
 import fun.vyse.cloud.define.entity.actual.PropertyActEO;
 import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
@@ -76,6 +77,11 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
 	private Map<Long, PropertyActEO> propertyMap = Maps.newConcurrentMap();
 
+	@Getter
+	@Setter
+	@JsonIgnore
+	private ConnectionActEO connection;
+
 	/**
 	 * 调整过的map状态映射
 	 */
@@ -83,7 +89,6 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 
 	@JsonIgnore
 	private List<Long> deleteModelIds = Lists.newArrayList();
-
 
 	@Getter
 	@Setter
@@ -431,7 +436,7 @@ public class DomainModel extends AbstractStateEntity implements IModel<Long> {
 					Map<String, Object> childrenInternalModel = r.getInternalModel();
 					ConnectionSpecEO connectionEO = connectionEOS.get(0);
 					String code = r.entity.getCode();
-					Long max = connectionEO.getMaxmium();
+					Integer max = connectionEO.getMaxmium();
 					if (data.containsKey(code)) {
 						Object value = data.get(code);
 						if (value != null) {

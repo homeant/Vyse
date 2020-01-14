@@ -10,5 +10,5 @@ public class UserDto {
 
     private String date;
 
-    private List<Site> adds;
+    private List<Site> siteList;
 }

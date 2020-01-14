@@ -1,6 +1,6 @@
 package fun.vyse.cloud.define.repository;
 
-import fun.vyse.cloud.core.repository.IBaseRepository;
+import fun.vyse.cloud.base.repository.IBaseRepository;
 import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
 
 /**

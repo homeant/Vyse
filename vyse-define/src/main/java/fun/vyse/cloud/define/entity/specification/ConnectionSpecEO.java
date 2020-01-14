@@ -46,12 +46,12 @@ public class ConnectionSpecEO extends AbstractBaseEntity<Long>  {
     /**
      * 最大数
      */
-    private Long maxmium;
+    private Integer maxmium;
 
     /**
      * 最小数
      */
-    private Long minmiun;
+    private Integer minmiun;
 
     /**
      * 构建个数

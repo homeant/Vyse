@@ -1,10 +1,11 @@
-package fun.vyse.cloud.core.service;
+package fun.vyse.cloud.base.service;
 
 import fun.vyse.cloud.core.domain.IEntity;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.core.domain.ITenantEntity;
 import org.springframework.data.domain.Example;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,6 +15,9 @@ import java.util.List;
  * @date 2019-10-24 12:21
  */
 public interface IBaseService<T extends IEntity,ID> {
+
+	ID get();
+
 	T findOne(ID id);
 
 	<S extends T> List<S> findList(Example<S> example);
@@ -24,8 +28,7 @@ public interface IBaseService<T extends IEntity,ID> {
 
 	/**
 	 * 创建新的模型对象
-	 * @param id id
 	 * @return 模型对象
 	 */
-	<T extends IFixedEntity> T newActual(ID id);
+	<T extends IFixedEntity> T newActual();
 }

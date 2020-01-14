@@ -15,15 +15,15 @@
             <b>date</b>
         </field>
         <field>
-            <a>addresses</a>
-            <b>adds</b>
+            <a>addressList</a>
+            <b>siteList</b>
         </field>
     </mapping>
     <mapping>
         <class-a>fun.vyse.cloud.test.domain.Address</class-a>
         <class-b>fun.vyse.cloud.test.domain.Site</class-b>
         <field>
-            <a>address</a>
+            <a>name</a>
             <b>name</b>
         </field>
     </mapping>

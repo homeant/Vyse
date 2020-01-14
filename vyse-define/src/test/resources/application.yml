@@ -4,9 +4,9 @@ spring:
   aop:
     auto: true
   datasource:
-    url: jdbc:mysql://9.7.32.6:3306/define
+    url: jdbc:mysql://140.143.66.80:3306/define
     username: root
-    password: p@ssw0rd
+    password: kFTg^kY7
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
@@ -16,7 +16,6 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       use-new-id-generator-mappings: true
     show-sql: true
-
 logging:
   level:
     fun:

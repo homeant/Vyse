@@ -1,7 +1,7 @@
 package fun.vyse.cloud.define.service.impl;
 
 import fun.vyse.cloud.core.constant.EntityState;
-import fun.vyse.cloud.core.service.impl.BaseServiceImpl;
+import fun.vyse.cloud.base.service.impl.BaseServiceImpl;
 import fun.vyse.cloud.define.entity.actual.ModelActEO;
 import fun.vyse.cloud.define.repository.IModelActRepository;
 import fun.vyse.cloud.define.service.IModelActService;

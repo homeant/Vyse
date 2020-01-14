@@ -1,10 +1,13 @@
 package fun.vyse.cloud.define.service.impl;
 
+import com.google.common.collect.Lists;
+import fun.vyse.cloud.base.service.IGeneratorService;
 import fun.vyse.cloud.core.constant.EntityState;
 import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
-import fun.vyse.cloud.define.domain.Model;
+import fun.vyse.cloud.define.domain.Specification;
+import fun.vyse.cloud.define.entity.actual.ConnectionActEO;
 import fun.vyse.cloud.define.entity.actual.ModelActEO;
 import fun.vyse.cloud.define.entity.actual.PropertyActEO;
 import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
@@ -36,13 +39,20 @@ import java.util.Map;
 public class DomainModelServiceImpl implements IDomainModelService {
 
 	@Autowired
+	private IGeneratorService generatorService;
+
+	@Autowired
 	private IMetaDefinitionService metaDefinitionService;
 
 	@Autowired
-	private IModelActService modelDataService;
+	private IModelActService modelActService;
 
 	@Autowired
-	private IPropertyActService actPropertyService;
+	private IPropertyActService propertyActService;
+
+	private Long get() {
+		return (Long) generatorService.get("act_seq", null);
+	}
 
 	/**
 	 * 创建领域模型
@@ -53,8 +63,8 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	@Override
 	public DomainModel createDomainModel(Long modelId, Map<String, Object> entity) {
 		MetaDefinition<Long> md = metaDefinitionService.getMetaDefinition("");
-		Model model = md.buildModel(null, modelId);
-		return this.createDomainModel(md, null, model, modelId, entity);
+		Specification model = md.buildSpec(null, modelId);
+		return this.createDomainModel(md, null, model, this.get(), entity);
 	}
 
 	/**
@@ -62,32 +72,33 @@ public class DomainModelServiceImpl implements IDomainModelService {
 	 *
 	 * @param md
 	 * @param parent
-	 * @param model
+	 * @param spec
 	 * @param entity
 	 * @return
 	 */
-	@Override
-	public DomainModel createDomainModel(MetaDefinition<Long> md, DomainModel parent, Model model, Long id, Map<String, Object> entity) {
-		ModelSpecEO modelEO = md.getModel(id);
+	private DomainModel createDomainModel(MetaDefinition<Long> md, DomainModel parent, Specification spec, Long id, Map<String, Object> entity) {
+		ModelSpecEO modelEO = md.getModel(spec.getEntity().getId());
 		if (modelEO != null) {
-			ModelActEO dataEO = new ModelActEO();
-			dataEO.setDomainId(id);
-			dataEO.setCode(modelEO.getCode());
-			dataEO.updateDirtyFlag(EntityState.New);
+			ModelActEO modelActEO = new ModelActEO();
+			modelActEO.setId(id);
+			modelActEO.setDomainId(spec.getEntity().getId());
+			modelActEO.setCode(modelEO.getCode());
+			modelActEO.updateDirtyFlag(EntityState.New);
 			Long fixedId = modelEO.getFixedId();
-			DomainModel domainModel = new DomainModel(dataEO, md);
+			DomainModel domainModel = new DomainModel(modelActEO, md);
+			domainModel.updateState$(EntityState.New);
 			Long topId;
 			String parentPath = "";
-			Integer loadType = 0;
 			if (parent == null) {
 				topId = id;
-				dataEO.setTopId(topId);
+				modelActEO.setTopId(topId);
 			} else {
 				topId = parent.getEntity().getTopId();
 				parent.updateState$(EntityState.Modify);
 				Long parentId = parent.getId();
-				dataEO.setParentId(parentId);
+				modelActEO.setParentId(parentId);
 				ConnectionSpecEO connection = md.getConnection(parentId, id, null);
+				Integer loadType = 0;
 				if (connection != null) {
 					loadType = connection.getLoadType();
 				}
@@ -96,20 +107,25 @@ public class DomainModelServiceImpl implements IDomainModelService {
 					domainModel.setParentModel(parent);
 					parentPath = parent.getEntity().getPath();
 				} else if (loadType == -1) {
-					// TODO 需要开发懒加载功能
+					ConnectionActEO connectionActEO = new ConnectionActEO();
+					connectionActEO.setTenantId(modelActEO.getTenantId());
+					connectionActEO.setDomainId(modelActEO.getId());
+					connectionActEO.setParentId(parent.getEntity().getId());
+					connectionActEO.setTopId(topId);
+					connectionActEO.setDirtyFlag(EntityState.New);
+					domainModel.setConnection(connectionActEO);
 				}
-
 			}
-			dataEO.setTopId(topId);
+			modelActEO.setTopId(topId);
 
 			if (ObjectUtils.isNotEmpty(fixedId)) {
-				dataEO.setFixedId(modelEO.getFixedId());
+				modelActEO.setFixedId(modelEO.getFixedId());
 				FixedModelSpecEO fixedModelEO = md.getFixedModelEO(1L);
 				Object fixedInstance = fixedModelEO.createFixedInstance();
 				domainModel.setFixedModel((IFixedEntity) fixedInstance);
 			}
 			//设置属性
-			List<PropertySpecEO> propertyEOS = model.findChildren(PropertySpecEO.class);
+			List<PropertySpecEO> propertyEOS = spec.findChildren(PropertySpecEO.class);
 			if (CollectionUtils.isNotEmpty(propertyEOS)) {
 				PropertyActEO property = null;
 				Iterator iterator = propertyEOS.iterator();
@@ -131,14 +147,13 @@ public class DomainModelServiceImpl implements IDomainModelService {
 							Boolean fixed = md.isFixed(modelEO, propertyEO);
 							if (!fixed) {//不是静态表
 								if (property == null) {
-									property = actPropertyService.newActual(null);
+									property = propertyActService.newActual();
 									property.setSerialIndex(index);
 									property.setParentId(modelEO.getId());
 									property.setTopId(topId);
 									++index;
 								}
 								property.set(PropertyType.code, index, propertyEO.getCode());
-								property.set(PropertyType.domainId, index, propertyEO.getId());
 								property.set(PropertyType.domainId, index, propertyEO.getId());
 								property.set(PropertyType.dateType, index, propertyEO.getDataType());
 								property.set(PropertyType.pattern, index, propertyEO.getPattern());
@@ -164,8 +179,52 @@ public class DomainModelServiceImpl implements IDomainModelService {
 				}
 			}
 			//添加action对象
+
 			//添加子模型
-			domainModel.updateState$(EntityState.New);
+			List<Specification> children = spec.findChildren(Specification.class);
+			if (CollectionUtils.isNotEmpty(children)) {
+				children.stream().forEach(childSpec -> {
+					List<ConnectionSpecEO> connections = spec.getConnection(childSpec.getId());
+					if (CollectionUtils.isNotEmpty(connections)) {
+						ConnectionSpecEO connectionSpecEO = connections.get(0);
+						Integer loadType = connectionSpecEO.getLoadType();
+						int buiderCount;
+						if (loadType == null) {
+							loadType = 0;
+						}
+						if (loadType == 0) {
+							Integer buildNumber = connectionSpecEO.getBuildNumber();
+							Integer minmiun = connectionSpecEO.getMinmiun();
+							if (buildNumber == null) {
+								buildNumber = 0;
+							}
+							if (minmiun == null) {
+								minmiun = 0;
+							}
+							buiderCount = buildNumber >= minmiun ? buildNumber : minmiun;
+							String code = domainModel.getEntity().getCode();
+							List<Map<String, Object>> values = null;
+							if (entity != null && entity.containsKey(code)) {
+								Object value = entity.get(code);
+								if (value instanceof Map) {
+									values = Lists.newArrayList();
+									values.add((Map) value);
+								}
+								if (value instanceof List) {
+									values = (List) value;
+								}
+							}
+							for (int i = 0; i < buiderCount; i++) {
+								Map<String, Object> value = null;
+								if (CollectionUtils.isNotEmpty(values) && values.size() > i) {
+									value = values.get(i);
+								}
+								this.createDomainModel(md, domainModel, childSpec, this.get(), value);
+							}
+						}
+					}
+				});
+			}
 			return domainModel;
 		}
 		return null;

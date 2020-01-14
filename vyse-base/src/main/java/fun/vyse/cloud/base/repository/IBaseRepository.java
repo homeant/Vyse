@@ -1,4 +1,4 @@
-package fun.vyse.cloud.core.repository;
+package fun.vyse.cloud.base.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

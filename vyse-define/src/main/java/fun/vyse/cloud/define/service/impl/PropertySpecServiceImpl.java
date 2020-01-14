@@ -1,6 +1,6 @@
 package fun.vyse.cloud.define.service.impl;
 
-import fun.vyse.cloud.core.service.impl.BaseServiceImpl;
+import fun.vyse.cloud.base.service.impl.BaseServiceImpl;
 import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import fun.vyse.cloud.define.repository.IPropertySpecRepository;
 import fun.vyse.cloud.define.service.IPropertySpecService;

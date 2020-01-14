@@ -1,24 +1,28 @@
 package fun.vyse.cloud.test.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import fun.vyse.cloud.base.service.IGeneratorService;
+import fun.vyse.cloud.core.domain.IFixedEntity;
 import fun.vyse.cloud.define.domain.DomainEntity;
 import fun.vyse.cloud.define.domain.DomainModel;
 import fun.vyse.cloud.define.domain.MetaDefinition;
+import fun.vyse.cloud.define.entity.actual.ModelActEO;
 import fun.vyse.cloud.define.entity.specification.ConnectionSpecEO;
 import fun.vyse.cloud.define.entity.specification.FixedModelSpecEO;
 import fun.vyse.cloud.define.entity.specification.ModelSpecEO;
 import fun.vyse.cloud.define.entity.specification.PropertySpecEO;
 import fun.vyse.cloud.define.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.testng.annotations.Test;
 
 
 /**
@@ -28,9 +32,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @date 2019-10-24 09:49
  */
 @Slf4j
-@RunWith(SpringRunner.class)
 @SpringBootTest
-public class ModelTest {
+public class ModelTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	private IModelSpecService specModelService;
@@ -52,6 +55,11 @@ public class ModelTest {
 
 	@Autowired
 	private IDomainModelService domainModelService;
+
+	@Autowired
+	private IModelActService modelActService;
+
+	private ObjectMapper mapper = new ObjectMapper();
 
 	@Test
 	public void insert() {
@@ -96,7 +104,7 @@ public class ModelTest {
 		connectionEO.setSubId(2L);
 		connectionEO.setParentType("Model");
 		connectionEO.setSubType("Model");
-		connectionEO.setMaxmium(1L);
+		connectionEO.setMaxmium(1);
 		connectionEO.setVersion_(0L);
 		specConnectionService.saveAndFlush(connectionEO);
 
@@ -131,34 +139,44 @@ public class ModelTest {
 		log.debug("bean:{}", specModelService.findOne(1L));
 		MetaDefinition<Long> metaDefinition = metaDefinitionService.getMetaDefinition(null);
 		DomainEntity entity = new DomainEntity();
-		DomainModel model = new DomainModel(null,metaDefinition);
+		DomainModel model = new DomainModel(null, metaDefinition);
 		entity.setModel(model);
-		log.debug("model:{}",model);
+		log.debug("model:{}", model);
 	}
 
 	@Test
-	public void domainEntityTest(){
+	public void domainEntityTest() throws JsonProcessingException {
 		DomainModel domainModel = domainModelService.createDomainModel(1L, Maps.newHashMap());
-		log.info("model:{}",domainModel);
+		log.info("model:{}", mapper.writeValueAsString(domainModel.getData()));
 	}
 
 	@Autowired
 	private IGeneratorService generatorService;
 
 	@Test
-	public void generatorTest(){
+	public void generatorTest() {
 		for (int i = 0; i < 10; i++) {
 			Object value = generatorService.get("test", null);
-			log.info("value{}:{}",i+1,value);
+			log.info("value{}:{}", i + 1, value);
 		}
 		for (int i = 0; i < 2; i++) {
 			Long value = (Long) generatorService.get("pkId", null);
-			log.info("pkId{}:{}",i+1,value);
+			log.info("pkId{}:{}", i + 1, value);
 		}
+	}
+
+	@Test
+	public void idGenTest() {
+		log.debug("start install...");
+		ModelActEO modelActEO = new ModelActEO();
+		modelActService.saveAndFlush(modelActEO);
+		IFixedEntity fixedEntity = modelActService.newActual();
+		log.debug("entity:{}", fixedEntity);
 	}
 
 	@Configuration
 	//@ComponentScan(basePackages = {"fun.vyse.cloud.define.test"})
+	@EnableAspectJAutoProxy(exposeProxy = true)
 	@EnableAutoConfiguration
 	@EnableTransactionManagement
 	public static class Config {

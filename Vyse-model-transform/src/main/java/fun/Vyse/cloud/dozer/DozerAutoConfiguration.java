@@ -8,6 +8,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 
+/**
+ * @author junchen
+ */
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "dozer.enabled", havingValue  = "true")
