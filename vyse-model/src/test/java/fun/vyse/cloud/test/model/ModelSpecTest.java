@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 
 /**
@@ -22,6 +23,7 @@ public class ModelSpecTest extends ApplicationTest {
 	private ModelSpecService modelSpecService;
 
 	@Test
+	@Transactional
 	public void test(){
 		ModelSpec modelSpec = modelSpecService.getOne(1);
 		log.info("model:{}",modelSpec);

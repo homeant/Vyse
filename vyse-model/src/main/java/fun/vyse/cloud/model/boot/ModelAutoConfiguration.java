@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Slf4j
 @Configuration
 @EntityScan(basePackages = {"fun.vyse.cloud.core.domain","fun.vyse.cloud.model.entity"})
-@EnableJpaRepositories(basePackages = {"fun.vyse.cloud.model.repository"})
+@EnableJpaRepositories(basePackages = {"fun.vyse.cloud.core.repository","fun.vyse.cloud.model.repository"})
 public class ModelAutoConfiguration {
 	@Bean
 	public ModelSpecService modelSpecService(){

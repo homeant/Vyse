@@ -18,6 +18,6 @@ public class BaseServiceImpl<T extends IEntity, M extends IBaseRepository<T>> im
 
 	@Override
 	public T getOne(Integer id) {
-		return baseRepository.getOne(id);
+		return baseRepository.findById(id).orElse(null);
 	}
 }

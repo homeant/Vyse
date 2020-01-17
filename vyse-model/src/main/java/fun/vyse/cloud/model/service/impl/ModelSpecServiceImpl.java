@@ -4,7 +4,6 @@ import fun.vyse.cloud.base.service.impl.BaseServiceImpl;
 import fun.vyse.cloud.model.entity.ModelSpec;
 import fun.vyse.cloud.model.repository.ModelSpecRepository;
 import fun.vyse.cloud.model.service.ModelSpecService;
-import org.springframework.stereotype.Service;
 
 /**
  * ModelSpecServiceImpl
