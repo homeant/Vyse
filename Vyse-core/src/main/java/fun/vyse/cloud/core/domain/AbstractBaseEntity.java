@@ -37,6 +37,7 @@ public abstract class AbstractBaseEntity implements IEntity, IVersionEntity, ITe
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(length = 32)
 	private String tenantId;
 
 	@Version

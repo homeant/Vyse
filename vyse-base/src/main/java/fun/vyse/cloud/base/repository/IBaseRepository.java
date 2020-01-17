@@ -12,5 +12,5 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @date 2019-10-23 13:14
  */
 @NoRepositoryBean
-public interface IBaseRepository<T,ID> extends JpaRepository<T,ID>, JpaSpecificationExecutor<T> {
+public interface IBaseRepository<T> extends JpaRepository<T,Integer>, JpaSpecificationExecutor<T> {
 }

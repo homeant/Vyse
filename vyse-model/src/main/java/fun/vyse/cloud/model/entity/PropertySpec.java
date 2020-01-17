@@ -21,4 +21,6 @@ public class PropertySpec extends AbstractBaseEntity {
 	private String name;
 
 	private String code;
+
+	private String dataType;
 }
