@@ -18,11 +18,9 @@ package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-//import org.hibernate.annotations.ColumnMeta;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * fun.vyse.cloud.core.domain.AbstractBaseEntity
@@ -33,20 +31,20 @@ import javax.persistence.*;
 @MappedSuperclass
 @Data
 @ToString(callSuper = true)
-public abstract class AbstractBaseEntity<T> extends AbstractStateEntity implements IEntity<T>, IVersionEntity {
+public abstract class AbstractBaseEntity implements IEntity, IVersionEntity, ITenantEntity,ITimestampEntity,Serializable,Cloneable {
 
 	@Id
-	private T id;
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Integer id;
 
-	//@ColumnMeta(index = Integer.MAX_VALUE - 1)
 	private String tenantId;
 
-	//@ColumnMeta(index = Integer.MAX_VALUE)
 	@Version
 	private Long version_;
 
-	public static final String ID = "id";
+	private Long createdTime;
 
-	public static final String TENANT_ID = "tenantId";
+	private Long updatedTime;
 
+	private Long deletedTime;
 }

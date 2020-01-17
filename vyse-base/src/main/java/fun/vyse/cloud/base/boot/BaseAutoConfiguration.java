@@ -1,7 +1,5 @@
 package fun.vyse.cloud.base.boot;
 
-import fun.vyse.cloud.base.service.IGeneratorService;
-import fun.vyse.cloud.base.service.impl.GeneratorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -23,10 +21,4 @@ public class BaseAutoConfiguration {
 	public BaseAutoConfiguration(){
 		log.info("BaseAutoConfiguration init ...");
 	}
-
-	@Bean
-	public IGeneratorService generatorService(){
-		return new GeneratorServiceImpl();
-	}
-
 }

@@ -2,6 +2,7 @@ package fun.vyse.cloud.core.exception;
 
 /**
  * 业务异常
+ * @author junchen
  */
 public class BusinessException extends RuntimeException {
 
