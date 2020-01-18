@@ -17,10 +17,10 @@
 package fun.vyse.cloud.core.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * fun.vyse.cloud.core.domain.AbstractBaseEntity
@@ -30,8 +30,9 @@ import java.io.Serializable;
  */
 @MappedSuperclass
 @Data
+@EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
-public abstract class AbstractBaseEntity implements IEntity, IVersionEntity, ITenantEntity,ITimestampEntity,Serializable,Cloneable {
+public abstract class AbstractBaseEntity implements IEntity, IVersionEntity, ITenantEntity,ITimestampEntity{
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)

@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @date 2019-10-12 12:01
  */
 
-public interface IEntity {
+public interface IEntity extends Serializable,Cloneable  {
 	Integer getId();
 
 	void setId(Integer id);
