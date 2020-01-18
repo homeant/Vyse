@@ -14,12 +14,12 @@ import javax.persistence.Entity;
  */
 @Data
 @Builder
-@Entity(name = "spec_connection")
+@Entity(name = "act_connection")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
-public class ConnectionSpec extends AbstractBaseEntity {
+public class ConnectionAct extends AbstractBaseEntity {
 	private Integer parentId;
 
 	@Column(length = 32)

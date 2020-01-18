@@ -2,12 +2,8 @@ package fun.vyse.cloud.test.model;
 
 import fun.vyse.cloud.model.constant.DataType;
 import fun.vyse.cloud.model.constant.ModelType;
-import fun.vyse.cloud.model.entity.ConnectionSpec;
-import fun.vyse.cloud.model.entity.ModelSpec;
-import fun.vyse.cloud.model.entity.PropertySpec;
-import fun.vyse.cloud.model.service.ConnectionSpecService;
-import fun.vyse.cloud.model.service.ModelSpecService;
-import fun.vyse.cloud.model.service.PropertySpecService;
+import fun.vyse.cloud.model.entity.*;
+import fun.vyse.cloud.model.service.*;
 import fun.vyse.cloud.test.ApplicationTest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +29,15 @@ public class ModelSpecTest extends ApplicationTest {
 	@Autowired
 	private ConnectionSpecService connectionSpecService;
 
+	@Autowired
+	private ModelActService modelActService;
+
+	@Autowired
+	private PropertyActService propertyActService;
+
+	@Autowired
+	private ConnectionActService connectionActService;
+
 	@Test
 	public void test(){
 		ModelSpec customerModel = ModelSpec.builder().code("customer").name("客户信息").build();
@@ -47,6 +52,17 @@ public class ModelSpecTest extends ApplicationTest {
 				.build();
 		connectionSpec = connectionSpecService.save(connectionSpec);
 		log.info("model:{}",connectionSpec);
+
+		ModelAct modelAct = ModelAct.builder().code(customerModel.getCode()).name(customerModel.getName()).build();
+		modelAct = modelActService.save(modelAct);
+		PropertyAct propertyAct = PropertyAct.builder().id1(nameProperty.getId()).value1("托尼").build();
+		propertyAct = propertyActService.save(propertyAct);
+
+		ConnectionAct connectionAct = ConnectionAct.builder()
+				.parentId(modelAct.getId()).parentType(ModelType.Model.name())
+				.subId(propertyAct.getId()).subType(ModelType.Property.name())
+				.build();
+
 	}
 
 	@Configuration

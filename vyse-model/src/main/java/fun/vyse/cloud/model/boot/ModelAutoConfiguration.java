@@ -1,11 +1,7 @@
 package fun.vyse.cloud.model.boot;
 
-import fun.vyse.cloud.model.service.ConnectionSpecService;
-import fun.vyse.cloud.model.service.ModelSpecService;
-import fun.vyse.cloud.model.service.PropertySpecService;
-import fun.vyse.cloud.model.service.impl.ConnectionSpecServiceImpl;
-import fun.vyse.cloud.model.service.impl.ModelSpecServiceImpl;
-import fun.vyse.cloud.model.service.impl.PropertySpecServiceImpl;
+import fun.vyse.cloud.model.service.*;
+import fun.vyse.cloud.model.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -36,5 +32,20 @@ public class ModelAutoConfiguration {
 	@Bean
 	public ConnectionSpecService connectionSpecService(){
 		return new ConnectionSpecServiceImpl();
+	}
+
+	@Bean
+	public ModelActService modelActService(){
+		return new ModelActServiceImpl();
+	}
+
+	@Bean
+	public PropertyActService propertyActService(){
+		return new PropertyActServiceImpl();
+	}
+
+	@Bean
+	public ConnectionActService connectionActService(){
+		return new ConnectionActServiceImpl();
 	}
 }

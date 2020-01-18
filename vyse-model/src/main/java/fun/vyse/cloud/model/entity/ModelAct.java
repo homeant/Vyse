@@ -6,20 +6,21 @@ import lombok.*;
 import javax.persistence.Entity;
 
 /**
- * Model
+ * ModelAct
  *
  * @author junchen
- * @date 2020-01-17 22:28
+ * @date 2020-01-18 18:18
  */
+
 @Data
 @Builder
-@Entity(name = "spec_model")
+@Entity(name="act_model")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
-public class ModelSpec extends AbstractBaseEntity {
-	private String name;
-
+public class ModelAct extends AbstractBaseEntity {
 	private String code;
+
+	private String name;
 }
