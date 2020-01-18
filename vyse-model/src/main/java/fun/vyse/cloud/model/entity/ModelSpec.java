@@ -1,9 +1,7 @@
 package fun.vyse.cloud.model.entity;
 
 import fun.vyse.cloud.core.domain.AbstractBaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 
@@ -14,6 +12,9 @@ import javax.persistence.Entity;
  * @date 2020-01-17 22:28
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "spec_model")
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)

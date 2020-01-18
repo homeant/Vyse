@@ -16,6 +16,7 @@
 
 package fun.vyse.cloud.core.domain;
 
+import fun.vyse.cloud.core.hibernate.AuditingEntityListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,6 +33,7 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
+@EntityListeners({AuditingEntityListener.class})
 public abstract class AbstractBaseEntity implements IEntity, IVersionEntity, ITenantEntity,ITimestampEntity{
 
 	@Id
@@ -42,7 +44,7 @@ public abstract class AbstractBaseEntity implements IEntity, IVersionEntity, ITe
 	private String tenantId;
 
 	@Version
-	private Long version_;
+	private Long version;
 
 	private Long createdTime;
 

@@ -14,7 +14,7 @@
  *  the License.
  */
 
-package fun.vyse.cloud.core.constant;
+package fun.vyse.cloud.model.constant;
 
 /**
  * fun.vyse.cloud.define.constant.DataType
@@ -23,11 +23,32 @@ package fun.vyse.cloud.core.constant;
  * @date 2019-10-16 13:21
  */
 public enum DataType {
+	/**
+	 * string
+	 */
     String,
+	/**
+	 * integer
+	 */
     Integer,
+	/**
+	 * long
+	 */
     Long,
+	/**
+	 * float
+	 */
     Float,
+	/**
+	 * bigDecimal
+	 */
     BigDecimal,
+	/**
+	 * date
+	 */
     Date,
+	/**
+	 * dateTime
+	 */
     DateTime
 }
