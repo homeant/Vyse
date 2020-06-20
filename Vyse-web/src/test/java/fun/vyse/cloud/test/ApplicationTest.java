@@ -1,7 +1,7 @@
 package fun.vyse.cloud.test;
 
-import fun.vyse.cloud.test.config.ApplicationConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 /**
@@ -10,7 +10,8 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
  * @author junchen
  * @date 2020-01-15 22:38
  */
-@SpringBootTest(classes = {ApplicationConfiguration.class})
+@ComponentScan
+@SpringBootTest
 public class ApplicationTest extends AbstractTestNGSpringContextTests {
-	
+
 }
