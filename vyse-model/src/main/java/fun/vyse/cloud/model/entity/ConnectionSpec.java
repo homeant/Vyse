@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
+import java.util.List;
 
 /**
  * ConnectSpec
@@ -29,4 +31,7 @@ public class ConnectionSpec extends AbstractBaseEntity {
 
 	@Column(length = 32)
 	private String subType;
+
+	@Transient
+	private List<ConnectionSpec> connections;
 }

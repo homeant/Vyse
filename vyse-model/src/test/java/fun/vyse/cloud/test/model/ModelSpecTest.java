@@ -1,15 +1,18 @@
 package fun.vyse.cloud.test.model;
 
 import fun.vyse.cloud.model.constant.DataType;
-import fun.vyse.cloud.model.constant.ModelType;
+import fun.vyse.cloud.model.constant.ConnectionType;
 import fun.vyse.cloud.model.entity.*;
 import fun.vyse.cloud.model.service.*;
 import fun.vyse.cloud.test.ApplicationTest;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 /**
  * ModelTest
@@ -47,8 +50,8 @@ public class ModelSpecTest extends ApplicationTest {
 		nameProperty = propertySpecService.save(nameProperty);
 
 		ConnectionSpec connectionSpec = ConnectionSpec.builder()
-				.parentId(customerModel.getId()).parentType(ModelType.Model.name())
-				.subId(nameProperty.getId()).subType(ModelType.Property.name())
+				.parentId(customerModel.getId()).parentType(ConnectionType.Model.name())
+				.subId(nameProperty.getId()).subType(ConnectionType.Property.name())
 				.build();
 		connectionSpec = connectionSpecService.save(connectionSpec);
 		log.info("model:{}",connectionSpec);
@@ -59,11 +62,19 @@ public class ModelSpecTest extends ApplicationTest {
 		propertyAct = propertyActService.save(propertyAct);
 
 		ConnectionAct connectionAct = ConnectionAct.builder()
-				.parentId(modelAct.getId()).parentType(ModelType.Model.name())
-				.subId(propertyAct.getId()).subType(ModelType.Property.name())
+				.parentId(modelAct.getId()).parentType(ConnectionType.Model.name())
+				.subId(propertyAct.getId()).subType(ConnectionType.Property.name())
 				.build();
-
+		connectionActService.save(connectionAct);
 	}
+
+	@Test
+	public void query(){
+		List<ConnectionSpec> connection = connectionSpecService.getConnection(2, ConnectionType.Model);
+		log.info("connection:{}", JSONValue.toJSONString(connection));
+	}
+
+
 
 	@Configuration
 	@EnableAutoConfiguration
